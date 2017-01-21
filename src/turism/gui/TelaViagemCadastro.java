@@ -284,7 +284,8 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
         btnAdicionar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnAdicionar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Cadastro de Viagem");
         setMaximumSize(new java.awt.Dimension(1366, 768));
         setPreferredSize(new java.awt.Dimension(1080, 768));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -738,7 +739,7 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
                 .addGroup(PainelOnibusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jbEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel17))
-                .addGap(6, 12, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(PainelOnibusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PainelOnibusLayout.createSequentialGroup()
                         .addComponent(btnAdVeiculo)

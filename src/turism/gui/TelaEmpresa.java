@@ -75,7 +75,8 @@ public class TelaEmpresa extends javax.swing.JFrame {
         listBusca = new javax.swing.JList<>();
         txtBusca = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Empresa e Veículos");
 
         labelNome.setText("Nome:");
 

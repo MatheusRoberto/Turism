@@ -93,20 +93,32 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
         jbCidade = new javax.swing.JComboBox<>();
         btnSelecionar = new javax.swing.JButton();
         btnAdicionar = new javax.swing.JButton();
+        PainelOnibus = new javax.swing.JPanel();
+        jbEmpresa = new javax.swing.JComboBox<>();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        jbVeiculo = new javax.swing.JComboBox<>();
+        btnAdVeiculo = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jtVeiculos = new javax.swing.JTable();
+        btnRmVeiculo = new javax.swing.JButton();
+        jLabel20 = new javax.swing.JLabel();
+        txtValorOnCon = new javax.swing.JSpinner();
+        PainelHotel = new javax.swing.JPanel();
+        jLabel19 = new javax.swing.JLabel();
+        jbHotel = new javax.swing.JComboBox<>();
+        btnAdHotel = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jtHotel = new javax.swing.JTable();
+        btnRmHotel = new javax.swing.JButton();
+        jLabel21 = new javax.swing.JLabel();
+        txtValorHtCon = new javax.swing.JSpinner();
+        jTPViagem = new javax.swing.JTabbedPane();
+        PainelVisualizacao = new javax.swing.JPanel();
         PainelOrigem = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
-        jbCidadeOrigem = new javax.swing.JComboBox<>();
-        jbEstadoOrigem = new javax.swing.JComboBox<>();
-        jbPaisOrigem = new javax.swing.JComboBox<>();
+        txtOrigemVisu = new javax.swing.JTextField();
         PainelDestino = new javax.swing.JPanel();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jbCidadeDestino = new javax.swing.JComboBox<>();
-        jbEstadoDestino = new javax.swing.JComboBox<>();
-        jbPaisDestino = new javax.swing.JComboBox<>();
+        txtDestinoVisu = new javax.swing.JTextField();
         PainelAll = new javax.swing.JPanel();
         Date date = new Date();
         SpinnerDateModel sm =
@@ -134,26 +146,10 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
         jLabel22 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         txtDescricao = new javax.swing.JTextPane();
-        PainelHotel = new javax.swing.JPanel();
-        jLabel19 = new javax.swing.JLabel();
-        jbHotel = new javax.swing.JComboBox<>();
-        btnAdHotel = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jtHotel = new javax.swing.JTable();
-        btnRmHotel = new javax.swing.JButton();
-        jLabel21 = new javax.swing.JLabel();
-        txtValorHtCon = new javax.swing.JSpinner();
-        PainelOnibus = new javax.swing.JPanel();
-        jbEmpresa = new javax.swing.JComboBox<>();
-        jLabel17 = new javax.swing.JLabel();
-        jLabel18 = new javax.swing.JLabel();
-        jbVeiculo = new javax.swing.JComboBox<>();
-        btnAdVeiculo = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jtVeiculos = new javax.swing.JTable();
-        btnRmVeiculo = new javax.swing.JButton();
-        jLabel20 = new javax.swing.JLabel();
-        txtValorOnCon = new javax.swing.JSpinner();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jTextField2 = new javax.swing.JTextField();
         painelFuncoes = new javax.swing.JPanel();
         btnSalvar = new javax.swing.JButton();
 
@@ -283,409 +279,6 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
         btnAdicionar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnAdicionar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        PainelOrigem.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED), "Origem:"));
-
-        jLabel1.setText("Cidade:");
-
-        jLabel16.setText("UF:");
-
-        jLabel15.setText("País:");
-
-        jbCidadeOrigem.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jbCidadeOrigemFocusLost(evt);
-            }
-        });
-
-        jbEstadoOrigem.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jbEstadoOrigemFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jbEstadoOrigemFocusLost(evt);
-            }
-        });
-        jbEstadoOrigem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbEstadoOrigemActionPerformed(evt);
-            }
-        });
-
-        jbPaisOrigem.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jbPaisOrigemFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jbPaisOrigemFocusLost(evt);
-            }
-        });
-
-        javax.swing.GroupLayout PainelOrigemLayout = new javax.swing.GroupLayout(PainelOrigem);
-        PainelOrigem.setLayout(PainelOrigemLayout);
-        PainelOrigemLayout.setHorizontalGroup(
-            PainelOrigemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PainelOrigemLayout.createSequentialGroup()
-                .addGroup(PainelOrigemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jbPaisOrigem, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.LEADING))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(PainelOrigemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PainelOrigemLayout.createSequentialGroup()
-                        .addComponent(jbEstadoOrigem, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(PainelOrigemLayout.createSequentialGroup()
-                        .addComponent(jLabel16)
-                        .addGap(74, 74, 74)
-                        .addGroup(PainelOrigemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(PainelOrigemLayout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addGap(0, 121, Short.MAX_VALUE))
-                            .addComponent(jbCidadeOrigem, 0, 175, Short.MAX_VALUE))))
-                .addContainerGap())
-        );
-        PainelOrigemLayout.setVerticalGroup(
-            PainelOrigemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PainelOrigemLayout.createSequentialGroup()
-                .addGroup(PainelOrigemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel16)
-                    .addComponent(jLabel15))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(PainelOrigemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbCidadeOrigem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbEstadoOrigem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbPaisOrigem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(30, Short.MAX_VALUE))
-        );
-
-        getContentPane().add(PainelOrigem, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
-
-        PainelDestino.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED), "Destino:"));
-
-        jLabel13.setText("País:");
-
-        jLabel14.setText("UF:");
-
-        jLabel2.setText("Cidade:");
-
-        jbCidadeDestino.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jbCidadeDestinoFocusLost(evt);
-            }
-        });
-
-        jbEstadoDestino.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jbEstadoDestinoFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jbEstadoDestinoFocusLost(evt);
-            }
-        });
-        jbEstadoDestino.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbEstadoDestinoActionPerformed(evt);
-            }
-        });
-
-        jbPaisDestino.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jbPaisDestinoFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jbPaisDestinoFocusLost(evt);
-            }
-        });
-
-        javax.swing.GroupLayout PainelDestinoLayout = new javax.swing.GroupLayout(PainelDestino);
-        PainelDestino.setLayout(PainelDestinoLayout);
-        PainelDestinoLayout.setHorizontalGroup(
-            PainelDestinoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PainelDestinoLayout.createSequentialGroup()
-                .addGroup(PainelDestinoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PainelDestinoLayout.createSequentialGroup()
-                        .addComponent(jLabel13)
-                        .addGap(133, 133, 133))
-                    .addGroup(PainelDestinoLayout.createSequentialGroup()
-                        .addComponent(jbPaisDestino, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                .addGroup(PainelDestinoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel14)
-                    .addComponent(jbEstadoDestino, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
-                .addGroup(PainelDestinoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jbCidadeDestino, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
-        PainelDestinoLayout.setVerticalGroup(
-            PainelDestinoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PainelDestinoLayout.createSequentialGroup()
-                .addGroup(PainelDestinoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel14)
-                    .addComponent(jLabel13))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(PainelDestinoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbCidadeDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbEstadoDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbPaisDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(30, Short.MAX_VALUE))
-        );
-
-        getContentPane().add(PainelDestino, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 0, -1, -1));
-
-        PainelAll.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        JSpinner.DateEditor de = new JSpinner.DateEditor(txtHoraSaida, "HH:mm");
-        txtHoraSaida.setEditor(de);
-        txtHoraSaida.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.HOUR));
-
-        jLabel5.setText("Horário Saída:");
-
-        jLabel4.setText("Data de Volta:");
-
-        dataIda.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                dataIdaPropertyChange(evt);
-            }
-        });
-
-        jLabel3.setText("Data de Ida:");
-
-        jLabel6.setText("Vagas Total:");
-
-        jLabel7.setText("Vagas Restante:");
-
-        txtVagaRestante.setEditable(false);
-        txtVagaRestante.setEnabled(false);
-
-        txtVagaTotal.setEditable(false);
-        txtVagaTotal.setEnabled(false);
-
-        jLabel8.setText("Vagas Extras:");
-
-        jSpinner1.setModel(new javax.swing.SpinnerNumberModel());
-
-        jLabel9.setText("Valor por Pessoa:");
-
-        jLabel10.setText("Valor do Ônibus:");
-
-        jLabel11.setText("Valor do Hotel:");
-
-        txtValorPessoa.setEditable(false);
-        txtValorPessoa.setEnabled(false);
-
-        txtValorOnibus.setEditable(false);
-        txtValorOnibus.setEnabled(false);
-        txtValorOnibus.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtValorOnibusActionPerformed(evt);
-            }
-        });
-
-        txtValorHotel.setEditable(false);
-        txtValorHotel.setEnabled(false);
-
-        txtValorTotal.setEditable(false);
-        txtValorTotal.setEnabled(false);
-
-        jLabel12.setText("Valor Total:");
-
-        jLabel22.setText("Descrição:");
-
-        jScrollPane3.setViewportView(txtDescricao);
-
-        javax.swing.GroupLayout PainelAllLayout = new javax.swing.GroupLayout(PainelAll);
-        PainelAll.setLayout(PainelAllLayout);
-        PainelAllLayout.setHorizontalGroup(
-            PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PainelAllLayout.createSequentialGroup()
-                .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PainelAllLayout.createSequentialGroup()
-                        .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(PainelAllLayout.createSequentialGroup()
-                                .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(dataVolta, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtVagaRestante, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel7))
-                                .addGap(14, 14, 14))
-                            .addGroup(PainelAllLayout.createSequentialGroup()
-                                .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PainelAllLayout.createSequentialGroup()
-                                        .addComponent(txtValorPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(50, 50, 50)
-                                        .addComponent(txtValorOnibus, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(58, 58, 58))
-                                    .addGroup(PainelAllLayout.createSequentialGroup()
-                                        .addComponent(jLabel9)
-                                        .addGap(44, 44, 44)
-                                        .addComponent(jLabel10)
-                                        .addGap(60, 60, 60)))
-                                .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel11)
-                                    .addComponent(txtValorHotel, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(42, 42, 42)
-                        .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel5)
-                                .addComponent(txtHoraSaida)
-                                .addComponent(jLabel8)
-                                .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel12)
-                            .addComponent(txtValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jLabel3)
-                    .addComponent(dataIda, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6)
-                    .addComponent(txtVagaTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel22)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(34, 34, 34))
-        );
-        PainelAllLayout.setVerticalGroup(
-            PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PainelAllLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel22))
-                        .addComponent(jLabel4)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PainelAllLayout.createSequentialGroup()
-                        .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(dataIda, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(dataVolta, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(txtHoraSaida, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(PainelAllLayout.createSequentialGroup()
-                                .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel8))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(txtVagaRestante, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(PainelAllLayout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtVagaTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(6, 6, 6)
-                        .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(PainelAllLayout.createSequentialGroup()
-                                .addComponent(jLabel12)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(PainelAllLayout.createSequentialGroup()
-                                .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jLabel9)
-                                        .addComponent(jLabel10))
-                                    .addComponent(jLabel11))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(txtValorPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(txtValorOnibus, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(txtValorHotel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(27, Short.MAX_VALUE))
-        );
-
-        dataIda.getJCalendar().setMinSelectableDate(new Date());
-
-        getContentPane().add(PainelAll, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 930, -1));
-
-        PainelHotel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Hotel"));
-
-        jLabel19.setText("Hotel:");
-
-        btnAdHotel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/add_16.png"))); // NOI18N
-        btnAdHotel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAdHotelActionPerformed(evt);
-            }
-        });
-
-        jtHotel.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-
-            }
-        ));
-        jScrollPane2.setViewportView(jtHotel);
-
-        btnRmHotel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/close_16.png"))); // NOI18N
-        btnRmHotel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRmHotelActionPerformed(evt);
-            }
-        });
-
-        jLabel21.setText("Valor:");
-
-        txtValorHtCon.setModel(new javax.swing.SpinnerNumberModel(250.0d, null, null, 1.0d));
-
-        javax.swing.GroupLayout PainelHotelLayout = new javax.swing.GroupLayout(PainelHotel);
-        PainelHotel.setLayout(PainelHotelLayout);
-        PainelHotelLayout.setHorizontalGroup(
-            PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PainelHotelLayout.createSequentialGroup()
-                .addContainerGap(36, Short.MAX_VALUE)
-                .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PainelHotelLayout.createSequentialGroup()
-                        .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(PainelHotelLayout.createSequentialGroup()
-                                .addComponent(btnAdHotel)
-                                .addGap(61, 61, 61)
-                                .addComponent(btnRmHotel))
-                            .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jbHotel, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel19)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel21)
-                            .addComponent(txtValorHtCon, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(37, Short.MAX_VALUE))
-        );
-        PainelHotelLayout.setVerticalGroup(
-            PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PainelHotelLayout.createSequentialGroup()
-                .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel19)
-                    .addComponent(jLabel21))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jbHotel)
-                    .addComponent(txtValorHtCon))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PainelHotelLayout.createSequentialGroup()
-                        .addComponent(btnAdHotel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE))
-                    .addGroup(PainelHotelLayout.createSequentialGroup()
-                        .addComponent(btnRmHotel)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(12, 12, 12))
-        );
-
-        getContentPane().add(PainelHotel, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 340, 454, 345));
-
         PainelOnibus.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Ônibus"));
 
         jbEmpresa.addItemListener(new java.awt.event.ItemListener() {
@@ -774,7 +367,320 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
                 .addGap(112, 112, 112))
         );
 
-        getContentPane().add(PainelOnibus, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 340, 470, 345));
+        PainelHotel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Hotel"));
+
+        jLabel19.setText("Hotel:");
+
+        btnAdHotel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/add_16.png"))); // NOI18N
+        btnAdHotel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdHotelActionPerformed(evt);
+            }
+        });
+
+        jtHotel.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane2.setViewportView(jtHotel);
+
+        btnRmHotel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/close_16.png"))); // NOI18N
+        btnRmHotel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRmHotelActionPerformed(evt);
+            }
+        });
+
+        jLabel21.setText("Valor:");
+
+        txtValorHtCon.setModel(new javax.swing.SpinnerNumberModel(250.0d, null, null, 1.0d));
+
+        javax.swing.GroupLayout PainelHotelLayout = new javax.swing.GroupLayout(PainelHotel);
+        PainelHotel.setLayout(PainelHotelLayout);
+        PainelHotelLayout.setHorizontalGroup(
+            PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PainelHotelLayout.createSequentialGroup()
+                .addContainerGap(36, Short.MAX_VALUE)
+                .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PainelHotelLayout.createSequentialGroup()
+                        .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(PainelHotelLayout.createSequentialGroup()
+                                .addComponent(btnAdHotel)
+                                .addGap(61, 61, 61)
+                                .addComponent(btnRmHotel))
+                            .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jbHotel, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel19)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel21)
+                            .addComponent(txtValorHtCon, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(37, Short.MAX_VALUE))
+        );
+        PainelHotelLayout.setVerticalGroup(
+            PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PainelHotelLayout.createSequentialGroup()
+                .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel19)
+                    .addComponent(jLabel21))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jbHotel)
+                    .addComponent(txtValorHtCon))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PainelHotelLayout.createSequentialGroup()
+                        .addComponent(btnAdHotel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE))
+                    .addGroup(PainelHotelLayout.createSequentialGroup()
+                        .addComponent(btnRmHotel)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(12, 12, 12))
+        );
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Viagem");
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        PainelOrigem.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED), "Origem:"));
+
+        txtOrigemVisu.setEditable(false);
+
+        javax.swing.GroupLayout PainelOrigemLayout = new javax.swing.GroupLayout(PainelOrigem);
+        PainelOrigem.setLayout(PainelOrigemLayout);
+        PainelOrigemLayout.setHorizontalGroup(
+            PainelOrigemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PainelOrigemLayout.createSequentialGroup()
+                .addComponent(txtOrigemVisu, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        PainelOrigemLayout.setVerticalGroup(
+            PainelOrigemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(txtOrigemVisu, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        PainelDestino.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED), "Destino:"));
+
+        txtDestinoVisu.setEditable(false);
+
+        javax.swing.GroupLayout PainelDestinoLayout = new javax.swing.GroupLayout(PainelDestino);
+        PainelDestino.setLayout(PainelDestinoLayout);
+        PainelDestinoLayout.setHorizontalGroup(
+            PainelDestinoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PainelDestinoLayout.createSequentialGroup()
+                .addComponent(txtDestinoVisu, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        PainelDestinoLayout.setVerticalGroup(
+            PainelDestinoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(txtDestinoVisu, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        PainelAll.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        JSpinner.DateEditor de = new JSpinner.DateEditor(txtHoraSaida, "HH:mm");
+        txtHoraSaida.setEditor(de);
+        txtHoraSaida.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.HOUR));
+        txtHoraSaida.setEnabled(false);
+
+        jLabel5.setText("Horário Saída:");
+
+        dataVolta.setEnabled(false);
+
+        jLabel4.setText("Data de Volta:");
+
+        dataIda.setEnabled(false);
+        dataIda.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                dataIdaPropertyChange(evt);
+            }
+        });
+
+        jLabel3.setText("Data de Ida:");
+
+        jLabel6.setText("Vagas Total:");
+
+        jLabel7.setText("Vagas Restante:");
+
+        txtVagaRestante.setEditable(false);
+        txtVagaRestante.setEnabled(false);
+
+        txtVagaTotal.setEditable(false);
+        txtVagaTotal.setEnabled(false);
+
+        jLabel8.setText("Vagas Extras:");
+
+        jSpinner1.setModel(new javax.swing.SpinnerNumberModel());
+        jSpinner1.setEnabled(false);
+
+        jLabel9.setText("Valor por Pessoa:");
+
+        jLabel10.setText("Valor do Ônibus:");
+
+        jLabel11.setText("Valor do Hotel:");
+
+        txtValorPessoa.setEditable(false);
+        txtValorPessoa.setEnabled(false);
+
+        txtValorOnibus.setEditable(false);
+        txtValorOnibus.setEnabled(false);
+        txtValorOnibus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtValorOnibusActionPerformed(evt);
+            }
+        });
+
+        txtValorHotel.setEditable(false);
+        txtValorHotel.setEnabled(false);
+
+        txtValorTotal.setEditable(false);
+        txtValorTotal.setEnabled(false);
+
+        jLabel12.setText("Valor Total:");
+
+        jLabel22.setText("Descrição:");
+
+        txtDescricao.setEnabled(false);
+        jScrollPane3.setViewportView(txtDescricao);
+
+        jLabel1.setText("Valor Recebido:");
+
+        jLabel2.setText("Valor Faltante:");
+
+        jTextField1.setEditable(false);
+
+        jTextField2.setEditable(false);
+
+        javax.swing.GroupLayout PainelAllLayout = new javax.swing.GroupLayout(PainelAll);
+        PainelAll.setLayout(PainelAllLayout);
+        PainelAllLayout.setHorizontalGroup(
+            PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PainelAllLayout.createSequentialGroup()
+                .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PainelAllLayout.createSequentialGroup()
+                        .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(PainelAllLayout.createSequentialGroup()
+                                .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6)
+                                    .addComponent(txtVagaTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtValorPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(PainelAllLayout.createSequentialGroup()
+                                        .addComponent(txtVagaRestante, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(PainelAllLayout.createSequentialGroup()
+                                        .addComponent(txtValorOnibus, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(txtValorHotel, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(txtValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel12))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jTextField1)))
+                                    .addGroup(PainelAllLayout.createSequentialGroup()
+                                        .addComponent(jLabel7)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel8))))
+                            .addGroup(PainelAllLayout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel10)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel11)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2)))
+                    .addGroup(PainelAllLayout.createSequentialGroup()
+                        .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(dataIda, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(dataVolta, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4))
+                        .addGap(18, 18, 18)
+                        .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtHoraSaida, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5))
+                        .addGap(18, 18, 18)
+                        .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel22)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(18, Short.MAX_VALUE))
+        );
+        PainelAllLayout.setVerticalGroup(
+            PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PainelAllLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel3)
+                        .addComponent(jLabel4))
+                    .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel5)
+                        .addComponent(jLabel22)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PainelAllLayout.createSequentialGroup()
+                        .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(dataIda, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtHoraSaida, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(dataVolta, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel7)
+                                .addComponent(jLabel8)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtVagaTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtVagaRestante, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(6, 6, 6)
+                .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel11)
+                    .addGroup(PainelAllLayout.createSequentialGroup()
+                        .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel9)
+                                .addComponent(jLabel10))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel12)
+                                .addComponent(jLabel1)
+                                .addComponent(jLabel2)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(PainelAllLayout.createSequentialGroup()
+                                .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jTextField1)
+                                    .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(txtValorPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtValorOnibus, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtValorHotel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PainelAllLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        dataIda.getJCalendar().setMinSelectableDate(new Date());
 
         painelFuncoes.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -802,7 +708,42 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        getContentPane().add(painelFuncoes, new org.netbeans.lib.awtextra.AbsoluteConstraints(936, 276, 110, 120));
+        javax.swing.GroupLayout PainelVisualizacaoLayout = new javax.swing.GroupLayout(PainelVisualizacao);
+        PainelVisualizacao.setLayout(PainelVisualizacaoLayout);
+        PainelVisualizacaoLayout.setHorizontalGroup(
+            PainelVisualizacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PainelVisualizacaoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(PainelVisualizacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PainelVisualizacaoLayout.createSequentialGroup()
+                        .addComponent(PainelAll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(painelFuncoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(PainelVisualizacaoLayout.createSequentialGroup()
+                        .addComponent(PainelOrigem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(PainelDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        PainelVisualizacaoLayout.setVerticalGroup(
+            PainelVisualizacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PainelVisualizacaoLayout.createSequentialGroup()
+                .addGroup(PainelVisualizacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(PainelOrigem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(PainelDestino, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(PainelVisualizacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PainelVisualizacaoLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(PainelAll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(PainelVisualizacaoLayout.createSequentialGroup()
+                        .addGap(110, 110, 110)
+                        .addComponent(painelFuncoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 386, Short.MAX_VALUE))
+        );
+
+        jTPViagem.addTab("Visualização", PainelVisualizacao);
+
+        getContentPane().add(jTPViagem, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1050, 700));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -935,120 +876,6 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
         }*/
     }//GEN-LAST:event_btnSelecionarActionPerformed
 
-    private void jbPaisOrigemFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jbPaisOrigemFocusGained
-        // TODO add your handling code here:
-        PaisDAO pDAO = new PaisDAO();
-        paises = pDAO.buscaPaises("");
-        jbPaisOrigem.removeAllItems();
-        paises.forEach((next) -> {
-            jbPaisOrigem.addItem(next.getNome());
-        });
-        jbPaisOrigem.setSelectedIndex(-1);
-        jbEstadoOrigem.removeAllItems();
-        jbEstadoOrigem.setSelectedIndex(-1);
-        jbCidadeOrigem.removeAllItems();
-        jbCidadeOrigem.setSelectedIndex(-1);
-    }//GEN-LAST:event_jbPaisOrigemFocusGained
-
-    private void jbPaisOrigemFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jbPaisOrigemFocusLost
-        // TODO add your handling code here:
-        int indice = jbPaisOrigem.getSelectedIndex();
-        if (indice >= 0) {
-            PaisDAO pDAO = new PaisDAO();
-            Pais p = pDAO.buscaPais(indice + 1);
-            jbEstadoOrigem.removeAllItems();
-            if (!p.getEstadoList().isEmpty()) {
-                p.getEstadoList().forEach((next) -> {
-                    jbEstadoOrigem.addItem(next.getUf());
-                });
-                jbEstadoOrigem.setSelectedIndex(-1);
-            }
-        }
-    }//GEN-LAST:event_jbPaisOrigemFocusLost
-
-    private void jbEstadoOrigemFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jbEstadoOrigemFocusGained
-        // TODO add your handling code here:
-        jbCidadeOrigem.removeAllItems();
-        jbCidadeOrigem.setSelectedIndex(-1);
-    }//GEN-LAST:event_jbEstadoOrigemFocusGained
-
-    private void jbEstadoOrigemFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jbEstadoOrigemFocusLost
-        // TODO add your handling code here:
-        int indice = jbEstadoOrigem.getSelectedIndex();
-        if (indice >= 0) {
-            EstadoDAO eDAO = new EstadoDAO();
-            Estado e = eDAO.buscaEstado(indice + 1);
-            jbCidadeOrigem.removeAllItems();
-            if (!e.getCidadeList().isEmpty()) {
-                e.getCidadeList().forEach((next) -> {
-                    jbCidadeOrigem.addItem(next.getNome());
-                });
-                jbCidadeOrigem.setSelectedIndex(-1);
-            }
-        }
-    }//GEN-LAST:event_jbEstadoOrigemFocusLost
-
-    private void jbEstadoOrigemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEstadoOrigemActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jbEstadoOrigemActionPerformed
-
-    private void jbPaisDestinoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jbPaisDestinoFocusGained
-        // TODO add your handling code here:
-        PaisDAO pDAO = new PaisDAO();
-        paises = pDAO.buscaPaises("");
-        jbPaisDestino.removeAllItems();
-        paises.forEach((next) -> {
-            jbPaisDestino.addItem(next.getNome());
-        });
-        jbPaisDestino.setSelectedIndex(-1);
-        jbEstadoDestino.removeAllItems();
-        jbEstadoDestino.setSelectedIndex(-1);
-        jbCidadeDestino.removeAllItems();
-        jbCidadeDestino.setSelectedIndex(-1);
-    }//GEN-LAST:event_jbPaisDestinoFocusGained
-
-    private void jbPaisDestinoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jbPaisDestinoFocusLost
-        // TODO add your handling code here:
-        int indice = jbPaisDestino.getSelectedIndex();
-        if (indice >= 0) {
-            PaisDAO pDAO = new PaisDAO();
-            Pais p = pDAO.buscaPais(indice + 1);
-            jbEstadoDestino.removeAllItems();
-            if (!p.getEstadoList().isEmpty()) {
-                p.getEstadoList().forEach((next) -> {
-                    jbEstadoDestino.addItem(next.getUf());
-                });
-                jbEstadoDestino.setSelectedIndex(-1);
-            }
-        }
-    }//GEN-LAST:event_jbPaisDestinoFocusLost
-
-    private void jbEstadoDestinoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jbEstadoDestinoFocusGained
-        // TODO add your handling code here:
-        jbCidadeDestino.removeAllItems();
-        jbCidadeDestino.setSelectedIndex(-1);
-    }//GEN-LAST:event_jbEstadoDestinoFocusGained
-
-    private void jbEstadoDestinoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jbEstadoDestinoFocusLost
-        // TODO add your handling code here:
-        int indice = jbEstadoDestino.getSelectedIndex();
-        if (indice >= 0) {
-            EstadoDAO eDAO = new EstadoDAO();
-            Estado e = eDAO.buscaEstado(indice + 1);
-            jbCidadeDestino.removeAllItems();
-            if (!e.getCidadeList().isEmpty()) {
-                e.getCidadeList().forEach((next) -> {
-                    jbCidadeDestino.addItem(next.getNome());
-                });
-                jbCidadeDestino.setSelectedIndex(-1);
-            }
-        }
-    }//GEN-LAST:event_jbEstadoDestinoFocusLost
-
-    private void jbEstadoDestinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEstadoDestinoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jbEstadoDestinoActionPerformed
-
     private void txtValorOnibusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtValorOnibusActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtValorOnibusActionPerformed
@@ -1141,30 +968,6 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
         viagem = new Viagem();
     }//GEN-LAST:event_btnSalvarActionPerformed
 
-    private void jbCidadeDestinoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jbCidadeDestinoFocusLost
-        // TODO add your handling code here:
-        int indice = jbCidadeDestino.getSelectedIndex();
-        if (indice >= 0) {
-            CidadeDAO cDAO = new CidadeDAO();
-            Cidade c = cDAO.buscaCidade(indice + 1);
-            if (c != null) {
-                viagem.setIddestino(c);
-            }
-        }
-    }//GEN-LAST:event_jbCidadeDestinoFocusLost
-
-    private void jbCidadeOrigemFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jbCidadeOrigemFocusLost
-        // TODO add your handling code here:
-        int indice = jbCidadeOrigem.getSelectedIndex();
-        if (indice >= 0) {
-            CidadeDAO cDAO = new CidadeDAO();
-            Cidade c = cDAO.buscaCidade(indice + 1);
-            if (c != null) {
-                viagem.setIdorigem(c);
-            }
-        }
-    }//GEN-LAST:event_jbCidadeOrigemFocusLost
-
     /**
      * @param args the command line arguments
      */
@@ -1213,6 +1016,7 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
     private javax.swing.JPanel PainelHotel;
     private javax.swing.JPanel PainelOnibus;
     private javax.swing.JPanel PainelOrigem;
+    private javax.swing.JPanel PainelVisualizacao;
     private javax.swing.JButton btnAdHotel;
     private javax.swing.JButton btnAdVeiculo;
     private javax.swing.JButton btnAdicionar;
@@ -1229,13 +1033,9 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel13L;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel14L;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel15L;
-    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
@@ -1254,25 +1054,24 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSpinner jSpinner1;
+    private javax.swing.JTabbedPane jTPViagem;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     private javax.swing.JComboBox<String> jbCidade;
-    private javax.swing.JComboBox<String> jbCidadeDestino;
-    private javax.swing.JComboBox<String> jbCidadeOrigem;
     private javax.swing.JComboBox<String> jbEmpresa;
     private javax.swing.JComboBox<String> jbEstado;
-    private javax.swing.JComboBox<String> jbEstadoDestino;
-    private javax.swing.JComboBox<String> jbEstadoOrigem;
     private javax.swing.JComboBox<String> jbHotel;
     private javax.swing.JComboBox<String> jbPais;
-    private javax.swing.JComboBox<String> jbPaisDestino;
-    private javax.swing.JComboBox<String> jbPaisOrigem;
     private javax.swing.JComboBox<String> jbVeiculo;
     private javax.swing.JTable jtHotel;
     private javax.swing.JTable jtVeiculos;
     private javax.swing.JPanel painelFuncoes;
     private javax.swing.JTextPane txtDescricao;
     private javax.swing.JTextField txtDestino;
+    private javax.swing.JTextField txtDestinoVisu;
     private javax.swing.JSpinner txtHoraSaida;
     private javax.swing.JTextField txtOrigem;
+    private javax.swing.JTextField txtOrigemVisu;
     private javax.swing.JTextField txtVagaRestante;
     private javax.swing.JTextField txtVagaTotal;
     private javax.swing.JTextField txtValorHotel;
@@ -1288,11 +1087,9 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
         btnBuscaOrigem.setVisible(v);
         dataIda.setVisible(v);
         dataVolta.setVisible(v);
-        jLabel1.setVisible(v);
         jLabel10.setVisible(v);
         jLabel11.setVisible(v);
         jLabel12.setVisible(v);
-        jLabel2.setVisible(v);
         jLabel3.setVisible(v);
         jLabel4.setVisible(v);
         jLabel5.setVisible(v);
