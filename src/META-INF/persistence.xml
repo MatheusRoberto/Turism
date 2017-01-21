@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="TurismPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>turism.modelo.Pais</class>
+    <class>turism.modelo.Empresa</class>
+    <class>turism.modelo.Veiculo</class>
+    <class>turism.modelo.Formapagamento</class>
+    <class>turism.modelo.Cidade</class>
+    <class>turism.modelo.Contrato</class>
+    <class>turism.modelo.Usuario</class>
+    <class>turism.modelo.Ocupante</class>
+    <class>turism.modelo.Quarto</class>
+    <class>turism.modelo.Hotel</class>
+    <class>turism.modelo.Lembrete</class>
+    <class>turism.modelo.Parcela</class>
+    <class>turism.modelo.Cliente</class>
+    <class>turism.modelo.Estado</class>
+    <class>turism.modelo.Viagem</class>
+    <class>turism.modelo.Logs</class>
+    <class>turism.modelo.Assento</class>
+    <class>turism.Veiculoscontratados</class>
+    <class>turism.Hoteiscontratados</class>
+    <class>turism.modelo.Hoteiscontratados</class>
+    <class>turism.modelo.Veiculoscontratados</class>
+    <class>turism.modelo.Ocupantes</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/turism?zeroDateTimeBehavior=convertToNull"/>
+      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value="madsr1411"/>
+    </properties>
+  </persistence-unit>
+</persistence>
