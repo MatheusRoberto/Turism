@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -49,8 +50,9 @@ public class ViagemDAO {
     }
 
     public void atualizar(Viagem v) {
-        String sql = "UPDATE viagem SET dataida = ?, datavolta = ?, horariosaida = ?, descricao = ?, idorigem = ?, iddestino = ?, vagasextras = ?"
-                + "WHERE viagem.idviagem = ?;";
+        String sql = "UPDATE viagem SET dataida = ?, datavolta = ?, horariosaida = ?, descricao = ?, idorigem = ?,"
+                + " iddestino = ?, vagasextras = ?"
+                + " WHERE idviagem = ? ;";
         PreparedStatement stmt;
         try {
             stmt = connection.prepareStatement(sql);
@@ -68,7 +70,7 @@ public class ViagemDAO {
         }
     }
 
-    public void excluir(Viagem v) {
+    public void apagar(Viagem v) {
         String sql = "DELETE FROM viagem WHERE idviagem = '" + v.getIdviagem() + "';";
         PreparedStatement stmt = null;
         try {
@@ -84,54 +86,6 @@ public class ViagemDAO {
                 Logger.getLogger(ViagemDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }
-
-    public Viagem buscaViagem(int origem, int destino) {
-        Viagem viagem = null;
-        PreparedStatement stmt = null;
-        ResultSet result;
-        String sql = "SELECT * FROM viagem WHERE idorigem = '" + origem + "' AND iddestino = '" + destino + "';";
-        try {
-            stmt = connection.prepareStatement(sql);
-            result = stmt.executeQuery(sql);
-            while (result.next()) {
-                viagem = new Viagem();
-                viagem.setDataida(result.getDate("dataida"));
-                viagem.setDatavolta(result.getDate("datavolta"));
-                viagem.setHorariosaida(result.getDate("horariosaida"));
-                viagem.setDescricao(result.getString("descricao"));
-                viagem.setVagasextras(result.getInt("vagasextras"));
-                CidadeDAO cDAO = new CidadeDAO();
-                Cidade cidade = cDAO.buscaCidade(result.getInt("idorigem"));
-                viagem.setIdorigem(cidade);
-                cidade = cDAO.buscaCidade(result.getInt("iddestino"));
-                viagem.setIddestino(cidade);
-                viagem.setIdviagem(result.getInt("idviagem"));
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ViagemDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return viagem;
-    }
-
-    public ArrayList<Cidade> buscaOrigem() {
-        ArrayList<Cidade> list = new ArrayList<>();
-        Cidade cidade;
-        PreparedStatement stmt;
-        ResultSet result;
-        String sql = "SELECT * FROM viagem ;";
-        try {
-            stmt = connection.prepareStatement(sql);
-            result = stmt.executeQuery(sql);
-            while (result.next()) {
-                CidadeDAO cDAO = new CidadeDAO();
-                cidade = cDAO.buscaCidade(result.getInt("idorigem"));;
-                list.add(cidade);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ViagemDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return list;
     }
 
     public ArrayList<Cidade> buscaDestino(int origem) {
@@ -154,6 +108,139 @@ public class ViagemDAO {
         return list;
     }
 
+    public ArrayList<Viagem> buscaViagem(int origem, int destino) {
+        ArrayList<Viagem> list = new ArrayList<>();
+        Viagem viagem;
+        PreparedStatement stmt;
+        ResultSet result;
+        String sql = "SELECT * FROM viagem WHERE idorigem = '" +origem+"' AND iddestino = '"+destino+"' "
+                + "AND dataida >= '"+ new java.sql.Date(new Date().getTime())+"' ;";
+        try {
+            stmt = connection.prepareStatement(sql);
+            result = stmt.executeQuery(sql);
+            while (result.next()) {
+                viagem = new Viagem();
+                viagem.setDataida(result.getDate("dataida"));
+                viagem.setDatavolta(result.getDate("datavolta"));
+                viagem.setHorariosaida(result.getTime("horariosaida"));
+                viagem.setDescricao(result.getString("descricao"));
+                viagem.setVagasextras(result.getInt("vagasextras"));
+                CidadeDAO cDAO = new CidadeDAO();
+                Cidade cidade = cDAO.buscaCidade(result.getInt("idorigem"));
+                viagem.setIdorigem(cidade);
+                cidade = cDAO.buscaCidade(result.getInt("iddestino"));
+                viagem.setIddestino(cidade);
+                viagem.setIdviagem(result.getInt("idviagem"));
+                list.add(viagem);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ViagemDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+
+     public ArrayList<Viagem> buscaViagem(int origem, int destino, Date dataida) {
+        ArrayList<Viagem> list = new ArrayList<>();
+        Viagem viagem;
+        PreparedStatement stmt;
+        ResultSet result;
+        String sql = "SELECT * FROM viagem WHERE idorigem = '"+origem+"' AND iddestino = '"+destino+"' "
+                + "AND dataida = '"+new java.sql.Date(dataida.getTime())+"' ;";
+        try {
+            stmt = connection.prepareStatement(sql);
+            result = stmt.executeQuery(sql);
+            while (result.next()) {
+                viagem = new Viagem();
+                viagem.setDataida(result.getDate("dataida"));
+                viagem.setDatavolta(result.getDate("datavolta"));
+                viagem.setHorariosaida(result.getTime("horariosaida"));
+                viagem.setDescricao(result.getString("descricao"));
+                viagem.setVagasextras(result.getInt("vagasextras"));
+                CidadeDAO cDAO = new CidadeDAO();
+                Cidade cidade = cDAO.buscaCidade(result.getInt("idorigem"));
+                viagem.setIdorigem(cidade);
+                cidade = cDAO.buscaCidade(result.getInt("iddestino"));
+                viagem.setIddestino(cidade);
+                viagem.setIdviagem(result.getInt("idviagem"));
+                list.add(viagem);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ViagemDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+     
+     public ArrayList<Viagem> buscaViagem(int origem, int destino, Date dataida, Date datavolta) {
+        ArrayList<Viagem> list = new ArrayList<>();
+        Viagem viagem;
+        PreparedStatement stmt;
+        ResultSet result;
+        String sql = "SELECT * FROM viagem WHERE idorigem = '"+origem+"' AND iddestino = '"+destino+"' "
+                + "AND dataida = '"+ new java.sql.Date(dataida.getTime())+"' "
+                + "AND datavolta = '"+new java.sql.Date(datavolta.getTime())+"';";
+        try {
+            stmt = connection.prepareStatement(sql);
+            result = stmt.executeQuery(sql);
+            while (result.next()) {
+                viagem = new Viagem();
+                viagem.setDataida(result.getDate("dataida"));
+                viagem.setDatavolta(result.getDate("datavolta"));
+                viagem.setHorariosaida(result.getTime("horariosaida"));
+                viagem.setDescricao(result.getString("descricao"));
+                viagem.setVagasextras(result.getInt("vagasextras"));
+                CidadeDAO cDAO = new CidadeDAO();
+                Cidade cidade = cDAO.buscaCidade(result.getInt("idorigem"));
+                viagem.setIdorigem(cidade);
+                cidade = cDAO.buscaCidade(result.getInt("iddestino"));
+                viagem.setIddestino(cidade);
+                viagem.setIdviagem(result.getInt("idviagem"));
+                list.add(viagem);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ViagemDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+
+    public ArrayList<Cidade> buscaOrigem() {
+        ArrayList<Cidade> list = new ArrayList<>();
+        Cidade cidade;
+        PreparedStatement stmt;
+        ResultSet result;
+        String sql = "SELECT * FROM viagem ;";
+        try {
+            stmt = connection.prepareStatement(sql);
+            result = stmt.executeQuery(sql);
+            while (result.next()) {
+                CidadeDAO cDAO = new CidadeDAO();
+                cidade = cDAO.buscaCidade(result.getInt("idorigem"));;
+                list.add(cidade);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ViagemDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+
+    public ArrayList<Viagem> carregaViagem() {
+        ArrayList<Viagem> list = new ArrayList<>();
+        Viagem viagem;
+        PreparedStatement stmt;
+        ResultSet result;
+        String sql = "SELECT * FROM viagem;";
+        try {
+            stmt = connection.prepareStatement(sql);
+            result = stmt.executeQuery(sql);
+            while (result.next()) {
+                viagem = this.buscaViagem(result.getInt("idviagem"));
+                list.add(viagem);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ViagemDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+
     public Viagem buscaViagem(int id) {
         Viagem viagem = null;
         ResultSet result;
@@ -168,7 +255,7 @@ public class ViagemDAO {
                 viagem.setDataida(result.getDate("dataida"));
                 viagem.setDatavolta(result.getDate("datavolta"));
                 viagem.setDescricao(result.getString("descricao"));
-                viagem.setHorariosaida(result.getDate("horariosaida"));
+                viagem.setHorariosaida(result.getTime("horariosaida"));
                 CidadeDAO cDAO = new CidadeDAO();
                 Cidade cidade = cDAO.buscaCidade(result.getInt("idorigem"));
                 viagem.setIdorigem(cidade);
@@ -189,7 +276,7 @@ public class ViagemDAO {
         return viagem;
     }
 
-    private Viagem selecionaUltimo() {
+    public Viagem selecionaUltimo() {
         Viagem viagem = null;
         ResultSet result;
         PreparedStatement stmt = null;
