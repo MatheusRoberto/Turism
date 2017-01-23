@@ -60,7 +60,7 @@ public class VeiculosContratadosDAO {
     }
 
     public void apagar(Veiculoscontratados v) {
-        String sql = "DELETE FROM veiculoscontratados WHERE veiculoscontratados.veiculo_idveiculo = ? AND veiculoscontratados.viagem_idviagem = ?;";
+        String sql = "DELETE FROM veiculoscontratados WHERE veiculoscontratados.veiculo_idveiculo = ? AND veiculoscontratados.viagem_idviagem = ? ;";
         PreparedStatement stmt = null;
         try {
             stmt = connection.prepareStatement(sql);
@@ -113,6 +113,72 @@ public class VeiculosContratadosDAO {
         }
 
         return list;
+    }
+
+    public ArrayList<Veiculoscontratados> buscaVeiculosContratadosViagem(int idv) {
+        ArrayList<Veiculoscontratados> list = new ArrayList<>();
+        Veiculoscontratados vc;
+        ResultSet result;
+        PreparedStatement stmt = null;
+        String sql = "SELECT * FROM veiculoscontratados WHERE veiculoscontratados.viagem_idviagem = '"+idv+"' ;";
+        try {
+            stmt = connection.prepareStatement(sql);
+            result = stmt.executeQuery(sql);
+            while (result.next()) {
+                vc = new Veiculoscontratados();
+                vc.setValor(result.getDouble("valor"));
+                ViagemDAO vDAO = new ViagemDAO();
+                Viagem viagem = vDAO.buscaViagem(result.getInt("viagem_idviagem"));
+                vc.setViagem(viagem);
+                VeiculoDAO veDAO = new VeiculoDAO();
+                Veiculo veiculo = veDAO.buscaVeiculo(result.getInt("veiculo_idveiculo"));
+                vc.setVeiculo(veiculo);
+                list.add(vc);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "erro no Veiculo contratado" + e.getMessage());
+        } finally {
+
+            try {
+                stmt.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "erro ao fechar" + e.getMessage());
+            }
+        }
+
+        return list;
+    }
+
+    public Veiculoscontratados buscaVeiculoContratadoViagem(int idv) {
+        Veiculoscontratados vc = null;
+        ResultSet result;
+        PreparedStatement stmt = null;
+        String sql = "SELECT * FROM veiculoscontratados WHERE veiculoscontratados.viagem_idviagem = '"+idv+"' ;";
+        try {
+            stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, idv);
+            result = stmt.executeQuery(sql);
+            while (result.next()) {
+                vc.setValor(result.getDouble("valor"));
+                ViagemDAO vDAO = new ViagemDAO();
+                Viagem viagem = vDAO.buscaViagem(result.getInt("viagem_idviagem"));
+                vc.setViagem(viagem);
+                VeiculoDAO veDAO = new VeiculoDAO();
+                Veiculo veiculo = veDAO.buscaVeiculo(result.getInt("veiculo_idveiculo"));
+                vc.setVeiculo(veiculo);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "erro no Veiculo contratado" + e.getMessage());
+        } finally {
+
+            try {
+                stmt.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "erro ao fechar" + e.getMessage());
+            }
+        }
+
+        return vc;
     }
 
     public Veiculoscontratados buscaVeiculoContratado(int idv, int idve) {

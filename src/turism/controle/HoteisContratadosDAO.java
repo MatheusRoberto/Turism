@@ -27,10 +27,10 @@ public class HoteisContratadosDAO {
     public HoteisContratadosDAO() {
         this.connection = Conexao.getConnection();
     }
-    
+
     private final Connection connection;
-    
-    public void adicionar(Hoteiscontratados h){
+
+    public void adicionar(Hoteiscontratados h) {
         String sql = "INSERT INTO hoteiscontratados(hotel_idHotel, viagem_idviagem, valor) VALUES (?,?,?)";
         PreparedStatement stmt;
         try {
@@ -43,8 +43,8 @@ public class HoteisContratadosDAO {
             Logger.getLogger(HoteisContratadosDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-     public void atualizar(Hoteiscontratados h) {
+
+    public void atualizar(Hoteiscontratados h) {
         String sql = "UPDATE hoteiscontratados SET valor = ? WHERE hoteiscontratados.hotel_idHotel = ? "
                 + "AND hoteiscontratados.viagem_idviagem = ?;";
         PreparedStatement stmt;
@@ -60,7 +60,7 @@ public class HoteisContratadosDAO {
     }
 
     public void apagar(Hoteiscontratados h) {
-        String sql = "DELETE FROM hoteiscontratados WHERE hoteiscontratados.hotel_idHotel = ? AND hoteiscontratados.viagem_idviagem = ?;";
+        String sql = "DELETE FROM hoteiscontratados WHERE hoteiscontratados.hotel_idHotel = ? AND hoteiscontratados.viagem_idviagem = ? ;";
         PreparedStatement stmt = null;
         try {
             stmt = connection.prepareStatement(sql);
@@ -115,15 +115,47 @@ public class HoteisContratadosDAO {
         return list;
     }
 
-    public Hoteiscontratados buscaVeiculoContratado(int idv, int idh) {
+    public ArrayList<Hoteiscontratados> buscaHoteisContratadosViagem(int idv) {
+        ArrayList<Hoteiscontratados> list = new ArrayList<>();
+        Hoteiscontratados hc;
+        ResultSet result;
+        PreparedStatement stmt = null;
+        String sql = "SELECT * FROM hoteiscontratados WHERE hoteiscontratados.viagem_idviagem = '"+idv+"';";
+        try {
+            stmt = connection.prepareStatement(sql);
+            result = stmt.executeQuery(sql);
+            while (result.next()) {
+                hc = new Hoteiscontratados();
+                hc.setValor(result.getDouble("valor"));
+                ViagemDAO vDAO = new ViagemDAO();
+                Viagem viagem = vDAO.buscaViagem(result.getInt("viagem_idviagem"));
+                hc.setViagem(viagem);
+                HotelDAO hDAO = new HotelDAO();
+                Hotel hotel = hDAO.buscaHotel(result.getInt("hotel_idHotel"));
+                hc.setHotel(hotel);
+                list.add(hc);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "erro no Hotel contratado" + e.getMessage());
+        } finally {
+
+            try {
+                stmt.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "erro ao fechar" + e.getMessage());
+            }
+        }
+
+        return list;
+    }
+
+    public Hoteiscontratados buscaVeiculoContratadoViagem(int idv) {
         Hoteiscontratados hc = null;
         ResultSet result;
         PreparedStatement stmt = null;
-        String sql = "SELECT * FROM hoteiscontratados WHERE hoteiscontratados.viagem_idviagem = ? OR hoteiscontratados.hotel_idHotel = ?;";
+        String sql = "SELECT * FROM hoteiscontratados WHERE hoteiscontratados.viagem_idviagem = '"+idv+"' ;";
         try {
             stmt = connection.prepareStatement(sql);
-            stmt.setInt(1, idv);
-            stmt.setInt(2, idh);
             result = stmt.executeQuery(sql);
             while (result.next()) {
                 hc.setValor(result.getDouble("valor"));
