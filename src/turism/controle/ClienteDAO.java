@@ -19,11 +19,12 @@ public class ClienteDAO {
     private final Connection connection;
 
     public void adiciona(Cliente c) {
-        String sql = "INSERT INTO cliente(nome,rg) VALUES(?,?)";
+        String sql = "INSERT INTO cliente(nome,rg, telefone) VALUES(?,?,?)";
         try {
             try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                 stmt.setString(1, c.getNome());
                 stmt.setString(2, c.getRg());
+                stmt.setString(3, c.getTelefone());
                 stmt.execute();
                 c.setIdcliente(this.selecionaUltimo().getIdcliente());
             }
@@ -34,12 +35,13 @@ public class ClienteDAO {
     }
 
     public void atualizar(Cliente c) {
-        String sql = "UPDATE cliente SET nome = ?, rg = ? WHERE cliente.idcliente = ?;";
+        String sql = "UPDATE cliente SET nome = ?, rg = ?, telefone = ? WHERE cliente.idcliente = ?;";
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1, c.getNome());
             stmt.setString(2, c.getRg());
-            stmt.setInt(3, c.getIdcliente());
+            stmt.setString(3, c.getTelefone());
+            stmt.setInt(4, c.getIdcliente());
             stmt.execute();
         } catch (SQLException ex) {
             Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -77,7 +79,8 @@ public class ClienteDAO {
                 cliente = new Cliente();
                 cliente.setIdcliente(result.getInt("idcliente"));
                 cliente.setNome(result.getString("nome"));
-                cliente.setRg(result.getString("RG"));
+                cliente.setRg(result.getString("rg"));
+                cliente.setTelefone(result.getString("telefone"));
                 list.add(cliente);
             }
         } catch (SQLException e) {
@@ -106,7 +109,8 @@ public class ClienteDAO {
                 cliente = new Cliente();
                 cliente.setIdcliente(result.getInt("idcliente"));
                 cliente.setNome(result.getString("nome"));
-                cliente.setRg(result.getString("RG"));
+                cliente.setRg(result.getString("rg"));
+                cliente.setTelefone(result.getString("telefone"));
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "erro no cliente " + e.getMessage());
