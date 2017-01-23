@@ -5,7 +5,6 @@
  */
 package turism.gui;
 
-
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
@@ -23,13 +22,16 @@ import turism.modelo.Cidade;
 import turism.modelo.Empresa;
 import turism.modelo.Estado;
 import turism.modelo.Hoteiscontratados;
+import turism.modelo.HoteiscontratadosPK;
 import turism.modelo.Hotel;
 import turism.modelo.Pais;
 import turism.modelo.Veiculo;
 import turism.modelo.Veiculoscontratados;
+import turism.modelo.VeiculoscontratadosPK;
 import turism.modelo.Viagem;
 import turism.regra.HoteisContratadosTableModel;
 import turism.regra.VeiculosContratadosTableModel;
+import turism.regra.ViagemTableModel;
 
 /**
  *
@@ -39,10 +41,16 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
 
     //Listas
     ArrayList<Pais> paises = new ArrayList<>();
+    ArrayList<Estado> estados = new ArrayList<>();
+    ArrayList<Cidade> cidades = new ArrayList<>();
     ArrayList<Empresa> empresas = new ArrayList<>();
+    ArrayList<Veiculo> veiculos = new ArrayList<>();
     ArrayList<Hotel> hoteis = new ArrayList<>();
     ArrayList<Hoteiscontratados> hoteiscontratados = new ArrayList<>();
+    ArrayList<HoteiscontratadosPK> hoteiscontratadospk = new ArrayList<>();
     ArrayList<Veiculoscontratados> veiculoscontratados = new ArrayList<>();
+    ArrayList<VeiculoscontratadosPK> veiculoscontratadospk = new ArrayList<>();
+    ArrayList<Viagem> viagens = new ArrayList<>();
 
     //Entidades e DAO
     Viagem viagem = new Viagem();
@@ -51,6 +59,7 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
     //Modelo Tabela
     VeiculosContratadosTableModel modeloV;
     HoteisContratadosTableModel modeloH;
+    ViagemTableModel modeloViagem;
 
     //formato dinheiro
     private static final Locale BRAZIL = new Locale("pt", "BR");
@@ -63,12 +72,11 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
      */
     public TelaViagemVisualizacao() {
         initComponents();
-        carregaEmpresa();
-        carregaHotel();
-        modeloV = new VeiculosContratadosTableModel();
-        modeloH = new HoteisContratadosTableModel();
-        jtVeiculos.setModel(modeloV);
-        jtHotel.setModel(modeloH);
+        this.carregaEmpresa();
+        this.carregaHotel();
+        this.carregaTable();
+        this.buscaViagem();
+        this.carregaPais();
     }
 
     /**
@@ -84,36 +92,35 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
         btnBuscaOrigem = new javax.swing.JButton();
         txtDestino = new javax.swing.JTextField();
         btnBuscaDestino = new javax.swing.JButton();
-        jInternalBuscaCidade = new javax.swing.JInternalFrame();
+        btnAdicionar = new javax.swing.JButton();
         jLabel13L = new javax.swing.JLabel();
         jLabel14L = new javax.swing.JLabel();
         jLabel15L = new javax.swing.JLabel();
         jbPais = new javax.swing.JComboBox<>();
         jbEstado = new javax.swing.JComboBox<>();
         jbCidade = new javax.swing.JComboBox<>();
-        btnSelecionar = new javax.swing.JButton();
-        btnAdicionar = new javax.swing.JButton();
-        PainelOnibus = new javax.swing.JPanel();
-        jbEmpresa = new javax.swing.JComboBox<>();
-        jLabel17 = new javax.swing.JLabel();
-        jLabel18 = new javax.swing.JLabel();
-        jbVeiculo = new javax.swing.JComboBox<>();
-        btnAdVeiculo = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jtVeiculos = new javax.swing.JTable();
-        btnRmVeiculo = new javax.swing.JButton();
-        jLabel20 = new javax.swing.JLabel();
-        txtValorOnCon = new javax.swing.JSpinner();
-        PainelHotel = new javax.swing.JPanel();
-        jLabel19 = new javax.swing.JLabel();
-        jbHotel = new javax.swing.JComboBox<>();
-        btnAdHotel = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jtHotel = new javax.swing.JTable();
-        btnRmHotel = new javax.swing.JButton();
-        jLabel21 = new javax.swing.JLabel();
-        txtValorHtCon = new javax.swing.JSpinner();
-        jTPViagem = new javax.swing.JTabbedPane();
+        jInternalBuscaViagem = new javax.swing.JInternalFrame();
+        btnBuscarViagem = new javax.swing.JButton();
+        dataIdaBusca = new com.toedter.calendar.JDateChooser();
+        dataVoltaBusca = new com.toedter.calendar.JDateChooser();
+        PainelOrigem1 = new javax.swing.JPanel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jbCidadeOrigem = new javax.swing.JComboBox<>();
+        jbEstadoOrigem = new javax.swing.JComboBox<>();
+        jbPaisOrigem = new javax.swing.JComboBox<>();
+        PainelDestino1 = new javax.swing.JPanel();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
+        jbCidadeDestino = new javax.swing.JComboBox<>();
+        jbEstadoDestino = new javax.swing.JComboBox<>();
+        jbPaisDestino = new javax.swing.JComboBox<>();
+        jLabel25 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jtViagem = new javax.swing.JTable();
         PainelVisualizacao = new javax.swing.JPanel();
         PainelOrigem = new javax.swing.JPanel();
         txtOrigemVisu = new javax.swing.JTextField();
@@ -152,6 +159,30 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
         jTextField2 = new javax.swing.JTextField();
         painelFuncoes = new javax.swing.JPanel();
         btnSalvar = new javax.swing.JButton();
+        btnAtualizar = new javax.swing.JButton();
+        btnExcluir = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
+        PainelOnibus = new javax.swing.JPanel();
+        jbEmpresa = new javax.swing.JComboBox<>();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        jbVeiculo = new javax.swing.JComboBox<>();
+        btnAdVeiculo = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jtVeiculos = new javax.swing.JTable();
+        btnRmVeiculo = new javax.swing.JButton();
+        jLabel20 = new javax.swing.JLabel();
+        txtValorOnCon = new javax.swing.JSpinner();
+        PainelHotel = new javax.swing.JPanel();
+        jLabel19 = new javax.swing.JLabel();
+        jbHotel = new javax.swing.JComboBox<>();
+        btnAdHotel = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jtHotel = new javax.swing.JTable();
+        btnRmHotel = new javax.swing.JButton();
+        jLabel21 = new javax.swing.JLabel();
+        txtValorHtCon = new javax.swing.JSpinner();
 
         txtOrigem.setEditable(false);
         txtOrigem.setEnabled(false);
@@ -173,30 +204,10 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
             }
         });
 
-        jInternalBuscaCidade.setTitle("Busca Cidade");
-        jInternalBuscaCidade.setVisible(false);
-        jInternalBuscaCidade.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jInternalBuscaCidadeFocusGained(evt);
-            }
-        });
-        jInternalBuscaCidade.addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
-            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
-            }
-            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
-            }
-            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
-                jInternalBuscaCidadeInternalFrameClosed(evt);
-            }
-            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
-            }
-            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
-            }
-            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
-            }
-            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
-            }
-        });
+        btnAdicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/padrao/add_64.png"))); // NOI18N
+        btnAdicionar.setText("Adicionar");
+        btnAdicionar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAdicionar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 
         jLabel13L.setText("País:");
 
@@ -227,230 +238,275 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
             }
         });
 
-        btnSelecionar.setText("Selecionar");
-        btnSelecionar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSelecionarActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jInternalBuscaCidadeLayout = new javax.swing.GroupLayout(jInternalBuscaCidade.getContentPane());
-        jInternalBuscaCidade.getContentPane().setLayout(jInternalBuscaCidadeLayout);
-        jInternalBuscaCidadeLayout.setHorizontalGroup(
-            jInternalBuscaCidadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jInternalBuscaCidadeLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addGroup(jInternalBuscaCidadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel13L)
-                    .addComponent(jbPais, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(50, 50, 50)
-                .addGroup(jInternalBuscaCidadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnSelecionar)
-                    .addGroup(jInternalBuscaCidadeLayout.createSequentialGroup()
-                        .addGroup(jInternalBuscaCidadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel14L))
-                        .addGap(67, 67, 67)
-                        .addGroup(jInternalBuscaCidadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel15L)
-                            .addComponent(jbCidade, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jInternalBuscaCidadeLayout.setVerticalGroup(
-            jInternalBuscaCidadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jInternalBuscaCidadeLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jInternalBuscaCidadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13L)
-                    .addComponent(jLabel14L)
-                    .addComponent(jLabel15L))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jInternalBuscaCidadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbPais, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbCidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
-                .addComponent(btnSelecionar)
-                .addGap(26, 26, 26))
-        );
-
-        btnAdicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/padrao/add_64.png"))); // NOI18N
-        btnAdicionar.setText("Adicionar");
-        btnAdicionar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnAdicionar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-
-        PainelOnibus.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Ônibus"));
-
-        jbEmpresa.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jbEmpresaItemStateChanged(evt);
-            }
-        });
-
-        jLabel17.setText("Empresa:");
-
-        jLabel18.setText("Veículo:");
-
-        btnAdVeiculo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/add_16.png"))); // NOI18N
-        btnAdVeiculo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAdVeiculoActionPerformed(evt);
-            }
-        });
-
-        jtVeiculos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-
-            }
-        ));
-        jScrollPane1.setViewportView(jtVeiculos);
-
-        btnRmVeiculo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/close_16.png"))); // NOI18N
-        btnRmVeiculo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRmVeiculoActionPerformed(evt);
-            }
-        });
-
-        jLabel20.setText("Valor:");
-
-        txtValorOnCon.setModel(new javax.swing.SpinnerNumberModel(100.0d, null, null, 1.0d));
-
-        javax.swing.GroupLayout PainelOnibusLayout = new javax.swing.GroupLayout(PainelOnibus);
-        PainelOnibus.setLayout(PainelOnibusLayout);
-        PainelOnibusLayout.setHorizontalGroup(
-            PainelOnibusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PainelOnibusLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(PainelOnibusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jbEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel17))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(PainelOnibusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PainelOnibusLayout.createSequentialGroup()
-                        .addComponent(btnAdVeiculo)
-                        .addGap(31, 31, 31)
-                        .addComponent(btnRmVeiculo))
-                    .addComponent(jLabel18)
-                    .addComponent(jbVeiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(PainelOnibusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel20)
-                    .addComponent(txtValorOnCon, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(68, 68, 68))
-            .addGroup(PainelOnibusLayout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        PainelOnibusLayout.setVerticalGroup(
-            PainelOnibusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PainelOnibusLayout.createSequentialGroup()
-                .addGroup(PainelOnibusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel17)
-                    .addComponent(jLabel18)
-                    .addComponent(jLabel20))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(PainelOnibusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(PainelOnibusLayout.createSequentialGroup()
-                        .addGroup(PainelOnibusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jbVeiculo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jbEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtValorOnCon, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnRmVeiculo))
-                    .addComponent(btnAdVeiculo))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(112, 112, 112))
-        );
-
-        PainelHotel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Hotel"));
-
-        jLabel19.setText("Hotel:");
-
-        btnAdHotel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/add_16.png"))); // NOI18N
-        btnAdHotel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAdHotelActionPerformed(evt);
-            }
-        });
-
-        jtHotel.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-
-            }
-        ));
-        jScrollPane2.setViewportView(jtHotel);
-
-        btnRmHotel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/close_16.png"))); // NOI18N
-        btnRmHotel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRmHotelActionPerformed(evt);
-            }
-        });
-
-        jLabel21.setText("Valor:");
-
-        txtValorHtCon.setModel(new javax.swing.SpinnerNumberModel(250.0d, null, null, 1.0d));
-
-        javax.swing.GroupLayout PainelHotelLayout = new javax.swing.GroupLayout(PainelHotel);
-        PainelHotel.setLayout(PainelHotelLayout);
-        PainelHotelLayout.setHorizontalGroup(
-            PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PainelHotelLayout.createSequentialGroup()
-                .addContainerGap(36, Short.MAX_VALUE)
-                .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PainelHotelLayout.createSequentialGroup()
-                        .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(PainelHotelLayout.createSequentialGroup()
-                                .addComponent(btnAdHotel)
-                                .addGap(61, 61, 61)
-                                .addComponent(btnRmHotel))
-                            .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jbHotel, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel19)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel21)
-                            .addComponent(txtValorHtCon, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(37, Short.MAX_VALUE))
-        );
-        PainelHotelLayout.setVerticalGroup(
-            PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(PainelHotelLayout.createSequentialGroup()
-                .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel19)
-                    .addComponent(jLabel21))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jbHotel)
-                    .addComponent(txtValorHtCon))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PainelHotelLayout.createSequentialGroup()
-                        .addComponent(btnAdHotel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE))
-                    .addGroup(PainelHotelLayout.createSequentialGroup()
-                        .addComponent(btnRmHotel)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(12, 12, 12))
-        );
-
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Viagem");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jInternalBuscaViagem.setTitle("Busca Cidade");
+        jInternalBuscaViagem.setVisible(false);
+        jInternalBuscaViagem.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jInternalBuscaViagemFocusGained(evt);
+            }
+        });
+        jInternalBuscaViagem.addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+                jInternalBuscaViagemInternalFrameClosed(evt);
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
+
+        btnBuscarViagem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/padrao/search_64.png"))); // NOI18N
+        btnBuscarViagem.setText("Buscar Viagem");
+        btnBuscarViagem.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnBuscarViagem.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnBuscarViagem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarViagemActionPerformed(evt);
+            }
+        });
+
+        dataIdaBusca.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                dataIdaBuscaPropertyChange(evt);
+            }
+        });
+
+        dataVoltaBusca.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                dataVoltaBuscaPropertyChange(evt);
+            }
+        });
+
+        PainelOrigem1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED), "Origem:"));
+
+        jLabel13.setText("Cidade:");
+
+        jLabel16.setText("UF:");
+
+        jLabel15.setText("País:");
+
+        jbEstadoOrigem.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jbEstadoOrigemItemStateChanged(evt);
+            }
+        });
+
+        jbPaisOrigem.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jbPaisOrigemItemStateChanged(evt);
+            }
+        });
+        jbPaisOrigem.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jbPaisOrigemPropertyChange(evt);
+            }
+        });
+        jbPaisOrigem.addVetoableChangeListener(new java.beans.VetoableChangeListener() {
+            public void vetoableChange(java.beans.PropertyChangeEvent evt)throws java.beans.PropertyVetoException {
+                jbPaisOrigemVetoableChange(evt);
+            }
+        });
+
+        javax.swing.GroupLayout PainelOrigem1Layout = new javax.swing.GroupLayout(PainelOrigem1);
+        PainelOrigem1.setLayout(PainelOrigem1Layout);
+        PainelOrigem1Layout.setHorizontalGroup(
+            PainelOrigem1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PainelOrigem1Layout.createSequentialGroup()
+                .addGroup(PainelOrigem1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jbPaisOrigem, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.LEADING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(PainelOrigem1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PainelOrigem1Layout.createSequentialGroup()
+                        .addComponent(jbEstadoOrigem, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(PainelOrigem1Layout.createSequentialGroup()
+                        .addComponent(jLabel16)
+                        .addGap(74, 74, 74)
+                        .addGroup(PainelOrigem1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(PainelOrigem1Layout.createSequentialGroup()
+                                .addComponent(jLabel13)
+                                .addGap(0, 121, Short.MAX_VALUE))
+                            .addComponent(jbCidadeOrigem, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap())
+        );
+        PainelOrigem1Layout.setVerticalGroup(
+            PainelOrigem1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PainelOrigem1Layout.createSequentialGroup()
+                .addGroup(PainelOrigem1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(jLabel16)
+                    .addComponent(jLabel15))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(PainelOrigem1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jbCidadeOrigem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbEstadoOrigem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbPaisOrigem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(30, Short.MAX_VALUE))
+        );
+
+        PainelDestino1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED), "Destino:"));
+
+        jLabel14.setText("País:");
+
+        jLabel23.setText("UF:");
+
+        jLabel24.setText("Cidade:");
+
+        jbCidadeDestino.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jbCidadeDestinoFocusLost(evt);
+            }
+        });
+
+        jbEstadoDestino.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jbEstadoDestinoItemStateChanged(evt);
+            }
+        });
+
+        jbPaisDestino.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jbPaisDestinoItemStateChanged(evt);
+            }
+        });
+
+        javax.swing.GroupLayout PainelDestino1Layout = new javax.swing.GroupLayout(PainelDestino1);
+        PainelDestino1.setLayout(PainelDestino1Layout);
+        PainelDestino1Layout.setHorizontalGroup(
+            PainelDestino1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PainelDestino1Layout.createSequentialGroup()
+                .addGroup(PainelDestino1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PainelDestino1Layout.createSequentialGroup()
+                        .addComponent(jLabel14)
+                        .addGap(133, 133, 133))
+                    .addGroup(PainelDestino1Layout.createSequentialGroup()
+                        .addComponent(jbPaisDestino, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                .addGroup(PainelDestino1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel23)
+                    .addComponent(jbEstadoDestino, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addGroup(PainelDestino1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel24)
+                    .addComponent(jbCidadeDestino, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+        PainelDestino1Layout.setVerticalGroup(
+            PainelDestino1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PainelDestino1Layout.createSequentialGroup()
+                .addGroup(PainelDestino1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel24)
+                    .addComponent(jLabel23)
+                    .addComponent(jLabel14))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(PainelDestino1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jbCidadeDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbEstadoDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbPaisDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(30, Short.MAX_VALUE))
+        );
+
+        jLabel25.setText("Data de Ida:");
+
+        jLabel26.setText("Data de Volta:");
+
+        jtViagem.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jtViagem.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jtViagemMouseClicked(evt);
+            }
+        });
+        jScrollPane4.setViewportView(jtViagem);
+
+        javax.swing.GroupLayout jInternalBuscaViagemLayout = new javax.swing.GroupLayout(jInternalBuscaViagem.getContentPane());
+        jInternalBuscaViagem.getContentPane().setLayout(jInternalBuscaViagemLayout);
+        jInternalBuscaViagemLayout.setHorizontalGroup(
+            jInternalBuscaViagemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jInternalBuscaViagemLayout.createSequentialGroup()
+                .addGap(0, 63, Short.MAX_VALUE)
+                .addGroup(jInternalBuscaViagemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jInternalBuscaViagemLayout.createSequentialGroup()
+                        .addComponent(PainelOrigem1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jInternalBuscaViagemLayout.createSequentialGroup()
+                        .addGroup(jInternalBuscaViagemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel25)
+                            .addComponent(dataIdaBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(118, 118, 118)))
+                .addGroup(jInternalBuscaViagemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(PainelDestino1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jInternalBuscaViagemLayout.createSequentialGroup()
+                        .addGap(8, 8, 8)
+                        .addGroup(jInternalBuscaViagemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jInternalBuscaViagemLayout.createSequentialGroup()
+                                .addComponent(jLabel26)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnBuscarViagem)
+                                .addGap(63, 63, 63))
+                            .addComponent(dataVoltaBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+            .addGroup(jInternalBuscaViagemLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane4)
+                .addContainerGap())
+        );
+        jInternalBuscaViagemLayout.setVerticalGroup(
+            jInternalBuscaViagemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jInternalBuscaViagemLayout.createSequentialGroup()
+                .addGroup(jInternalBuscaViagemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(PainelDestino1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(PainelOrigem1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jInternalBuscaViagemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jInternalBuscaViagemLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnBuscarViagem))
+                    .addGroup(jInternalBuscaViagemLayout.createSequentialGroup()
+                        .addGroup(jInternalBuscaViagemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jInternalBuscaViagemLayout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addComponent(jLabel25))
+                            .addGroup(jInternalBuscaViagemLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel26)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jInternalBuscaViagemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(dataIdaBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dataVoltaBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        dataIdaBusca.getJCalendar().setMinSelectableDate(new Date());
+
+        getContentPane().add(jInternalBuscaViagem, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+
         PainelOrigem.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED), "Origem:"));
 
         txtOrigemVisu.setEditable(false);
+        txtOrigemVisu.setEnabled(false);
 
         javax.swing.GroupLayout PainelOrigemLayout = new javax.swing.GroupLayout(PainelOrigem);
         PainelOrigem.setLayout(PainelOrigemLayout);
@@ -468,6 +524,7 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
         PainelDestino.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED), "Destino:"));
 
         txtDestinoVisu.setEditable(false);
+        txtDestinoVisu.setEnabled(false);
 
         javax.swing.GroupLayout PainelDestinoLayout = new javax.swing.GroupLayout(PainelDestino);
         PainelDestino.setLayout(PainelDestinoLayout);
@@ -554,8 +611,10 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
         jLabel2.setText("Valor Faltante:");
 
         jTextField1.setEditable(false);
+        jTextField1.setEnabled(false);
 
         jTextField2.setEditable(false);
+        jTextField2.setEnabled(false);
 
         javax.swing.GroupLayout PainelAllLayout = new javax.swing.GroupLayout(PainelAll);
         PainelAll.setLayout(PainelAllLayout);
@@ -628,8 +687,8 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
                     .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel3)
                         .addComponent(jLabel4))
-                    .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel5)
+                    .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jLabel22)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -668,8 +727,8 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
                             .addGroup(PainelAllLayout.createSequentialGroup()
                                 .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jTextField1)
+                                    .addComponent(txtValorPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(PainelAllLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(txtValorPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(txtValorOnibus, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(txtValorHotel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(txtValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -686,6 +745,7 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
 
         btnSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/padrao/save_64.png"))); // NOI18N
         btnSalvar.setText("Salvar");
+        btnSalvar.setEnabled(false);
         btnSalvar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSalvar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnSalvar.addActionListener(new java.awt.event.ActionListener() {
@@ -694,17 +754,244 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
             }
         });
 
+        btnAtualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/padrao/Update_64.png"))); // NOI18N
+        btnAtualizar.setText("Atualizar");
+        btnAtualizar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAtualizar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAtualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAtualizarActionPerformed(evt);
+            }
+        });
+
+        btnExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/padrao/delete_64.png"))); // NOI18N
+        btnExcluir.setText("Excluir");
+        btnExcluir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnExcluir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirActionPerformed(evt);
+            }
+        });
+
+        btnBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/padrao/search_64.png"))); // NOI18N
+        btnBuscar.setText("Buscar");
+        btnBuscar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnBuscar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+
+        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/padrao/cancel_64.png"))); // NOI18N
+        btnCancelar.setText("Cancelar");
+        btnCancelar.setEnabled(false);
+        btnCancelar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnCancelar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout painelFuncoesLayout = new javax.swing.GroupLayout(painelFuncoes);
         painelFuncoes.setLayout(painelFuncoesLayout);
         painelFuncoesLayout.setHorizontalGroup(
             painelFuncoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnSalvar, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
+            .addGroup(painelFuncoesLayout.createSequentialGroup()
+                .addGroup(painelFuncoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnSalvar)
+                    .addComponent(btnAtualizar)
+                    .addComponent(btnBuscar)
+                    .addComponent(btnExcluir)
+                    .addComponent(btnCancelar))
+                .addGap(0, 24, Short.MAX_VALUE))
         );
         painelFuncoesLayout.setVerticalGroup(
             painelFuncoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelFuncoesLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnAtualizar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnSalvar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnBuscar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnExcluir)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnCancelar))
+        );
+
+        PainelOnibus.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Ônibus"));
+
+        jbEmpresa.setEnabled(false);
+        jbEmpresa.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jbEmpresaItemStateChanged(evt);
+            }
+        });
+
+        jLabel17.setText("Empresa:");
+
+        jLabel18.setText("Veículo:");
+
+        jbVeiculo.setEnabled(false);
+
+        btnAdVeiculo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/add_16.png"))); // NOI18N
+        btnAdVeiculo.setEnabled(false);
+        btnAdVeiculo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdVeiculoActionPerformed(evt);
+            }
+        });
+
+        jtVeiculos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane1.setViewportView(jtVeiculos);
+
+        btnRmVeiculo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/close_16.png"))); // NOI18N
+        btnRmVeiculo.setEnabled(false);
+        btnRmVeiculo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRmVeiculoActionPerformed(evt);
+            }
+        });
+
+        jLabel20.setText("Valor por Pessoa:");
+
+        txtValorOnCon.setModel(new javax.swing.SpinnerNumberModel(100.0d, null, null, 1.0d));
+        txtValorOnCon.setEnabled(false);
+
+        javax.swing.GroupLayout PainelOnibusLayout = new javax.swing.GroupLayout(PainelOnibus);
+        PainelOnibus.setLayout(PainelOnibusLayout);
+        PainelOnibusLayout.setHorizontalGroup(
+            PainelOnibusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PainelOnibusLayout.createSequentialGroup()
+                .addGroup(PainelOnibusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel17)
+                    .addGroup(PainelOnibusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(btnAdVeiculo, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jbEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(PainelOnibusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel18)
+                    .addGroup(PainelOnibusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(btnRmVeiculo)
+                        .addComponent(jbVeiculo, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(PainelOnibusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PainelOnibusLayout.createSequentialGroup()
+                        .addComponent(txtValorOnCon, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jLabel20, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        PainelOnibusLayout.setVerticalGroup(
+            PainelOnibusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PainelOnibusLayout.createSequentialGroup()
+                .addGroup(PainelOnibusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PainelOnibusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel18, javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabel20, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(PainelOnibusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(PainelOnibusLayout.createSequentialGroup()
+                        .addGroup(PainelOnibusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jbVeiculo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jbEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtValorOnCon, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRmVeiculo))
+                    .addComponent(btnAdVeiculo))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(119, Short.MAX_VALUE))
+        );
+
+        PainelHotel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Hotel"));
+
+        jLabel19.setText("Hotel:");
+
+        jbHotel.setEnabled(false);
+
+        btnAdHotel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/add_16.png"))); // NOI18N
+        btnAdHotel.setEnabled(false);
+        btnAdHotel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdHotelActionPerformed(evt);
+            }
+        });
+
+        jtHotel.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane2.setViewportView(jtHotel);
+
+        btnRmHotel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/close_16.png"))); // NOI18N
+        btnRmHotel.setEnabled(false);
+        btnRmHotel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRmHotelActionPerformed(evt);
+            }
+        });
+
+        jLabel21.setText("Valor por Pessoa:");
+
+        txtValorHtCon.setModel(new javax.swing.SpinnerNumberModel(250.0d, null, null, 1.0d));
+        txtValorHtCon.setEnabled(false);
+
+        javax.swing.GroupLayout PainelHotelLayout = new javax.swing.GroupLayout(PainelHotel);
+        PainelHotel.setLayout(PainelHotelLayout);
+        PainelHotelLayout.setHorizontalGroup(
+            PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PainelHotelLayout.createSequentialGroup()
+                .addGap(55, 55, 55)
+                .addComponent(btnAdHotel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnRmHotel)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(PainelHotelLayout.createSequentialGroup()
+                .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(PainelHotelLayout.createSequentialGroup()
+                        .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jbHotel, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel19))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtValorHtCon))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        PainelHotelLayout.setVerticalGroup(
+            PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PainelHotelLayout.createSequentialGroup()
+                .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel19)
+                    .addComponent(jLabel21))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtValorHtCon, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbHotel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAdHotel)
+                    .addComponent(btnRmHotel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -714,16 +1001,21 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
             PainelVisualizacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PainelVisualizacaoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(PainelVisualizacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(PainelVisualizacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(PainelVisualizacaoLayout.createSequentialGroup()
-                        .addComponent(PainelAll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(PainelVisualizacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(PainelAll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(PainelVisualizacaoLayout.createSequentialGroup()
+                                .addComponent(PainelOnibus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(PainelHotel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(painelFuncoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(PainelVisualizacaoLayout.createSequentialGroup()
                         .addComponent(PainelOrigem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(PainelDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(111, Short.MAX_VALUE))
         );
         PainelVisualizacaoLayout.setVerticalGroup(
             PainelVisualizacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -731,19 +1023,19 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
                 .addGroup(PainelVisualizacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(PainelOrigem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(PainelDestino, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(PainelVisualizacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PainelVisualizacaoLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(PainelAll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(PainelVisualizacaoLayout.createSequentialGroup()
-                        .addGap(110, 110, 110)
-                        .addComponent(painelFuncoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 386, Short.MAX_VALUE))
+                        .addComponent(PainelAll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(PainelVisualizacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(PainelOnibus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(PainelHotel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(painelFuncoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 135, Short.MAX_VALUE))
         );
 
-        jTPViagem.addTab("Visualização", PainelVisualizacao);
-
-        getContentPane().add(jTPViagem, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1050, 700));
+        getContentPane().add(PainelVisualizacao, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -751,10 +1043,9 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
     private void dataIdaPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dataIdaPropertyChange
         // TODO add your handling code here:
         dataVolta.getJCalendar().setMinSelectableDate(dataIda.getDate());
-        dataVolta.setDate(dataIda.getDate());
     }//GEN-LAST:event_dataIdaPropertyChange
 
-    private void jInternalBuscaCidadeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jInternalBuscaCidadeFocusGained
+    private void jInternalBuscaViagemFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jInternalBuscaViagemFocusGained
         // TODO add your handling code here:
         PaisDAO pDAO = new PaisDAO();
         paises = pDAO.buscaPaises("");
@@ -767,21 +1058,21 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
         jbEstado.setSelectedIndex(-1);
         jbCidade.removeAllItems();
         jbCidade.setSelectedIndex(-1);
-    }//GEN-LAST:event_jInternalBuscaCidadeFocusGained
+    }//GEN-LAST:event_jInternalBuscaViagemFocusGained
 
     private void btnBuscaOrigemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscaOrigemActionPerformed
         // TODO add your handling code here:
         chaveBackground(false);
-        jInternalBuscaCidade.setVisible(true);
-        jInternalBuscaCidade.toFront();
-        jInternalBuscaCidade.setClosable(true);
-        jInternalBuscaCidade.requestFocus();
+        jInternalBuscaViagem.setVisible(true);
+        jInternalBuscaViagem.toFront();
+        jInternalBuscaViagem.setClosable(true);
+        jInternalBuscaViagem.requestFocus();
     }//GEN-LAST:event_btnBuscaOrigemActionPerformed
 
-    private void jInternalBuscaCidadeInternalFrameClosed(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_jInternalBuscaCidadeInternalFrameClosed
+    private void jInternalBuscaViagemInternalFrameClosed(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_jInternalBuscaViagemInternalFrameClosed
         // TODO add your handling code here:
         chaveBackground(true);
-    }//GEN-LAST:event_jInternalBuscaCidadeInternalFrameClosed
+    }//GEN-LAST:event_jInternalBuscaViagemInternalFrameClosed
 
     private void jbEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEstadoActionPerformed
         // TODO add your handling code here:
@@ -838,43 +1129,26 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
     private void btnBuscaDestinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscaDestinoActionPerformed
         // TODO add your handling code here:
         chaveBackground(false);
-        jInternalBuscaCidade.setVisible(true);
-        jInternalBuscaCidade.toFront();
-        jInternalBuscaCidade.setClosable(true);
-        jInternalBuscaCidade.requestFocus();
+        jInternalBuscaViagem.setVisible(true);
+        jInternalBuscaViagem.toFront();
+        jInternalBuscaViagem.setClosable(true);
+        jInternalBuscaViagem.requestFocus();
     }//GEN-LAST:event_btnBuscaDestinoActionPerformed
 
-    private void btnSelecionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelecionarActionPerformed
+    private void btnBuscarViagemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarViagemActionPerformed
         // TODO add your handling code here:
-        /* int indice = jbCidade.getSelectedIndex();
-        CidadeDAO cDAO = new CidadeDAO();
-        Cidade cidade = cDAO.buscaCidade(indice + 1);
-        if (chave) {
-            txtOrigem.setText(cidade.getNome());
-            viagem.setIdorigem(cidade);
-            jbCidade.removeAllItems();
-            jbEstado.removeAllItems();
-            jbPais.removeAllItems();
-            try {
-                jInternalBuscaCidade.setClosed(true);
-            } catch (PropertyVetoException ex) {
-                Logger.getLogger(TelaViagemCadastro.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        int indo = jbCidadeOrigem.getSelectedIndex();
+        int indd = jbCidadeDestino.getSelectedIndex();
+        System.err.println(indo + " " + indd);
+        if (indo > -1 && indd > -1) {
+            CidadeDAO cDAO = new CidadeDAO();
+            Cidade origem = cDAO.buscaCidade(cidades.get(indo).getIdcidade());
+            Cidade destino = cDAO.buscaCidade(cidades.get(indd).getIdcidade());
+            this.buscaViagem(origem.getIdcidade(), destino.getIdcidade(), dataIdaBusca.getDate(), dataVoltaBusca.getDate());
         } else {
-            txtDestino.setText(cidade.getNome());
-            viagem.setIddestino(cidade);
-            jbCidade.removeAllItems();
-            jbEstado.removeAllItems();
-            jbPais.removeAllItems();
-            try {
-                System.err.println("Entrou");
-                jInternalBuscaCidade.setClosed(true);
-            } catch (PropertyVetoException ex) {
-                JOptionPane.showMessageDialog(this, "Erro: "+ex);
-                Logger.getLogger(TelaViagemCadastro.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }*/
-    }//GEN-LAST:event_btnSelecionarActionPerformed
+            JOptionPane.showMessageDialog(this, "Selecione uma cidade de origem e uma cidade de destino");
+        }
+    }//GEN-LAST:event_btnBuscarViagemActionPerformed
 
     private void txtValorOnibusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtValorOnibusActionPerformed
         // TODO add your handling code here:
@@ -890,15 +1164,19 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
         int indice = jbVeiculo.getSelectedIndex();
         if (indice >= 0) {
             VeiculoDAO veDAO = new VeiculoDAO();
-            Veiculo v = veDAO.buscaVeiculo(indice + 1);
+            Veiculo v = veDAO.buscaVeiculo(veiculos.get(indice).getIdveiculo());
             Veiculoscontratados vc = new Veiculoscontratados();
             vc.setVeiculo(v);
             vc.setViagem(viagem);
             vc.setValor(Double.valueOf(txtValorOnCon.getValue().toString()));
-            if (veiculoscontratados.contains(vc)) {
+            VeiculoscontratadosPK vcpk = new VeiculoscontratadosPK();
+            vcpk.setVeiculoIdveiculo(vc.getVeiculo().getIdveiculo());
+            vcpk.setViagemIdviagem(vc.getViagem().getIdviagem());
+            if (veiculoscontratados.contains(vc) && veiculoscontratadospk.contains(vcpk)) {
                 JOptionPane.showMessageDialog(this, "Veículo já adicionado");
             } else {
                 veiculoscontratados.add(vc);
+                veiculoscontratadospk.add(vcpk);
                 modeloV.addItem(vc);
                 this.vagasTotal();
                 this.valorTotal();
@@ -909,6 +1187,7 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
     private void btnRmVeiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRmVeiculoActionPerformed
         // TODO add your handling code here:
         veiculoscontratados.remove(jtVeiculos.getSelectedRow());
+        veiculoscontratadospk.remove(jtVeiculos.getSelectedRow());
         modeloV.limpar();
         modeloV.addListaVeiculosContratados(veiculoscontratados);
         this.vagasTotal();
@@ -920,15 +1199,19 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
         int indice = jbHotel.getSelectedIndex();
         if (indice >= 0) {
             HotelDAO hDAO = new HotelDAO();
-            Hotel h = hDAO.buscaHotel(indice + 1);
+            Hotel h = hDAO.buscaHotel(hoteis.get(indice).getIdhotel());
             Hoteiscontratados hc = new Hoteiscontratados();
             hc.setHotel(h);
             hc.setViagem(viagem);
             hc.setValor(Double.valueOf(txtValorHtCon.getValue().toString()));
-            if (hoteiscontratados.contains(hc)) {
+            HoteiscontratadosPK hcpk = new HoteiscontratadosPK();
+            hcpk.setHotelidHotel(hc.getHotel().getIdhotel());
+            hcpk.setViagemIdviagem(hc.getViagem().getIdviagem());
+            if (hoteiscontratados.contains(hc) && hoteiscontratadospk.contains(hcpk)) {
                 JOptionPane.showMessageDialog(this, "Hotel já adicionado");
             } else {
                 hoteiscontratados.add(hc);
+                hoteiscontratadospk.add(hcpk);
                 modeloH.addItem(hc);
                 this.valorTotal();
             }
@@ -938,6 +1221,7 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
     private void btnRmHotelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRmHotelActionPerformed
         // TODO add your handling code here:
         hoteiscontratados.remove(jtHotel.getSelectedRow());
+        hoteiscontratadospk.remove(jtHotel.getSelectedRow());
         modeloH.limpar();
         modeloH.addListaHoteisContratados(hoteiscontratados);
         this.valorTotal();
@@ -947,26 +1231,284 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (this.carregaViagem()) {
             if (viagem.getIdviagem() == null) {
-                vDAO.adicionar(viagem);
+                JOptionPane.showMessageDialog(this, "Selecione uma viagem!");
+            } else {
+                vDAO.atualizar(viagem);
                 VeiculosContratadosDAO vcDAO = new VeiculosContratadosDAO();
                 HoteisContratadosDAO hcDAO = new HoteisContratadosDAO();
+                ArrayList<Hoteiscontratados> existentesh = hcDAO.buscaHoteisContratadosViagem(viagem.getIdviagem());
+                ArrayList<Veiculoscontratados> existentesv = vcDAO.buscaVeiculosContratadosViagem(viagem.getIdviagem());
+/*                if (!existentesv.isEmpty()) {
+                    existentesv.forEach((veco) -> {
+                        if (veiculoscontratados.contains(veco)) {
+                            veiculoscontratados.remove(veco);
+                            existentesv.remove(veco);
+                        }
+                    });
+                }
+                if (!existentesh.isEmpty()) {
+                    existentesh.forEach((hoco) -> {
+                        if (hoteiscontratados.contains(hoco)) {
+                            hoteiscontratados.remove(hoco);
+                            existentesh.remove(hoco);
+                        }
+                    });
+                }*/
+                existentesv.forEach((next) -> {
+                    vcDAO.apagar(next);
+                });
+                existentesh.forEach((hc) -> {
+                    hcDAO.apagar(hc);
+                });
+
                 veiculoscontratados.forEach((next) -> {
                     vcDAO.adicionar(next);
                 });
-
                 hoteiscontratados.forEach((hc) -> {
                     hcDAO.adicionar(hc);
                 });
-                JOptionPane.showMessageDialog(this, "Viagem cadastrada com sucesso!");
-            } else {
-                JOptionPane.showMessageDialog(this, "Viagem já cadastrada!.");
+                JOptionPane.showMessageDialog(this, "Viagem atualizada com sucesso!");
+                btnBuscar.setEnabled(true);
+                btnSalvar.setEnabled(false);
+                btnAtualizar.setEnabled(true);
+                btnExcluir.setEnabled(true);
+
+                dataIda.setEnabled(false);
+                dataVolta.setEnabled(false);
+                txtHoraSaida.setEnabled(false);
+                txtDescricao.setEnabled(false);
+                jSpinner1.setEnabled(false);
+
+                btnAdHotel.setEnabled(false);
+                btnAdVeiculo.setEnabled(false);
+                btnRmHotel.setEnabled(false);
+                btnRmVeiculo.setEnabled(false);
+                jbVeiculo.setEnabled(false);
+                jbEmpresa.setEnabled(false);
+                jbHotel.setEnabled(false);
+                txtValorOnCon.setEnabled(false);
+                txtValorHtCon.setEnabled(false);
             }
-
-        } else {
-
         }
-        viagem = new Viagem();
     }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void dataIdaBuscaPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dataIdaBuscaPropertyChange
+        // TODO add your handling code here:
+        dataVoltaBusca.getJCalendar().setMinSelectableDate(dataIdaBusca.getDate());
+        dataVoltaBusca.requestFocus();
+    }//GEN-LAST:event_dataIdaBuscaPropertyChange
+
+    private void jbCidadeDestinoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jbCidadeDestinoFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jbCidadeDestinoFocusLost
+
+    private void dataVoltaBuscaPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dataVoltaBuscaPropertyChange
+        // TODO add your handling code here:
+        btnBuscarViagem.requestFocus();
+    }//GEN-LAST:event_dataVoltaBuscaPropertyChange
+
+    private void jbPaisOrigemPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jbPaisOrigemPropertyChange
+        // TODO add your handling code here:
+        int indice = jbPaisOrigem.getSelectedIndex();
+        if (indice >= 0) {
+            estados.clear();
+            PaisDAO pDAO = new PaisDAO();
+            Pais p = pDAO.buscaPais(paises.get(indice).getIdpais());
+            estados = p.getEstadoList();
+            jbEstadoOrigem.removeAllItems();
+            if (!estados.isEmpty()) {
+                p.getEstadoList().forEach((next) -> {
+                    jbEstadoOrigem.addItem(next.getUf());
+                });
+                jbEstadoOrigem.setSelectedIndex(-1);
+            }
+        }
+    }//GEN-LAST:event_jbPaisOrigemPropertyChange
+
+    private void jbPaisOrigemVetoableChange(java.beans.PropertyChangeEvent evt)throws java.beans.PropertyVetoException {//GEN-FIRST:event_jbPaisOrigemVetoableChange
+        // TODO add your handling code here:
+        int indice = jbPaisOrigem.getSelectedIndex();
+        if (indice >= 0) {
+            estados.clear();
+            PaisDAO pDAO = new PaisDAO();
+            Pais p = pDAO.buscaPais(paises.get(indice).getIdpais());
+            estados = p.getEstadoList();
+            jbEstadoOrigem.removeAllItems();
+            if (!estados.isEmpty()) {
+                p.getEstadoList().forEach((next) -> {
+                    jbEstadoOrigem.addItem(next.getUf());
+                });
+                jbEstadoOrigem.setSelectedIndex(-1);
+            }
+        }
+    }//GEN-LAST:event_jbPaisOrigemVetoableChange
+
+    private void jbPaisOrigemItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jbPaisOrigemItemStateChanged
+        // TODO add your handling code here:
+        int indice = jbPaisOrigem.getSelectedIndex();
+        if (indice >= 0) {
+            estados.clear();
+            PaisDAO pDAO = new PaisDAO();
+            Pais p = pDAO.buscaPais(paises.get(indice).getIdpais());
+            estados = p.getEstadoList();
+            jbEstadoOrigem.removeAllItems();
+            if (!estados.isEmpty()) {
+                p.getEstadoList().forEach((next) -> {
+                    jbEstadoOrigem.addItem(next.getUf());
+                });
+                jbEstadoOrigem.setSelectedIndex(-1);
+            }
+        }
+    }//GEN-LAST:event_jbPaisOrigemItemStateChanged
+
+    private void jbEstadoOrigemItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jbEstadoOrigemItemStateChanged
+        // TODO add your handling code here:
+        int indice = jbEstadoOrigem.getSelectedIndex();
+        if (indice >= 0) {
+            cidades.clear();
+            EstadoDAO eDAO = new EstadoDAO();
+            Estado e = eDAO.buscaEstado(estados.get(indice).getIdestado());
+            cidades = e.getCidadeList();
+            jbCidadeOrigem.removeAllItems();
+            if (!cidades.isEmpty()) {
+                cidades.forEach((next) -> {
+                    jbCidadeOrigem.addItem(next.getNome());
+                });
+                jbCidadeOrigem.setSelectedIndex(-1);
+            }
+        }
+    }//GEN-LAST:event_jbEstadoOrigemItemStateChanged
+
+    private void jbPaisDestinoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jbPaisDestinoItemStateChanged
+        // TODO add your handling code here:
+        int indice = jbPaisDestino.getSelectedIndex();
+        if (indice >= 0) {
+            PaisDAO pDAO = new PaisDAO();
+            Pais p = pDAO.buscaPais(indice + 1);
+            jbEstadoDestino.removeAllItems();
+            if (!p.getEstadoList().isEmpty()) {
+                p.getEstadoList().forEach((next) -> {
+                    jbEstadoDestino.addItem(next.getUf());
+                });
+                jbEstadoDestino.setSelectedIndex(-1);
+            }
+        }
+    }//GEN-LAST:event_jbPaisDestinoItemStateChanged
+
+    private void jbEstadoDestinoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jbEstadoDestinoItemStateChanged
+        // TODO add your handling code here:
+        int indice = jbEstadoDestino.getSelectedIndex();
+        if (indice >= 0) {
+            cidades.clear();
+            EstadoDAO eDAO = new EstadoDAO();
+            Estado e = eDAO.buscaEstado(estados.get(indice).getIdestado());
+            cidades = e.getCidadeList();
+            jbCidadeDestino.removeAllItems();
+            if (!cidades.isEmpty()) {
+                cidades.forEach((next) -> {
+                    jbCidadeDestino.addItem(next.getNome());
+                });
+                jbCidadeDestino.setSelectedIndex(-1);
+            }
+        }
+    }//GEN-LAST:event_jbEstadoDestinoItemStateChanged
+
+    private void jtViagemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jtViagemMouseClicked
+        // TODO add your handling code here:
+        int indice = jtViagem.getSelectedRow();
+        if (indice > -1) {
+            viagem = vDAO.buscaViagem(viagens.get(indice).getIdviagem());
+            this.carregaViagem(viagem);
+            this.chaveBackground(true);
+        }
+    }//GEN-LAST:event_jtViagemMouseClicked
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        // TODO add your handling code here:
+        int opcao = -1;
+        if (viagem.getIdviagem() == null) {
+            JOptionPane.showMessageDialog(this, "Busque uma Viagem primeiro!");
+        } else {
+            opcao = JOptionPane.showConfirmDialog(this, "Certeza que deseja exluir?");
+        }
+
+        if (opcao == JOptionPane.YES_OPTION) {
+            VeiculosContratadosDAO vcDAO = new VeiculosContratadosDAO();
+            veiculoscontratados.forEach((veiculocontratado) -> {
+                vcDAO.apagar(veiculocontratado);
+            });
+
+            HoteisContratadosDAO hcDAO = new HoteisContratadosDAO();
+            hoteiscontratados.forEach((hotelcontratado) -> {
+                hcDAO.apagar(hotelcontratado);
+            });
+            vDAO.apagar(viagem);
+            JOptionPane.showMessageDialog(this, "Viagem excluida!");
+
+            //Nova instancia
+            vDAO = new ViagemDAO();
+            viagem = new Viagem();
+            hoteiscontratados.clear();
+            veiculoscontratados.clear();
+            this.chaveBackground(false);
+            this.buscaViagem();
+        }
+    }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        // TODO add your handling code here:
+        this.buscaViagem();
+        this.chaveBackground(false);
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
+        // TODO add your handling code here:
+        btnBuscar.setEnabled(false);
+        btnSalvar.setEnabled(true);
+        btnAtualizar.setEnabled(false);
+        btnExcluir.setEnabled(false);
+        btnCancelar.setEnabled(true);
+
+        dataIda.setEnabled(true);
+        dataVolta.setEnabled(true);
+        txtHoraSaida.setEnabled(true);
+        txtDescricao.setEnabled(true);
+        jSpinner1.setEnabled(true);
+
+        btnAdHotel.setEnabled(true);
+        btnAdVeiculo.setEnabled(true);
+        btnRmHotel.setEnabled(true);
+        btnRmVeiculo.setEnabled(true);
+        jbVeiculo.setEnabled(true);
+        jbEmpresa.setEnabled(true);
+        jbHotel.setEnabled(true);
+        txtValorOnCon.setEnabled(true);
+        txtValorHtCon.setEnabled(true);
+    }//GEN-LAST:event_btnAtualizarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        btnBuscar.setEnabled(true);
+        btnSalvar.setEnabled(false);
+        btnAtualizar.setEnabled(true);
+        btnExcluir.setEnabled(true);
+        btnCancelar.setEnabled(false);
+
+        dataIda.setEnabled(false);
+        dataVolta.setEnabled(false);
+        txtHoraSaida.setEnabled(false);
+        txtDescricao.setEnabled(false);
+        jSpinner1.setEnabled(false);
+
+        btnAdHotel.setEnabled(false);
+        btnAdVeiculo.setEnabled(false);
+        btnRmHotel.setEnabled(false);
+        btnRmVeiculo.setEnabled(false);
+        jbVeiculo.setEnabled(false);
+        jbEmpresa.setEnabled(false);
+        jbHotel.setEnabled(false);
+        txtValorOnCon.setEnabled(false);
+        txtValorHtCon.setEnabled(false);
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1003,39 +1545,49 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new TelaViagemVisualizacao().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new TelaViagemVisualizacao().setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PainelAll;
     private javax.swing.JPanel PainelDestino;
+    private javax.swing.JPanel PainelDestino1;
     private javax.swing.JPanel PainelHotel;
     private javax.swing.JPanel PainelOnibus;
     private javax.swing.JPanel PainelOrigem;
+    private javax.swing.JPanel PainelOrigem1;
     private javax.swing.JPanel PainelVisualizacao;
     private javax.swing.JButton btnAdHotel;
     private javax.swing.JButton btnAdVeiculo;
     private javax.swing.JButton btnAdicionar;
+    private javax.swing.JButton btnAtualizar;
     private javax.swing.JButton btnBuscaDestino;
     private javax.swing.JButton btnBuscaOrigem;
+    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnBuscarViagem;
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnRmHotel;
     private javax.swing.JButton btnRmVeiculo;
     private javax.swing.JButton btnSalvar;
-    private javax.swing.JButton btnSelecionar;
     private com.toedter.calendar.JDateChooser dataIda;
+    private com.toedter.calendar.JDateChooser dataIdaBusca;
     private com.toedter.calendar.JDateChooser dataVolta;
-    private javax.swing.JInternalFrame jInternalBuscaCidade;
+    private com.toedter.calendar.JDateChooser dataVoltaBusca;
+    private javax.swing.JInternalFrame jInternalBuscaViagem;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel13L;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel14L;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel15L;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
@@ -1043,6 +1595,10 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1053,18 +1609,25 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JTabbedPane jTPViagem;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JComboBox<String> jbCidade;
+    private javax.swing.JComboBox<String> jbCidadeDestino;
+    private javax.swing.JComboBox<String> jbCidadeOrigem;
     private javax.swing.JComboBox<String> jbEmpresa;
     private javax.swing.JComboBox<String> jbEstado;
+    private javax.swing.JComboBox<String> jbEstadoDestino;
+    private javax.swing.JComboBox<String> jbEstadoOrigem;
     private javax.swing.JComboBox<String> jbHotel;
     private javax.swing.JComboBox<String> jbPais;
+    private javax.swing.JComboBox<String> jbPaisDestino;
+    private javax.swing.JComboBox<String> jbPaisOrigem;
     private javax.swing.JComboBox<String> jbVeiculo;
     private javax.swing.JTable jtHotel;
     private javax.swing.JTable jtVeiculos;
+    private javax.swing.JTable jtViagem;
     private javax.swing.JPanel painelFuncoes;
     private javax.swing.JTextPane txtDescricao;
     private javax.swing.JTextField txtDestino;
@@ -1083,30 +1646,26 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void chaveBackground(boolean v) {
-        btnBuscaDestino.setVisible(v);
-        btnBuscaOrigem.setVisible(v);
-        dataIda.setVisible(v);
-        dataVolta.setVisible(v);
-        jLabel10.setVisible(v);
-        jLabel11.setVisible(v);
-        jLabel12.setVisible(v);
-        jLabel3.setVisible(v);
-        jLabel4.setVisible(v);
-        jLabel5.setVisible(v);
-        jLabel6.setVisible(v);
-        jLabel7.setVisible(v);
-        jLabel8.setVisible(v);
-        jLabel9.setVisible(v);
-        jSpinner1.setVisible(v);
-        txtDestino.setVisible(v);
-        txtHoraSaida.setVisible(v);
-        txtOrigem.setVisible(v);
-        txtVagaTotal.setVisible(v);
-        txtVagaRestante.setVisible(v);
-        txtValorHotel.setVisible(v);
-        txtValorOnibus.setVisible(v);
-        txtValorPessoa.setVisible(v);
-        txtValorTotal.setVisible(v);
+        PainelVisualizacao.setVisible(v);
+        jInternalBuscaViagem.setVisible(!v);
+    }
+
+    private void carregaPais() {
+        paises.clear();
+        PaisDAO pDAO = new PaisDAO();
+        paises = pDAO.buscaPaises("");
+        jbPaisOrigem.removeAllItems();
+        jbPaisDestino.removeAllItems();
+        paises.forEach((next) -> {
+            jbPaisOrigem.addItem(next.getNome());
+            jbPaisDestino.addItem(next.getNome());
+        });
+        jbPaisOrigem.setSelectedIndex(-1);
+        jbPaisDestino.setSelectedIndex(-1);
+        jbEstadoOrigem.removeAllItems();
+        jbEstadoOrigem.setSelectedIndex(-1);
+        jbCidadeOrigem.removeAllItems();
+        jbCidadeOrigem.setSelectedIndex(-1);
     }
 
     private void carregaEmpresa() {
@@ -1123,8 +1682,9 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
         jbVeiculo.removeAllItems();
         if (indice >= 0) {
             EmpresaDAO eDAO = new EmpresaDAO();
-            Empresa empresa = eDAO.buscaEmpresa(indice + 1);
-            empresa.getVeiculoList().forEach((next) -> {
+            Empresa empresa = eDAO.buscaEmpresa(empresas.get(indice).getIdempresa());
+            veiculos = eDAO.carregaVeiculos(empresa);
+            veiculos.forEach((next) -> {
                 jbVeiculo.addItem(next.getNome());
             });
             jbVeiculo.setSelectedIndex(-1);
@@ -1143,7 +1703,7 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
 
     private int vagasTotal() {
         int total = 0;
-        if (!veiculoscontratados.isEmpty()) {
+        if (!veiculoscontratados.isEmpty() || veiculoscontratados != null) {
             total = veiculoscontratados.stream().map((next) -> next.getVeiculo().getLotacao()).reduce(total, Integer::sum);
         }
         txtVagaTotal.setText(String.valueOf(ITENS.format(total)));
@@ -1151,7 +1711,7 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
     }
 
     private void valorTotal() {
-        double total = 0, onibus = 0, hotel = 0;
+        double total, onibus = 0, hotel = 0;
         if (!veiculoscontratados.isEmpty()) {
             for (Veiculoscontratados next : veiculoscontratados) {
                 if (next.getValor() > onibus) {
@@ -1179,12 +1739,12 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
         txtValorPessoa.setText(String.valueOf(DINHEIRO_REAL.format(total)));
         txtValorTotal.setText(String.valueOf(DINHEIRO_REAL.format(total * this.vagasTotal())));
     }
-    
+
     private boolean carregaViagem() {
         boolean c = false, d = false;
         if (viagem.getIdorigem() != null && viagem.getIddestino() != null) {
             c = true;
-        }else{
+        } else {
             JOptionPane.showMessageDialog(this, "Escolha cidade de Origem e Destino!");
         }
         if (this.dataIda.getDate() != null && this.dataVolta.getDate() != null
@@ -1195,11 +1755,84 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
             System.err.println(data);
             viagem.setHorariosaida(data);
             d = true;
-        }else{
+        } else {
             JOptionPane.showMessageDialog(this, "Escolha data de ida e volta e horário de saída!");
         }
         viagem.setVagasextras(Integer.valueOf(jSpinner1.getValue().toString()));
         viagem.setDescricao(txtDescricao.getText());
         return c && d;
+    }
+
+    private void carregaTable() {
+        modeloV = new VeiculosContratadosTableModel();
+        modeloH = new HoteisContratadosTableModel();
+        modeloViagem = new ViagemTableModel();
+        jtVeiculos.setModel(modeloV);
+        jtHotel.setModel(modeloH);
+        jtViagem.setModel(modeloViagem);
+    }
+
+    private void buscaViagem() {
+        PainelVisualizacao.setVisible(false);
+        jInternalBuscaViagem.setVisible(true);
+        viagens = vDAO.carregaViagem();
+        modeloViagem.limpar();
+        modeloViagem.addListaViagem(viagens);
+    }
+
+    private void buscaViagem(int origem, int destino, Date ida, Date volta) {
+        if (origem < 0 || destino < 0) {
+            JOptionPane.showMessageDialog(this, "Selecione uma cidade de origem e uma cidade de destino");
+        } else {
+            if (ida != null && volta != null) {
+                viagens = vDAO.buscaViagem(origem, destino, ida, volta);
+            } else if (ida != null) {
+                viagens = vDAO.buscaViagem(origem, destino, ida);
+            } else {
+                viagens = vDAO.buscaViagem(origem, destino);
+            }
+        }
+        modeloViagem.limpar();
+        modeloViagem.addListaViagem(viagens);
+    }
+
+    private void carregaViagem(Viagem v) {
+        txtOrigemVisu.setText(v.getIdorigem().getNome());
+        txtDestinoVisu.setText(v.getIddestino().getNome());
+        dataIda.setDate(v.getDataida());
+        dataVolta.setDate(v.getDatavolta());
+        txtDescricao.setText(v.getDescricao());
+        hoteiscontratados.clear();
+        hoteiscontratadospk.clear();
+        veiculoscontratados.clear();
+        veiculoscontratadospk.clear();
+        modeloH.limpar();
+        modeloV.limpar();
+        Date date = v.getHorariosaida();
+        txtHoraSaida.setValue(date);
+        VeiculosContratadosDAO vcDAO = new VeiculosContratadosDAO();
+        HoteisContratadosDAO hcDAO = new HoteisContratadosDAO();
+        hoteiscontratados = hcDAO.buscaHoteisContratadosViagem(v.getIdviagem());
+        veiculoscontratados = vcDAO.buscaVeiculosContratadosViagem(v.getIdviagem());
+        if (!hoteiscontratados.isEmpty()) {
+            hoteiscontratados.forEach((next) -> {
+                HoteiscontratadosPK hcpk = new HoteiscontratadosPK();
+                hcpk.setHotelidHotel(next.getHotel().getIdhotel());
+                hcpk.setViagemIdviagem(next.getViagem().getIdviagem());
+                hoteiscontratadospk.add(hcpk);
+            });
+        }
+        modeloH.addListaHoteisContratados(hoteiscontratados);
+        if (!veiculoscontratados.isEmpty()) {
+            veiculoscontratados.forEach((next) -> {
+                VeiculoscontratadosPK vcpk = new VeiculoscontratadosPK();
+                vcpk.setVeiculoIdveiculo(next.getVeiculo().getIdveiculo());
+                vcpk.setViagemIdviagem(next.getViagem().getIdviagem());
+                veiculoscontratadospk.add(vcpk);
+            });
+        }
+        modeloV.addListaVeiculosContratados(veiculoscontratados);
+        this.vagasTotal();
+        this.valorTotal();
     }
 }
