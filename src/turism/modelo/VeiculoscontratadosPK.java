@@ -66,10 +66,7 @@ public class VeiculoscontratadosPK implements Serializable {
         if (this.viagemIdviagem != other.viagemIdviagem) {
             return false;
         }
-        if (this.veiculoIdveiculo != other.veiculoIdveiculo) {
-            return false;
-        }
-        return true;
+        return this.veiculoIdveiculo == other.veiculoIdveiculo;
     }
 
     @Override

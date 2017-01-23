@@ -7,7 +7,7 @@ package turism.modelo;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import java.util.ArrayList;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -63,9 +63,9 @@ public class Viagem implements Serializable {
     @Column(name = "vagasextras")
     private Integer vagasextras;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "viagem")
-    private List<Veiculoscontratados> veiculoscontratadosList;
+    private ArrayList<Veiculoscontratados> veiculoscontratadosList;
     @OneToMany(mappedBy = "idviagem")
-    private List<Contrato> contratoList;
+    private ArrayList<Contrato> contratoList;
     @JoinColumn(name = "idorigem", referencedColumnName = "idcidade")
     @ManyToOne
     private Cidade idorigem;
@@ -73,7 +73,7 @@ public class Viagem implements Serializable {
     @ManyToOne
     private Cidade iddestino;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "viagem")
-    private List<Hoteiscontratados> hoteiscontratadosList;
+    private ArrayList<Hoteiscontratados> hoteiscontratadosList;
 
     public Viagem() {
     }
@@ -131,20 +131,20 @@ public class Viagem implements Serializable {
     }
 
     @XmlTransient
-    public List<Veiculoscontratados> getVeiculoscontratadosList() {
+    public ArrayList<Veiculoscontratados> getVeiculoscontratadosList() {
         return veiculoscontratadosList;
     }
 
-    public void setVeiculoscontratadosList(List<Veiculoscontratados> veiculoscontratadosList) {
+    public void setVeiculoscontratadosList(ArrayList<Veiculoscontratados> veiculoscontratadosList) {
         this.veiculoscontratadosList = veiculoscontratadosList;
     }
 
     @XmlTransient
-    public List<Contrato> getContratoList() {
+    public ArrayList<Contrato> getContratoList() {
         return contratoList;
     }
 
-    public void setContratoList(List<Contrato> contratoList) {
+    public void setContratoList(ArrayList<Contrato> contratoList) {
         this.contratoList = contratoList;
     }
 
@@ -165,11 +165,11 @@ public class Viagem implements Serializable {
     }
 
     @XmlTransient
-    public List<Hoteiscontratados> getHoteiscontratadosList() {
+    public ArrayList<Hoteiscontratados> getHoteiscontratadosList() {
         return hoteiscontratadosList;
     }
 
-    public void setHoteiscontratadosList(List<Hoteiscontratados> hoteiscontratadosList) {
+    public void setHoteiscontratadosList(ArrayList<Hoteiscontratados> hoteiscontratadosList) {
         this.hoteiscontratadosList = hoteiscontratadosList;
     }
 
