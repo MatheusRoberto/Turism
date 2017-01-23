@@ -472,6 +472,7 @@ public class TelaEmpresa extends javax.swing.JFrame {
             eDAO = new EmpresaDAO();
             empresa = new Empresa();
             veiculos.clear();
+            this.limpar();
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
     
@@ -540,5 +541,12 @@ private void chaveBackdroug(boolean chave){
     labelNome.setVisible(chave);
     painelFuncoes.setVisible(chave);
     painelVeiculos.setVisible(chave);
+}
+
+private void limpar(){
+    modelo.limpar();
+    painelVeiculos.setVisible(false);
+    txtNome.setText("");
+    
 }
 }
