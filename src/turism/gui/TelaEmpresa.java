@@ -257,6 +257,23 @@ public class TelaEmpresa extends javax.swing.JFrame {
 
         jBusca.setClosable(true);
         jBusca.setVisible(true);
+        jBusca.addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+                jBuscaInternalFrameClosed(evt);
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
 
         listBusca.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         listBusca.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -498,6 +515,12 @@ public class TelaEmpresa extends javax.swing.JFrame {
         btnExcluir.setEnabled(true);
         txtNome.setText("");
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void jBuscaInternalFrameClosed(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_jBuscaInternalFrameClosed
+        // TODO add your handling code here:
+        this.chaveBackdroug(true);
+        painelVeiculos.setVisible(false);
+    }//GEN-LAST:event_jBuscaInternalFrameClosed
     
     /**
      * @param args the command line arguments

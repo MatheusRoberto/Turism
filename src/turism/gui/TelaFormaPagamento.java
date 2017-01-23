@@ -8,27 +8,28 @@ package turism.gui;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
-import turism.controle.ClienteDAO;
-import turism.modelo.Cliente;
+import turism.controle.FormaPGDAO;
+import turism.modelo.Formapagamento;
 
 /**
  *
  * @author matheus
  */
-public class TelaCliente extends javax.swing.JFrame {
-
-    //Entidades:
-    ClienteDAO cDAO = new ClienteDAO();
-    Cliente cliente = new Cliente();
-
-    //Arraylist
-    ArrayList<Cliente> clientes = new ArrayList<>();
+public class TelaFormaPagamento extends javax.swing.JFrame {
+    
+    //Entidades
+    Formapagamento formapagamento = new Formapagamento();
+    FormaPGDAO fpgDAO = new FormaPGDAO();
+    
+    //ArrayList
+    ArrayList<Formapagamento> formas = new ArrayList<>();
 
     /**
-     * Creates new form TelaCliente
+     * Creates new form TelaFormaPagamento
      */
-    public TelaCliente() {
+    public TelaFormaPagamento() {
         initComponents();
+        this.chaveBackground(true);
     }
 
     /**
@@ -40,40 +41,20 @@ public class TelaCliente extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        painelCliente = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        txtNome = new javax.swing.JTextField();
-        txtRG = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        txtTelefone = new javax.swing.JFormattedTextField();
         painelFuncoes = new javax.swing.JPanel();
         btnSalvar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
         btnExcluir = new javax.swing.JButton();
         btnAdicionar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        txtNome = new javax.swing.JTextField();
         jBusca = new javax.swing.JInternalFrame();
         jScrollPane1 = new javax.swing.JScrollPane();
         listBusca = new javax.swing.JList<>();
         txtBusca = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jLabel1.setText("Nome:");
-
-        jLabel2.setText("RG:");
-
-        txtRG.setEnabled(false);
-
-        jLabel3.setText("Telefone:");
-
-        try {
-            txtTelefone.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(##) #####-####")));
-        } catch (java.text.ParseException ex) {
-            ex.printStackTrace();
-        }
-        txtTelefone.setEnabled(false);
 
         painelFuncoes.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -152,52 +133,10 @@ public class TelaCliente extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnExcluir)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnCancelar)
-                .addContainerGap())
+                .addComponent(btnCancelar))
         );
 
-        javax.swing.GroupLayout painelClienteLayout = new javax.swing.GroupLayout(painelCliente);
-        painelCliente.setLayout(painelClienteLayout);
-        painelClienteLayout.setHorizontalGroup(
-            painelClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelClienteLayout.createSequentialGroup()
-                .addContainerGap(370, Short.MAX_VALUE)
-                .addComponent(painelFuncoes, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addGroup(painelClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(painelClienteLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addGroup(painelClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel1)
-                        .addComponent(jLabel2)
-                        .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(painelClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(txtRG, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtTelefone, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jLabel3))
-                    .addContainerGap(139, Short.MAX_VALUE)))
-        );
-        painelClienteLayout.setVerticalGroup(
-            painelClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelClienteLayout.createSequentialGroup()
-                .addComponent(painelFuncoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(painelClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(painelClienteLayout.createSequentialGroup()
-                    .addGap(19, 19, 19)
-                    .addComponent(jLabel1)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(18, 18, 18)
-                    .addComponent(jLabel2)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(txtRG, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(18, 18, 18)
-                    .addComponent(jLabel3)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(302, Short.MAX_VALUE)))
-        );
+        jLabel1.setText("Nome:");
 
         jBusca.setClosable(true);
         jBusca.setVisible(true);
@@ -265,9 +204,14 @@ public class TelaCliente extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(painelCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addComponent(painelFuncoes, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -276,9 +220,15 @@ public class TelaCliente extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(painelFuncoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(layout.createSequentialGroup()
-                .addComponent(painelCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
@@ -289,99 +239,24 @@ public class TelaCliente extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        // TODO add your handling code here:
-        if (txtNome.getText().isEmpty() || txtRG.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Digite Nome e RG do Cliente!");
-        } else if (cliente.getIdcliente() == null) {
-            cliente.setNome(txtNome.getText());
-            cliente.setRg(txtRG.getText());
-            cliente.setTelefone(txtTelefone.getText());
-            cDAO.adiciona(cliente);
-            JOptionPane.showMessageDialog(this, "Cliente cadastrado com sucesso!");
-            this.chaveBotoes(false);
-            this.chaveCadastro(false);
-        } else {
-            cliente.setNome(txtNome.getText());
-            cliente.setRg(txtRG.getText());
-            cliente.setTelefone(txtTelefone.getText());
-            cDAO.atualizar(cliente);
-            JOptionPane.showMessageDialog(this, "Cliente atualizado com sucesso!");
-            this.chaveBotoes(false);
-            this.chaveCadastro(false);
-        }
-    }//GEN-LAST:event_btnSalvarActionPerformed
-
-    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // TODO add your handling code here:
-        this.chaveBackground(false);
-        clientes = cDAO.buscaClientes(txtNome.getText());
-        txtBusca.setText(txtNome.getText());
-        listBusca.removeAll();
-        DefaultListModel modelol = new DefaultListModel();
-        clientes.forEach((next) -> {
-            modelol.addElement(next.getNome());
-        });
-        listBusca.setModel(modelol);
-        listBusca.repaint();
-    }//GEN-LAST:event_btnBuscarActionPerformed
-
-    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-        // TODO add your handling code here:
-        int opcao = -1;
-        if (cliente.getIdcliente() == null) {
-            JOptionPane.showMessageDialog(this, "Busque um Cliente primeiro!");
-        } else {
-            opcao = JOptionPane.showConfirmDialog(this, "Certeza que deseja exluir?");
-        }
-
-        if (opcao == JOptionPane.YES_OPTION) {
-            cDAO.apagar(cliente);
-            JOptionPane.showMessageDialog(this, "Cliente excluido!");
-
-            //Nova instancia
-            cDAO = new ClienteDAO();
-            cliente = new Cliente();
-            this.limpar();
-        }
-    }//GEN-LAST:event_btnExcluirActionPerformed
-
-    private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
-        // TODO add your handling code here:
-        this.limpar();
-        cliente = new Cliente();
-        this.chaveCadastro(true);
-        this.chaveBotoes(true);
-    }//GEN-LAST:event_btnAdicionarActionPerformed
-
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // TODO add your handling code here:
-        this.chaveCadastro(false);
-        this.chaveBotoes(false);
-    }//GEN-LAST:event_btnCancelarActionPerformed
-
     private void listBuscaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listBuscaMouseClicked
         // TODO add your handling code here:
         int indice = listBusca.getSelectedIndex();
         if (indice >= 0) {
-            cliente = clientes.get(indice);
-            txtNome.setText(cliente.getNome());
-            txtRG.setText(cliente.getRg());
-            txtTelefone.setText(cliente.getTelefone());
+            formapagamento = formas.get(indice);
+            txtNome.setText(formapagamento.getNome());
         }
-        jBusca.setVisible(false);
+        this.chaveBackground(true);
         this.chaveBotoes(true);
         btnExcluir.setEnabled(true);
-        this.chaveCadastro(true);
-        this.chaveBackground(true);
     }//GEN-LAST:event_listBuscaMouseClicked
 
     private void txtBuscaCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtBuscaCaretUpdate
         // TODO add your handling code here:
-        clientes = cDAO.buscaClientes(txtBusca.getText());
+        formas = fpgDAO.buscaFormas(txtBusca.getText());
         listBusca.removeAll();
         DefaultListModel modelol = new DefaultListModel();
-        clientes.forEach((next) -> {
+        formas.forEach((next) -> {
             modelol.addElement(next.getNome());
         });
         listBusca.setModel(modelol);
@@ -391,6 +266,73 @@ public class TelaCliente extends javax.swing.JFrame {
     private void txtBuscaInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_txtBuscaInputMethodTextChanged
         // TODO add your handling code here:
     }//GEN-LAST:event_txtBuscaInputMethodTextChanged
+
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        // TODO add your handling code here:
+        if (txtNome.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Digite nome da Forma de Pagamento!");
+        } else {
+            if (formapagamento.getIdformapagamento() == null) {
+                formapagamento.setNome(txtNome.getText());
+                fpgDAO.adicionar(formapagamento);
+            } else {
+                formapagamento.setNome(txtNome.getText());
+                fpgDAO.atualizar(formapagamento);
+            }
+            this.chaveBotoes(false);
+        }
+    }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        // TODO add your handling code here:
+        this.chaveBackground(false);
+        formas = fpgDAO.buscaFormas(txtNome.getText());
+        txtBusca.setText(txtNome.getText());
+        listBusca.removeAll();
+        DefaultListModel modelol = new DefaultListModel();
+        formas.forEach((next) -> {
+            modelol.addElement(next.getNome());
+        });
+        listBusca.setModel(modelol);
+        listBusca.repaint();
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
+        // TODO add your handling code here:
+        int opcao = -1;
+        if(formapagamento.getIdformapagamento() == null){
+            JOptionPane.showMessageDialog(this, "Busque uma Forma de Pagamento primeiro!");
+        }else{
+            opcao = JOptionPane.showConfirmDialog(this, "Certeza que deseja exluir?");
+        }
+
+        if(opcao == JOptionPane.YES_OPTION){
+            fpgDAO.apagar(formapagamento);
+            JOptionPane.showMessageDialog(this, "Forma de Pagamento excluida!");
+
+            //Nova instancia
+            fpgDAO = new FormaPGDAO();
+            formapagamento = new Formapagamento();
+            this.limpar();
+            this.chaveBotoes(false);
+        }
+    }//GEN-LAST:event_btnExcluirActionPerformed
+
+    private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
+        // TODO add your handling code here:
+        formapagamento = new Formapagamento();
+        this.limpar();
+        this.chaveBotoes(true);
+    }//GEN-LAST:event_btnAdicionarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        btnAdicionar.setEnabled(true);
+        btnSalvar.setEnabled(false);
+        btnCancelar.setEnabled(false);
+        btnBuscar.setEnabled(true);
+        btnExcluir.setEnabled(true);
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void jBuscaInternalFrameClosed(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_jBuscaInternalFrameClosed
         // TODO add your handling code here:
@@ -414,20 +356,20 @@ public class TelaCliente extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TelaCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaFormaPagamento.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TelaCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaFormaPagamento.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TelaCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaFormaPagamento.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TelaCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaFormaPagamento.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TelaCliente().setVisible(true);
+                new TelaFormaPagamento().setVisible(true);
             }
         });
     }
@@ -440,27 +382,15 @@ public class TelaCliente extends javax.swing.JFrame {
     private javax.swing.JButton btnSalvar;
     private javax.swing.JInternalFrame jBusca;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JList<String> listBusca;
-    private javax.swing.JPanel painelCliente;
     private javax.swing.JPanel painelFuncoes;
     private javax.swing.JTextField txtBusca;
     private javax.swing.JTextField txtNome;
-    private javax.swing.JTextField txtRG;
-    private javax.swing.JFormattedTextField txtTelefone;
     // End of variables declaration//GEN-END:variables
 
     private void limpar() {
         txtNome.setText("");
-        txtRG.setText("");
-        txtTelefone.setText("");
-    }
-
-    private void chaveCadastro(boolean b) {
-        txtRG.setEnabled(b);
-        txtTelefone.setEnabled(b);
     }
 
     private void chaveBotoes(boolean b) {
@@ -472,7 +402,9 @@ public class TelaCliente extends javax.swing.JFrame {
     }
     
     private void chaveBackground(boolean b){
-        painelCliente.setVisible(b);
+        jLabel1.setVisible(b);
+        txtNome.setVisible(b);
+        painelFuncoes.setVisible(b);
         jBusca.setVisible(!b);
     }
 }

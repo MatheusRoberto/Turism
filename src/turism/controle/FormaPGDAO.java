@@ -29,7 +29,7 @@ public class FormaPGDAO {
     private final Connection connection;
 
     public void adicionar(Formapagamento f) {
-        String sql = "INSERT INTO (nome) VALUES (?)";
+        String sql = "INSERT INTO formapagamento (nome) VALUES (?)";
         PreparedStatement stmt;
         try {
             stmt = connection.prepareCall(sql);
