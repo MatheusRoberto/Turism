@@ -5,27 +5,28 @@
  */
 package turism.gui;
 
+import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
 import javax.swing.*;
-import turism.controle.CidadeDAO;
 import turism.controle.EmpresaDAO;
 import turism.controle.EstadoDAO;
 import turism.controle.HoteisContratadosDAO;
 import turism.controle.HotelDAO;
 import turism.controle.PaisDAO;
-import turism.controle.VeiculoDAO;
 import turism.controle.VeiculosContratadosDAO;
 import turism.controle.ViagemDAO;
 import turism.modelo.Cidade;
 import turism.modelo.Empresa;
 import turism.modelo.Estado;
 import turism.modelo.Hoteiscontratados;
+import turism.modelo.HoteiscontratadosPK;
 import turism.modelo.Hotel;
 import turism.modelo.Pais;
 import turism.modelo.Veiculo;
 import turism.modelo.Veiculoscontratados;
+import turism.modelo.VeiculoscontratadosPK;
 import turism.modelo.Viagem;
 import turism.regra.HoteisContratadosTableModel;
 import turism.regra.VeiculosContratadosTableModel;
@@ -41,9 +42,12 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
     ArrayList<Estado> estados = new ArrayList<>();
     ArrayList<Cidade> cidades = new ArrayList<>();
     ArrayList<Empresa> empresas = new ArrayList<>();
+    ArrayList<Veiculo> veiculos = new ArrayList<>();
     ArrayList<Hotel> hoteis = new ArrayList<>();
     ArrayList<Hoteiscontratados> hoteiscontratados = new ArrayList<>();
+    ArrayList<HoteiscontratadosPK> hoteiscontratadosPK = new ArrayList<>();
     ArrayList<Veiculoscontratados> veiculoscontratados = new ArrayList<>();
+    ArrayList<VeiculoscontratadosPK> veiculoscontratadosPK = new ArrayList<>();
 
     //Entidades e DAO
     Viagem viagem = new Viagem();
@@ -66,6 +70,8 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
         initComponents();
         carregaEmpresa();
         carregaHotel();
+        this.carregaPais();
+        this.chaveCadastro(false);
         modeloV = new VeiculosContratadosTableModel();
         modeloH = new HoteisContratadosTableModel();
         jtVeiculos.setModel(modeloV);
@@ -93,7 +99,6 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
         jbEstado = new javax.swing.JComboBox<>();
         jbCidade = new javax.swing.JComboBox<>();
         btnSelecionar = new javax.swing.JButton();
-        btnAdicionar = new javax.swing.JButton();
         PainelOrigem = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
@@ -157,6 +162,8 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
         txtValorOnCon = new javax.swing.JSpinner();
         painelFuncoes = new javax.swing.JPanel();
         btnSalvar = new javax.swing.JButton();
+        btnAdicionar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
 
         txtOrigem.setEditable(false);
         txtOrigem.setEnabled(false);
@@ -279,11 +286,6 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
                 .addGap(26, 26, 26))
         );
 
-        btnAdicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/padrao/add_64.png"))); // NOI18N
-        btnAdicionar.setText("Adicionar");
-        btnAdicionar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnAdicionar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de Viagem");
         setMaximumSize(new java.awt.Dimension(1366, 768));
@@ -298,32 +300,21 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
 
         jLabel15.setText("País:");
 
-        jbCidadeOrigem.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jbCidadeOrigemFocusLost(evt);
+        jbCidadeOrigem.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jbCidadeOrigemItemStateChanged(evt);
             }
         });
 
-        jbEstadoOrigem.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jbEstadoOrigemFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jbEstadoOrigemFocusLost(evt);
-            }
-        });
-        jbEstadoOrigem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbEstadoOrigemActionPerformed(evt);
+        jbEstadoOrigem.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jbEstadoOrigemItemStateChanged(evt);
             }
         });
 
-        jbPaisOrigem.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jbPaisOrigemFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jbPaisOrigemFocusLost(evt);
+        jbPaisOrigem.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jbPaisOrigemItemStateChanged(evt);
             }
         });
 
@@ -375,32 +366,26 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
 
         jLabel2.setText("Cidade:");
 
+        jbCidadeDestino.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jbCidadeDestinoItemStateChanged(evt);
+            }
+        });
         jbCidadeDestino.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jbCidadeDestinoFocusLost(evt);
             }
         });
 
-        jbEstadoDestino.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jbEstadoDestinoFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jbEstadoDestinoFocusLost(evt);
-            }
-        });
-        jbEstadoDestino.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbEstadoDestinoActionPerformed(evt);
+        jbEstadoDestino.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jbEstadoDestinoItemStateChanged(evt);
             }
         });
 
-        jbPaisDestino.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jbPaisDestinoFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jbPaisDestinoFocusLost(evt);
+        jbPaisDestino.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jbPaisDestinoItemStateChanged(evt);
             }
         });
 
@@ -639,7 +624,7 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
             }
         });
 
-        jLabel21.setText("Valor:");
+        jLabel21.setText("Valor por Pessoa:");
 
         txtValorHtCon.setModel(new javax.swing.SpinnerNumberModel(250.0d, null, null, 1.0d));
 
@@ -648,7 +633,7 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
         PainelHotelLayout.setHorizontalGroup(
             PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PainelHotelLayout.createSequentialGroup()
-                .addContainerGap(36, Short.MAX_VALUE)
+                .addContainerGap(31, Short.MAX_VALUE)
                 .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PainelHotelLayout.createSequentialGroup()
@@ -660,11 +645,11 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
                             .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jbHotel, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jLabel19)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel21)
                             .addComponent(txtValorHtCon, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
         PainelHotelLayout.setVerticalGroup(
             PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -673,8 +658,8 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
                     .addComponent(jLabel19)
                     .addComponent(jLabel21))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jbHotel)
+                .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jbHotel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtValorHtCon))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(PainelHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -726,7 +711,7 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
             }
         });
 
-        jLabel20.setText("Valor:");
+        jLabel20.setText("Valor por Pessoa:");
 
         txtValorOnCon.setModel(new javax.swing.SpinnerNumberModel(100.0d, null, null, 1.0d));
 
@@ -784,6 +769,7 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
 
         btnSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/padrao/save_64.png"))); // NOI18N
         btnSalvar.setText("Salvar");
+        btnSalvar.setEnabled(false);
         btnSalvar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnSalvar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btnSalvar.addActionListener(new java.awt.event.ActionListener() {
@@ -792,21 +778,57 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
             }
         });
 
+        btnAdicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/padrao/add_64.png"))); // NOI18N
+        btnAdicionar.setText("Adicionar");
+        btnAdicionar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAdicionar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAdicionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdicionarActionPerformed(evt);
+            }
+        });
+
+        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/padrao/cancel_64.png"))); // NOI18N
+        btnCancelar.setText("Cancelar");
+        btnCancelar.setEnabled(false);
+        btnCancelar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnCancelar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout painelFuncoesLayout = new javax.swing.GroupLayout(painelFuncoes);
         painelFuncoes.setLayout(painelFuncoesLayout);
         painelFuncoesLayout.setHorizontalGroup(
             painelFuncoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnSalvar, javax.swing.GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
+            .addGroup(painelFuncoesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(painelFuncoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelFuncoesLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnAdicionar))
+                    .addGroup(painelFuncoesLayout.createSequentialGroup()
+                        .addGroup(painelFuncoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnCancelar))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         painelFuncoesLayout.setVerticalGroup(
             painelFuncoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelFuncoesLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(btnAdicionar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnSalvar)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnCancelar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        getContentPane().add(painelFuncoes, new org.netbeans.lib.awtextra.AbsoluteConstraints(936, 276, 110, 120));
+        getContentPane().add(painelFuncoes, new org.netbeans.lib.awtextra.AbsoluteConstraints(936, 216, 110, 320));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -814,7 +836,6 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
     private void dataIdaPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dataIdaPropertyChange
         // TODO add your handling code here:
         dataVolta.getJCalendar().setMinSelectableDate(dataIda.getDate());
-        dataVolta.setDate(dataIda.getDate());
     }//GEN-LAST:event_dataIdaPropertyChange
 
     private void jInternalBuscaCidadeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jInternalBuscaCidadeFocusGained
@@ -942,127 +963,6 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
         }*/
     }//GEN-LAST:event_btnSelecionarActionPerformed
 
-    private void jbPaisOrigemFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jbPaisOrigemFocusGained
-        // TODO add your handling code here:
-        paises.clear();
-        PaisDAO pDAO = new PaisDAO();
-        paises = pDAO.buscaPaises("");
-        jbPaisOrigem.removeAllItems();
-        paises.forEach((next) -> {
-            jbPaisOrigem.addItem(next.getNome());
-        });
-        jbPaisOrigem.setSelectedIndex(-1);
-        jbEstadoOrigem.removeAllItems();
-        jbEstadoOrigem.setSelectedIndex(-1);
-        jbCidadeOrigem.removeAllItems();
-        jbCidadeOrigem.setSelectedIndex(-1);
-    }//GEN-LAST:event_jbPaisOrigemFocusGained
-
-    private void jbPaisOrigemFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jbPaisOrigemFocusLost
-        // TODO add your handling code here:
-        int indice = jbPaisOrigem.getSelectedIndex();
-        if (indice >= 0) {
-            estados.clear();
-            PaisDAO pDAO = new PaisDAO();
-            Pais p = pDAO.buscaPais(paises.get(indice).getIdpais());
-            estados = p.getEstadoList();
-            jbEstadoOrigem.removeAllItems();
-            if (!estados.isEmpty()) {
-                p.getEstadoList().forEach((next) -> {
-                    jbEstadoOrigem.addItem(next.getUf());
-                });
-                jbEstadoOrigem.setSelectedIndex(-1);
-            }
-        }
-    }//GEN-LAST:event_jbPaisOrigemFocusLost
-
-    private void jbEstadoOrigemFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jbEstadoOrigemFocusGained
-        // TODO add your handling code here:
-        jbCidadeOrigem.removeAllItems();
-        jbCidadeOrigem.setSelectedIndex(-1);
-    }//GEN-LAST:event_jbEstadoOrigemFocusGained
-
-    private void jbEstadoOrigemFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jbEstadoOrigemFocusLost
-        // TODO add your handling code here:
-        int indice = jbEstadoOrigem.getSelectedIndex();
-        if (indice >= 0) {
-            cidades.clear();
-            EstadoDAO eDAO = new EstadoDAO();
-            Estado e = eDAO.buscaEstado(estados.get(indice).getIdestado());
-            cidades = e.getCidadeList();
-            jbCidadeOrigem.removeAllItems();
-            if (!cidades.isEmpty()) {
-                cidades.forEach((next) -> {
-                    jbCidadeOrigem.addItem(next.getNome());
-                });
-                jbCidadeOrigem.setSelectedIndex(-1);
-            }
-        }
-    }//GEN-LAST:event_jbEstadoOrigemFocusLost
-
-    private void jbEstadoOrigemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEstadoOrigemActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jbEstadoOrigemActionPerformed
-
-    private void jbPaisDestinoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jbPaisDestinoFocusGained
-        // TODO add your handling code here:
-        PaisDAO pDAO = new PaisDAO();
-        paises = pDAO.buscaPaises("");
-        jbPaisDestino.removeAllItems();
-        paises.forEach((next) -> {
-            jbPaisDestino.addItem(next.getNome());
-        });
-        jbPaisDestino.setSelectedIndex(-1);
-        jbEstadoDestino.removeAllItems();
-        jbEstadoDestino.setSelectedIndex(-1);
-        jbCidadeDestino.removeAllItems();
-        jbCidadeDestino.setSelectedIndex(-1);
-    }//GEN-LAST:event_jbPaisDestinoFocusGained
-
-    private void jbPaisDestinoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jbPaisDestinoFocusLost
-        // TODO add your handling code here:
-        int indice = jbPaisDestino.getSelectedIndex();
-        if (indice >= 0) {
-            PaisDAO pDAO = new PaisDAO();
-            Pais p = pDAO.buscaPais(indice + 1);
-            jbEstadoDestino.removeAllItems();
-            if (!p.getEstadoList().isEmpty()) {
-                p.getEstadoList().forEach((next) -> {
-                    jbEstadoDestino.addItem(next.getUf());
-                });
-                jbEstadoDestino.setSelectedIndex(-1);
-            }
-        }
-    }//GEN-LAST:event_jbPaisDestinoFocusLost
-
-    private void jbEstadoDestinoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jbEstadoDestinoFocusGained
-        // TODO add your handling code here:
-        jbCidadeDestino.removeAllItems();
-        jbCidadeDestino.setSelectedIndex(-1);
-    }//GEN-LAST:event_jbEstadoDestinoFocusGained
-
-    private void jbEstadoDestinoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jbEstadoDestinoFocusLost
-        // TODO add your handling code here:
-        int indice = jbEstadoDestino.getSelectedIndex();
-        if (indice >= 0) {
-            cidades.clear();
-            EstadoDAO eDAO = new EstadoDAO();
-            Estado e = eDAO.buscaEstado(estados.get(indice).getIdestado());
-            cidades = e.getCidadeList();
-            jbCidadeDestino.removeAllItems();
-            if (!cidades.isEmpty()) {
-                cidades.forEach((next) -> {
-                    jbCidadeDestino.addItem(next.getNome());
-                });
-                jbCidadeDestino.setSelectedIndex(-1);
-            }
-        }
-    }//GEN-LAST:event_jbEstadoDestinoFocusLost
-
-    private void jbEstadoDestinoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEstadoDestinoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jbEstadoDestinoActionPerformed
-
     private void txtValorOnibusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtValorOnibusActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtValorOnibusActionPerformed
@@ -1076,16 +976,19 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
         // TODO add your handling code here:
         int indice = jbVeiculo.getSelectedIndex();
         if (indice >= 0) {
-            VeiculoDAO veDAO = new VeiculoDAO();
-            Veiculo v = veDAO.buscaVeiculo(indice + 1);
+            Veiculo v = veiculos.get(indice);
             Veiculoscontratados vc = new Veiculoscontratados();
             vc.setVeiculo(v);
             vc.setViagem(viagem);
             vc.setValor(Double.valueOf(txtValorOnCon.getValue().toString()));
-            if (veiculoscontratados.contains(vc)) {
+            VeiculoscontratadosPK vcpk = new VeiculoscontratadosPK();
+            vcpk.setVeiculoIdveiculo(vc.getVeiculo().getIdveiculo());
+            vcpk.setViagemIdviagem(vDAO.selecionaUltimo().getIdviagem() + 1);
+            if (veiculoscontratados.contains(vc) && veiculoscontratadosPK.contains(vcpk)) {
                 JOptionPane.showMessageDialog(this, "Veículo já adicionado");
             } else {
                 veiculoscontratados.add(vc);
+                veiculoscontratadosPK.add(vcpk);
                 modeloV.addItem(vc);
                 this.vagasTotal();
                 this.valorTotal();
@@ -1096,6 +999,7 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
     private void btnRmVeiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRmVeiculoActionPerformed
         // TODO add your handling code here:
         veiculoscontratados.remove(jtVeiculos.getSelectedRow());
+        veiculoscontratadosPK.remove(jtVeiculos.getSelectedRow());
         modeloV.limpar();
         modeloV.addListaVeiculosContratados(veiculoscontratados);
         this.vagasTotal();
@@ -1106,16 +1010,19 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
         // TODO add your handling code here:
         int indice = jbHotel.getSelectedIndex();
         if (indice >= 0) {
-            HotelDAO hDAO = new HotelDAO();
-            Hotel h = hDAO.buscaHotel(indice + 1);
+            Hotel h = hoteis.get(indice);
             Hoteiscontratados hc = new Hoteiscontratados();
             hc.setHotel(h);
             hc.setViagem(viagem);
             hc.setValor(Double.valueOf(txtValorHtCon.getValue().toString()));
-            if (hoteiscontratados.contains(hc)) {
+            HoteiscontratadosPK hcpk = new HoteiscontratadosPK();
+            hcpk.setHotelidHotel(hc.getHotel().getIdhotel());
+            hcpk.setViagemIdviagem(vDAO.selecionaUltimo().getIdviagem() + 1);
+            if (hoteiscontratados.contains(hc) && hoteiscontratadosPK.contains(hcpk)) {
                 JOptionPane.showMessageDialog(this, "Hotel já adicionado");
             } else {
                 hoteiscontratados.add(hc);
+                hoteiscontratadosPK.add(hcpk);
                 modeloH.addItem(hc);
                 this.valorTotal();
             }
@@ -1125,6 +1032,7 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
     private void btnRmHotelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRmHotelActionPerformed
         // TODO add your handling code here:
         hoteiscontratados.remove(jtHotel.getSelectedRow());
+        hoteiscontratadosPK.remove(jtHotel.getSelectedRow());
         modeloH.limpar();
         modeloH.addListaHoteisContratados(hoteiscontratados);
         this.valorTotal();
@@ -1153,31 +1061,123 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
 
         }
         viagem = new Viagem();
+        this.chaveCadastro(false);
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void jbCidadeDestinoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jbCidadeDestinoFocusLost
         // TODO add your handling code here:
-        int indice = jbCidadeDestino.getSelectedIndex();
-        if (indice >= 0) {
-            CidadeDAO cDAO = new CidadeDAO();
-            Cidade c = cidades.get(indice);
-            if (c != null) {
-                viagem.setIddestino(c);
-            }
-        }
     }//GEN-LAST:event_jbCidadeDestinoFocusLost
 
-    private void jbCidadeOrigemFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jbCidadeOrigemFocusLost
+    private void jbPaisOrigemItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jbPaisOrigemItemStateChanged
+        // TODO add your handling code here:
+        int indice = jbPaisOrigem.getSelectedIndex();
+        if (indice >= 0) {
+            estados.clear();
+            PaisDAO pDAO = new PaisDAO();
+            Pais p = pDAO.buscaPais(paises.get(indice).getIdpais());
+            estados = p.getEstadoList();
+            jbEstadoOrigem.removeAllItems();
+            if (!estados.isEmpty()) {
+                p.getEstadoList().forEach((next) -> {
+                    jbEstadoOrigem.addItem(next.getUf());
+                });
+                jbEstadoOrigem.setSelectedIndex(-1);
+            }
+        }
+    }//GEN-LAST:event_jbPaisOrigemItemStateChanged
+
+    private void jbEstadoOrigemItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jbEstadoOrigemItemStateChanged
+        // TODO add your handling code here:
+        int indice = jbEstadoOrigem.getSelectedIndex();
+        if (indice >= 0) {
+            cidades.clear();
+            EstadoDAO eDAO = new EstadoDAO();
+            Estado e = eDAO.buscaEstado(estados.get(indice).getIdestado());
+            cidades = e.getCidadeList();
+            jbCidadeOrigem.removeAllItems();
+            if (!cidades.isEmpty()) {
+                cidades.forEach((next) -> {
+                    jbCidadeOrigem.addItem(next.getNome());
+                });
+                jbCidadeOrigem.setSelectedIndex(-1);
+            }
+        }
+    }//GEN-LAST:event_jbEstadoOrigemItemStateChanged
+
+    private void jbCidadeOrigemItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jbCidadeOrigemItemStateChanged
         // TODO add your handling code here:
         int indice = jbCidadeOrigem.getSelectedIndex();
         if (indice >= 0) {
-            CidadeDAO cDAO = new CidadeDAO();
             Cidade c = cidades.get(indice);
             if (c != null) {
                 viagem.setIdorigem(c);
             }
         }
-    }//GEN-LAST:event_jbCidadeOrigemFocusLost
+    }//GEN-LAST:event_jbCidadeOrigemItemStateChanged
+
+    private void jbEstadoDestinoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jbEstadoDestinoItemStateChanged
+        // TODO add your handling code here:
+        int indice = jbEstadoDestino.getSelectedIndex();
+        if (indice >= 0) {
+            cidades.clear();
+            EstadoDAO eDAO = new EstadoDAO();
+            Estado e = eDAO.buscaEstado(estados.get(indice).getIdestado());
+            cidades = e.getCidadeList();
+            jbCidadeDestino.removeAllItems();
+            if (!cidades.isEmpty()) {
+                cidades.forEach((next) -> {
+                    jbCidadeDestino.addItem(next.getNome());
+                });
+                jbCidadeDestino.setSelectedIndex(-1);
+            }
+        }
+    }//GEN-LAST:event_jbEstadoDestinoItemStateChanged
+
+    private void jbPaisDestinoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jbPaisDestinoItemStateChanged
+        // TODO add your handling code here:
+        int indice = jbPaisDestino.getSelectedIndex();
+        if (indice >= 0) {
+            estados.clear();
+            PaisDAO pDAO = new PaisDAO();
+            Pais p = pDAO.buscaPais(paises.get(indice).getIdpais());
+            estados = p.getEstadoList();
+            jbEstadoDestino.removeAllItems();
+            if (!estados.isEmpty()) {
+                p.getEstadoList().forEach((next) -> {
+                    jbEstadoDestino.addItem(next.getUf());
+                });
+                jbEstadoDestino.setSelectedIndex(-1);
+            }
+        }
+
+    }//GEN-LAST:event_jbPaisDestinoItemStateChanged
+
+    private void jbCidadeDestinoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jbCidadeDestinoItemStateChanged
+        // TODO add your handling code here:
+        int indice = jbCidadeDestino.getSelectedIndex();
+        if (indice >= 0) {
+            Cidade c = cidades.get(indice);
+            if (c != null) {
+                viagem.setIddestino(c);
+            }
+        }
+    }//GEN-LAST:event_jbCidadeDestinoItemStateChanged
+
+    private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
+        // TODO add your handling code here:
+        this.chaveCadastro(true);
+        btnSalvar.setEnabled(true);
+        btnAdicionar.setEnabled(false);
+        btnCancelar.setEnabled(true);
+    }//GEN-LAST:event_btnAdicionarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+            this.chaveCadastro(false);
+            btnAdicionar.setEnabled(true);
+            btnSalvar.setEnabled(false);
+            btnCancelar.setEnabled(false);
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1225,6 +1225,7 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
     private javax.swing.JButton btnAdicionar;
     private javax.swing.JButton btnBuscaDestino;
     private javax.swing.JButton btnBuscaOrigem;
+    private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnRmHotel;
     private javax.swing.JButton btnRmVeiculo;
     private javax.swing.JButton btnSalvar;
@@ -1318,6 +1319,24 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
         txtValorPessoa.setVisible(v);
         txtValorTotal.setVisible(v);
     }
+    
+    private void carregaPais(){
+        paises.clear();
+        PaisDAO pDAO = new PaisDAO();
+        paises = pDAO.buscaPaises("");
+        jbPaisOrigem.removeAllItems();
+        jbPaisDestino.removeAllItems();
+        paises.forEach((next) -> {
+            jbPaisOrigem.addItem(next.getNome());
+            jbPaisDestino.addItem(next.getNome());
+        });
+        jbPaisOrigem.setSelectedIndex(-1);
+        jbPaisDestino.setSelectedIndex(-1);
+        jbEstadoOrigem.removeAllItems();
+        jbEstadoOrigem.setSelectedIndex(-1);
+        jbCidadeOrigem.removeAllItems();
+        jbCidadeOrigem.setSelectedIndex(-1);
+    }
 
     private void carregaEmpresa() {
         EmpresaDAO eDAO = new EmpresaDAO();
@@ -1333,8 +1352,9 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
         jbVeiculo.removeAllItems();
         if (indice >= 0) {
             EmpresaDAO eDAO = new EmpresaDAO();
-            Empresa empresa = eDAO.buscaEmpresa(indice + 1);
-            empresa.getVeiculoList().forEach((next) -> {
+            Empresa empresa = eDAO.buscaEmpresa(empresas.get(indice).getIdempresa());
+            veiculos = empresa.getVeiculoList();
+            veiculos.forEach((next) -> {
                 jbVeiculo.addItem(next.getNome());
             });
             jbVeiculo.setSelectedIndex(-1);
@@ -1411,5 +1431,34 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
         viagem.setVagasextras(Integer.valueOf(jSpinner1.getValue().toString()));
         viagem.setDescricao(txtDescricao.getText());
         return c && d;
+    }
+
+    private void chaveCadastro(boolean b) {
+        btnBuscaDestino.setEnabled(b);
+        btnBuscaOrigem.setEnabled(b);
+        dataIda.setEnabled(b);
+        dataVolta.setEnabled(b);
+        jSpinner1.setEnabled(b);
+        txtDestino.setEnabled(b);
+        txtHoraSaida.setEnabled(b);
+        txtOrigem.setEnabled(b);
+        txtDescricao.setEnabled(b);
+        jbEmpresa.setEnabled(b);
+        jbVeiculo.setEnabled(b);
+        jbHotel.setEnabled(b);
+        txtValorOnCon.setEnabled(b);
+        txtValorHtCon.setEnabled(b);
+        btnAdHotel.setEnabled(b);
+        btnAdVeiculo.setEnabled(b);
+        btnRmHotel.setEnabled(b);
+        btnRmVeiculo.setEnabled(b);
+        jtHotel.setEnabled(b);
+        jtVeiculos.setEnabled(b);
+        jbCidadeDestino.setEnabled(b);
+        jbCidadeOrigem.setEnabled(b);
+        jbEstadoDestino.setEnabled(b);
+        jbEstadoOrigem.setEnabled(b);
+        jbPaisDestino.setEnabled(b);
+        jbPaisOrigem.setEnabled(b);
     }
 }
