@@ -7,9 +7,13 @@ package turism.gui;
 
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import turism.controle.ClienteDAO;
+import turism.controle.DepedenteDAO;
 import turism.modelo.Cliente;
+import turism.modelo.Depedente;
+import turism.regra.DepedenteTableModel;
 
 /**
  *
@@ -23,12 +27,18 @@ public class TelaCliente extends javax.swing.JFrame {
 
     //Arraylist
     ArrayList<Cliente> clientes = new ArrayList<>();
+    ArrayList<Depedente> depedentes = new ArrayList<>();
+    
+    //modelo Table
+    DepedenteTableModel modelo;
 
     /**
      * Creates new form TelaCliente
      */
     public TelaCliente() {
         initComponents();
+        modelo = new DepedenteTableModel();
+        jtDepedente.setModel(modelo);
     }
 
     /**
@@ -53,6 +63,12 @@ public class TelaCliente extends javax.swing.JFrame {
         btnExcluir = new javax.swing.JButton();
         btnAdicionar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
+        painelDepedente = new javax.swing.JPanel();
+        jSPDepedente = new javax.swing.JScrollPane();
+        jtDepedente = new javax.swing.JTable();
+        btnRmDepedente = new javax.swing.JButton();
+        btnAdDepedente = new javax.swing.JButton();
+        btnAdtepedente = new javax.swing.JButton();
         jBusca = new javax.swing.JInternalFrame();
         jScrollPane1 = new javax.swing.JScrollPane();
         listBusca = new javax.swing.JList<>();
@@ -156,12 +172,77 @@ public class TelaCliente extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        painelDepedente.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Depedentes:"));
+
+        jtDepedente.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jSPDepedente.setViewportView(jtDepedente);
+
+        btnRmDepedente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/close_16.png"))); // NOI18N
+        btnRmDepedente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRmDepedenteActionPerformed(evt);
+            }
+        });
+
+        btnAdDepedente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/add_16.png"))); // NOI18N
+        btnAdDepedente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdDepedenteActionPerformed(evt);
+            }
+        });
+
+        btnAdtepedente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/Update_16.png"))); // NOI18N
+        btnAdtepedente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdtepedenteActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout painelDepedenteLayout = new javax.swing.GroupLayout(painelDepedente);
+        painelDepedente.setLayout(painelDepedenteLayout);
+        painelDepedenteLayout.setHorizontalGroup(
+            painelDepedenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelDepedenteLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jSPDepedente, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelDepedenteLayout.createSequentialGroup()
+                .addGap(96, 96, 96)
+                .addComponent(btnAdDepedente)
+                .addGap(18, 18, 18)
+                .addComponent(btnAdtepedente)
+                .addGap(18, 18, 18)
+                .addComponent(btnRmDepedente)
+                .addContainerGap(65, Short.MAX_VALUE))
+        );
+        painelDepedenteLayout.setVerticalGroup(
+            painelDepedenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelDepedenteLayout.createSequentialGroup()
+                .addGroup(painelDepedenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnRmDepedente)
+                    .addComponent(btnAdDepedente)
+                    .addComponent(btnAdtepedente))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSPDepedente, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout painelClienteLayout = new javax.swing.GroupLayout(painelCliente);
         painelCliente.setLayout(painelClienteLayout);
         painelClienteLayout.setHorizontalGroup(
             painelClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelClienteLayout.createSequentialGroup()
-                .addContainerGap(370, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(painelDepedente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(painelFuncoes, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(painelClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -179,8 +260,10 @@ public class TelaCliente extends javax.swing.JFrame {
         );
         painelClienteLayout.setVerticalGroup(
             painelClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelClienteLayout.createSequentialGroup()
-                .addComponent(painelFuncoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(painelClienteLayout.createSequentialGroup()
+                .addGroup(painelClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(painelDepedente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(painelFuncoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(painelClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(painelClienteLayout.createSequentialGroup()
@@ -336,12 +419,18 @@ public class TelaCliente extends javax.swing.JFrame {
         }
 
         if (opcao == JOptionPane.YES_OPTION) {
+            DepedenteDAO dDAO = new DepedenteDAO();
+            depedentes.forEach((depedente) -> {
+                dDAO.apagar(depedente);
+            });
             cDAO.apagar(cliente);
             JOptionPane.showMessageDialog(this, "Cliente excluido!");
 
             //Nova instancia
             cDAO = new ClienteDAO();
             cliente = new Cliente();
+            depedentes.clear();
+            modelo.limpar();
             this.limpar();
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
@@ -369,6 +458,10 @@ public class TelaCliente extends javax.swing.JFrame {
             txtRG.setText(cliente.getRg());
             txtTelefone.setText(cliente.getTelefone());
         }
+        modelo.limpar();
+        DepedenteDAO dDAO = new DepedenteDAO();
+        depedentes = dDAO.buscaDepedenteCliente(cliente.getIdcliente());
+        modelo.addListaDepedente(depedentes);
         jBusca.setVisible(false);
         this.chaveBotoes(true);
         btnExcluir.setEnabled(true);
@@ -396,6 +489,41 @@ public class TelaCliente extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.chaveBackground(true);
     }//GEN-LAST:event_jBuscaInternalFrameClosed
+
+    private void btnRmDepedenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRmDepedenteActionPerformed
+        // TODO add your handling code here:
+        int indice = jtDepedente.getSelectedRow();
+        Depedente d = depedentes.get(indice);
+        depedentes.remove(indice);
+        DepedenteDAO dDAO = new DepedenteDAO();
+        dDAO.apagar(d);
+        modelo.limpar();
+        modelo.addListaDepedente(depedentes);
+    }//GEN-LAST:event_btnRmDepedenteActionPerformed
+
+    private void btnAdDepedenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdDepedenteActionPerformed
+        // TODO add your handling code here:
+        JFrame janela;
+        if (cliente.getIdcliente() != null) {
+            janela = new TelaDepedente(cliente);
+            janela.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Selecione um cliente antes!");
+        }
+
+    }//GEN-LAST:event_btnAdDepedenteActionPerformed
+
+    private void btnAdtepedenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdtepedenteActionPerformed
+        // TODO add your handling code here:
+        if(cliente.getIdcliente() != null){
+            DepedenteDAO dDAO = new DepedenteDAO();
+            depedentes = dDAO.buscaDepedenteCliente(cliente.getIdcliente());
+            modelo.limpar();
+            modelo.addListaDepedente(depedentes);
+        }else{
+            JOptionPane.showMessageDialog(this, "Selecione um cliente antes!");
+        }
+    }//GEN-LAST:event_btnAdtepedenteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -433,18 +561,24 @@ public class TelaCliente extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdDepedente;
     private javax.swing.JButton btnAdicionar;
+    private javax.swing.JButton btnAdtepedente;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnExcluir;
+    private javax.swing.JButton btnRmDepedente;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JInternalFrame jBusca;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JScrollPane jSPDepedente;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jtDepedente;
     private javax.swing.JList<String> listBusca;
     private javax.swing.JPanel painelCliente;
+    private javax.swing.JPanel painelDepedente;
     private javax.swing.JPanel painelFuncoes;
     private javax.swing.JTextField txtBusca;
     private javax.swing.JTextField txtNome;
