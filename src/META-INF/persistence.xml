@@ -24,6 +24,7 @@
     <class>turism.modelo.Hoteiscontratados</class>
     <class>turism.modelo.Veiculoscontratados</class>
     <class>turism.modelo.Ocupantes</class>
+    <class>turism.modelo.Depedente</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/turism?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.user" value="root"/>
