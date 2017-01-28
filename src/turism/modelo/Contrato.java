@@ -41,6 +41,10 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Contrato.findByPaga", query = "SELECT c FROM Contrato c WHERE c.paga = :paga")})
 public class Contrato implements Serializable {
 
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "desconto")
+    private Double desconto;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -183,6 +187,14 @@ public class Contrato implements Serializable {
     @Override
     public String toString() {
         return "turism.modelo.Contrato[ idcontrato=" + idcontrato + " ]";
+    }
+
+    public Double getDesconto() {
+        return desconto;
+    }
+
+    public void setDesconto(Double desconto) {
+        this.desconto = desconto;
     }
     
 }
