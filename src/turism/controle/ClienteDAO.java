@@ -97,6 +97,40 @@ public class ClienteDAO {
         return list;
     }
 
+    public ArrayList<Cliente> buscaClienteParcelado(int idviagem, String nome) {
+        String sql = "SELECT cliente.* FROM cliente "
+                + "INNER JOIN contrato ON contrato.idcliente = cliente.idcliente "
+                + "INNER JOIN viagem ON viagem.idviagem = contrato.idviagem "
+                + "WHERE contrato.idforma = 1 AND viagem.idviagem = '"+idviagem+"' AND cliente.nome LIKE '%"+nome+"%' ;";
+        ArrayList<Cliente> list = new ArrayList<>();
+        Cliente cliente;
+        ResultSet result;
+        PreparedStatement stmt = null;
+        try {
+            stmt = connection.prepareStatement(sql);
+            result = stmt.executeQuery(sql);
+            while (result.next()) {
+                cliente = new Cliente();
+                cliente.setIdcliente(result.getInt("idcliente"));
+                cliente.setNome(result.getString("nome"));
+                cliente.setRg(result.getString("rg"));
+                cliente.setTelefone(result.getString("telefone"));
+                list.add(cliente);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "erro no cliente " + e.getMessage());
+        } finally {
+
+            try {
+                stmt.close();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "erro ao fechar " + e.getMessage());
+            }
+        }
+
+        return list;
+    }
+
     public Cliente buscaCliente(int id) {
         Cliente cliente = null;
         ResultSet result;
