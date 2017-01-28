@@ -6,7 +6,7 @@
 package turism.modelo;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.ArrayList;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,6 +34,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Cliente.findByRg", query = "SELECT c FROM Cliente c WHERE c.rg = :rg")})
 public class Cliente implements Serializable {
 
+    @OneToMany(mappedBy = "idcliente")
+    private ArrayList<Depedente> depedenteList;
+
     @Basic(optional = false)
     @Column(name = "telefone")
     private String telefone;
@@ -49,7 +52,7 @@ public class Cliente implements Serializable {
     @Column(name = "rg")
     private String rg;
     @OneToMany(mappedBy = "idcliente")
-    private List<Contrato> contratoList;
+    private ArrayList<Contrato> contratoList;
 
     public Cliente() {
     }
@@ -83,11 +86,11 @@ public class Cliente implements Serializable {
     }
 
     @XmlTransient
-    public List<Contrato> getContratoList() {
+    public ArrayList<Contrato> getContratoList() {
         return contratoList;
     }
 
-    public void setContratoList(List<Contrato> contratoList) {
+    public void setContratoList(ArrayList<Contrato> contratoList) {
         this.contratoList = contratoList;
     }
 
@@ -105,10 +108,7 @@ public class Cliente implements Serializable {
             return false;
         }
         Cliente other = (Cliente) object;
-        if ((this.idcliente == null && other.idcliente != null) || (this.idcliente != null && !this.idcliente.equals(other.idcliente))) {
-            return false;
-        }
-        return true;
+        return !((this.idcliente == null && other.idcliente != null) || (this.idcliente != null && !this.idcliente.equals(other.idcliente)));
     }
 
     @Override
@@ -122,6 +122,15 @@ public class Cliente implements Serializable {
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
+    }
+
+    @XmlTransient
+    public ArrayList<Depedente> getDepedenteList() {
+        return depedenteList;
+    }
+
+    public void setDepedenteList(ArrayList<Depedente> depedenteList) {
+        this.depedenteList = depedenteList;
     }
     
 }
