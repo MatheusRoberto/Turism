@@ -14,7 +14,7 @@ public class Conexao {
 
 	    // Conectar ao banco
 	 public static Connection getConnection() {
-	        System.out.println(">>Conectando ao banco");
+	        //System.out.println(">>Conectando ao banco");
 	        try {
 	            Class.forName(DRIVER);
 	            if(conexao == null || conexao.isClosed()){
@@ -35,7 +35,7 @@ public class Conexao {
 	        try{
 	            if(conexao!=null && !conexao.isClosed()){
 	                conexao.close();
-	                System.out.println(">>Conexao encerrada com sucesso");
+	                //System.out.println(">>Conexao encerrada com sucesso");
 	            }
 	        }catch (SQLException e) {
 	        }
