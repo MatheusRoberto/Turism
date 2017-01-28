@@ -42,7 +42,8 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
     //Listas
     ArrayList<Pais> paises = new ArrayList<>();
     ArrayList<Estado> estados = new ArrayList<>();
-    ArrayList<Cidade> cidades = new ArrayList<>();
+    ArrayList<Cidade> origens = new ArrayList<>();
+    ArrayList<Cidade> destinos = new ArrayList<>();
     ArrayList<Empresa> empresas = new ArrayList<>();
     ArrayList<Veiculo> veiculos = new ArrayList<>();
     ArrayList<Hotel> hoteis = new ArrayList<>();
@@ -1139,11 +1140,10 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
         // TODO add your handling code here:
         int indo = jbCidadeOrigem.getSelectedIndex();
         int indd = jbCidadeDestino.getSelectedIndex();
-        System.err.println(indo + " " + indd);
         if (indo > -1 && indd > -1) {
             CidadeDAO cDAO = new CidadeDAO();
-            Cidade origem = cDAO.buscaCidade(cidades.get(indo).getIdcidade());
-            Cidade destino = cDAO.buscaCidade(cidades.get(indd).getIdcidade());
+            Cidade origem = cDAO.buscaCidade(origens.get(indo).getIdcidade());
+            Cidade destino = cDAO.buscaCidade(destinos.get(indd).getIdcidade());
             this.buscaViagem(origem.getIdcidade(), destino.getIdcidade(), dataIdaBusca.getDate(), dataVoltaBusca.getDate());
         } else {
             JOptionPane.showMessageDialog(this, "Selecione uma cidade de origem e uma cidade de destino");
@@ -1365,13 +1365,13 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
         // TODO add your handling code here:
         int indice = jbEstadoOrigem.getSelectedIndex();
         if (indice >= 0) {
-            cidades.clear();
+            origens.clear();
             EstadoDAO eDAO = new EstadoDAO();
             Estado e = eDAO.buscaEstado(estados.get(indice).getIdestado());
-            cidades = e.getCidadeList();
+            origens = e.getCidadeList();
             jbCidadeOrigem.removeAllItems();
-            if (!cidades.isEmpty()) {
-                cidades.forEach((next) -> {
+            if (!origens.isEmpty()) {
+                origens.forEach((next) -> {
                     jbCidadeOrigem.addItem(next.getNome());
                 });
                 jbCidadeOrigem.setSelectedIndex(-1);
@@ -1399,13 +1399,13 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
         // TODO add your handling code here:
         int indice = jbEstadoDestino.getSelectedIndex();
         if (indice >= 0) {
-            cidades.clear();
+            destinos.clear();
             EstadoDAO eDAO = new EstadoDAO();
             Estado e = eDAO.buscaEstado(estados.get(indice).getIdestado());
-            cidades = e.getCidadeList();
+            destinos = e.getCidadeList();
             jbCidadeDestino.removeAllItems();
-            if (!cidades.isEmpty()) {
-                cidades.forEach((next) -> {
+            if (!destinos.isEmpty()) {
+                destinos.forEach((next) -> {
                     jbCidadeDestino.addItem(next.getNome());
                 });
                 jbCidadeDestino.setSelectedIndex(-1);
