@@ -87,7 +87,7 @@ public class UsuarioDAO {
                 usuario.setIdusuario(result.getInt("idusuario"));
                 usuario.setLogin(result.getString("login"));
                 usuario.setNome(result.getString("nome"));
-                usuario.setSenha(result.getString("seha"));
+                usuario.setSenha(result.getString("senha"));
                 return true;
             }
         } catch (SQLException ex) {
@@ -115,7 +115,7 @@ public class UsuarioDAO {
                 usuario.setIdusuario(result.getInt("idusuario"));
                 usuario.setLogin(result.getString("login"));
                 usuario.setNome(result.getString("nome"));
-                usuario.setSenha(result.getString("seha"));
+                usuario.setSenha(result.getString("senha"));
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "erro no usuario " + ex.getMessage());
