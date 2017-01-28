@@ -338,9 +338,9 @@ public class TelaEmpresa extends javax.swing.JFrame {
                 .addComponent(painelFuncoes, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addGap(0, 21, Short.MAX_VALUE)
                     .addComponent(jBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                    .addGap(0, 22, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -477,6 +477,7 @@ public class TelaEmpresa extends javax.swing.JFrame {
             btnExcluir.setEnabled(true);
             btnSalvar.setEnabled(false);
             btnBuscar.setEnabled(true);
+            btnCancelar.setEnabled(false);
             painelVeiculos.setVisible(true);
         }
     }//GEN-LAST:event_btnSalvarActionPerformed
