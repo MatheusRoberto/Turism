@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Parte1_Carne_Landscape" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ee0d5788-3675-49c9-b327-ce04d43cf49f">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="90"/>
+	<parameter name="id" class="java.lang.Integer">
+		<parameterDescription><![CDATA[Id para gerar sql]]></parameterDescription>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+  SUM(turism.parcela.valor) AS TOTAL,
+  COUNT(turism.parcela.idparcela) AS NPARCELA,
+  turism.parcela.idcontrato,
+  turism.cliente.nome,
+  turism.viagem.dataida,
+  turism.viagem.datavolta,
+  turism.viagem.horariosaida,
+  turism.usuario.nome,
+  origem.nome AS origem,
+  destino.nome AS destino
+FROM
+  turism.parcela
+INNER JOIN
+  turism.contrato ON turism.contrato.idcontrato = turism.parcela.idcontrato
+INNER JOIN
+  turism.cliente ON turism.cliente.idcliente = turism.contrato.idcliente
+INNER JOIN
+  turism.viagem ON turism.viagem.idviagem = turism.contrato.idviagem
+INNER JOIN
+  turism.usuario ON turism.usuario.idusuario = turism.contrato.idusuario
+INNER JOIN
+  turism.cidade AS origem ON origem.idcidade =turism. viagem.idorigem
+INNER JOIN
+  turism.cidade AS destino ON destino.idcidade = turism.viagem.iddestino
+WHERE
+  turism.parcela.idcontrato = $P{id}
+GROUP BY
+  turism.parcela.idcontrato]]>
+	</queryString>
+	<field name="TOTAL" class="java.lang.Double"/>
+	<field name="idcontrato" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="NPARCELA" class="java.lang.Long"/>
+	<field name="nome" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="dataida" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="datavolta" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="horariosaida" class="java.sql.Time">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="COLUMN_8" class="java.lang.String"/>
+	<field name="origem" class="java.lang.String"/>
+	<field name="destino" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="210">
+			<rectangle>
+				<reportElement x="20" y="0" width="332" height="210" uuid="bcaea1dd-4beb-43d0-b5ce-c4b31a0e691f">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+			</rectangle>
+			<textField>
+				<reportElement x="120" y="30" width="210" height="20" uuid="2a4ec3ac-aafd-4ed3-a65b-a5a3665fc3d0"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤#,#00.00#;¤-#,#00.00#">
+				<reportElement x="120" y="120" width="100" height="20" uuid="9ace2402-1940-4bd4-a613-e160fd3023da"/>
+				<box padding="2">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{TOTAL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="120" y="150" width="100" height="20" uuid="f1f9f6a5-aafb-465d-87b2-904539fb6fa1"/>
+				<box padding="2">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{NPARCELA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="120" y="180" width="200" height="20" uuid="1499eb5a-1f85-4475-9a57-9dcede75224c"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{COLUMN_8}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="50" y="30" width="60" height="20" uuid="778d8222-3fcf-4f6e-a425-bbbd8a6cda6c"/>
+				<box padding="2">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[Cliente:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="50" y="60" width="60" height="20" uuid="64fc1bec-431c-4670-b809-a002a0ec82f8"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[Excursão:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="190" y="60" width="20" height="20" uuid="d5e563d3-dec3-4e7a-814e-0fbc1dd00717"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[á]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="50" y="90" width="60" height="20" uuid="d64e870b-b36c-4cd7-ae55-9851d0dab5f5"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[Período:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="210" y="90" width="20" height="20" uuid="77d37d17-f6a3-41d9-8ed8-6f12be552641"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[á]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="50" y="120" width="60" height="20" uuid="49c0015c-5048-4d8e-b3a0-4fe068b8c90c"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[Valor Total:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="150" width="90" height="20" uuid="31ea028b-d02e-418a-b2be-ddab5f5514b3"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<text><![CDATA[Total de Parcelas:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="50" y="180" width="60" height="20" uuid="2160ee51-bace-44a3-9cb2-db8b95bee02a"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[Vendedor:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="370" y="0" width="332" height="210" uuid="750e767e-830b-4492-844f-c8cfbce31f75">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="380" y="10" width="60" height="20" uuid="9f558bd7-6b25-498c-9b8f-d862739fff46"/>
+				<box padding="2">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[Cliente:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="380" y="30" width="300" height="30" uuid="d956f8f1-a612-485d-8bad-f3a35597866d"/>
+				<box padding="2">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="480" y="90" width="140" height="20" uuid="7df1b2c7-c155-4be3-9b69-961f2fefddff"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{destino}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="380" y="90" width="80" height="20" uuid="8621f528-e5a9-4398-9de4-2ef661d28357"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{origem}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="460" y="90" width="20" height="20" uuid="c97505ea-a757-45c3-ac35-71f327d305ad"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[á]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="70" width="60" height="20" uuid="67eebfe2-5a83-4fce-9a62-8265c9d79dac"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[Excursão:]]></text>
+			</staticText>
+			<textField pattern="¤#,#00.00#;¤-#,#00.00#">
+				<reportElement x="380" y="140" width="100" height="20" uuid="7de8c828-dbdb-43bd-b79a-4cb03e5c877e"/>
+				<box padding="2">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{TOTAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="380" y="120" width="80" height="20" uuid="7eb644d3-94de-4c8c-8736-5218c3eb5b26"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[Valor Total:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="520" y="120" width="100" height="20" uuid="c9245a50-cd85-4151-88e0-0decb3df1578"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[Total de Parcelas:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="520" y="140" width="100" height="20" uuid="fda139be-64c1-4da5-902d-398802e29214"/>
+				<box padding="2">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{NPARCELA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="230" y="90" width="100" height="20" uuid="5c7548c8-e9ed-42b7-bd00-c46b578a5d5c"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{datavolta}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="120" y="90" width="90" height="20" uuid="e60ba632-2491-4583-b687-63e88ea8a1e1"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{dataida}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="120" y="60" width="70" height="20" uuid="970e8c9b-099e-4bc0-94eb-21dc18b84cf2"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{origem}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="210" y="60" width="120" height="20" uuid="24333ee6-4d14-4ace-b424-636a04a47199"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{destino}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="262" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<subreport>
+				<reportElement x="0" y="0" width="702" height="100" uuid="3e85d601-d7e9-4e48-b848-d919b18b8fbc"/>
+				<subreportParameter name="id">
+					<subreportParameterExpression><![CDATA[$P{id}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.net.URL"><![CDATA[getClass().getResource( $P{SUBREPORT_DIR} + "Parte2_Carne_Landscape.jasper" )]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>
