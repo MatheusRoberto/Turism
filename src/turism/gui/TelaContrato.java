@@ -5,7 +5,9 @@
  */
 package turism.gui;
 
+import com.mysql.jdbc.Connection;
 import java.awt.Color;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
@@ -22,6 +24,9 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import net.sf.jasperreports.engine.JRException;
+import turism.conexao.Conexao;
+import turism.conexao.ConexaoReport;
 import turism.controle.AssentoDAO;
 import turism.controle.CidadeDAO;
 import turism.controle.ClienteDAO;
@@ -1483,27 +1488,27 @@ public class TelaContrato extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(painelContrato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(546, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addGap(0, 49, Short.MAX_VALUE)
                     .addComponent(jInternalBuscaViagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                    .addGap(0, 49, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addGap(0, 120, Short.MAX_VALUE)
                     .addComponent(JVisualizacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                    .addGap(0, 120, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addGap(0, 194, Short.MAX_VALUE)
                     .addComponent(jBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                    .addGap(0, 194, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addGap(0, 384, Short.MAX_VALUE)
                     .addComponent(jAssento, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                    .addGap(0, 384, Short.MAX_VALUE)))
         );
 
         pack();
@@ -1771,18 +1776,18 @@ public class TelaContrato extends javax.swing.JFrame {
         // TODO add your handling code here:
         Assento a = new Assento();
         AssentoPK apk = new AssentoPK();
-        
+
         if (cliente.getIdcliente() != null && viagem.getIdviagem() != null) {
             int indice = jCBVeiculos.getSelectedIndex();
-            
+
             if (indice > -1) {
                 int poltrona = (int) txtPoltrona.getValue();
-                
+
                 if (poltrona <= veiculoscontratados.get(indice).getVeiculo().getLotacao()) {
                     apk.setIdassento(poltrona);
                     apk.setIdcontrato(cDAO.selecionaUltimo().getIdcontrato() + 1);
                     apk.setIdveiculo(veiculoscontratados.get(indice).getVeiculo().getIdveiculo());
-                    
+
                     if (!this.poltronaOcupada(apk)) {
                         JOptionPane.showMessageDialog(this, "Poltrona Ocupada");
                     } else {
@@ -1814,7 +1819,7 @@ public class TelaContrato extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(this, "Selecione um Veículo");
             }
-            
+
         } else {
             JOptionPane.showMessageDialog(this, "Selecione um cliente e uma viagem!");
         }
@@ -1882,6 +1887,8 @@ public class TelaContrato extends javax.swing.JFrame {
 
     private void txtDescontoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDescontoFocusGained
         // TODO add your handling code here:
+        txtDesconto.setText(String.valueOf(removeCifrao(txtDesconto.getText())));
+        txtDesconto.selectAll();
     }//GEN-LAST:event_txtDescontoFocusGained
 
     private void jCBFormaPGItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCBFormaPGItemStateChanged
@@ -1923,7 +1930,7 @@ public class TelaContrato extends javax.swing.JFrame {
 
     private void btnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarActionPerformed
         // TODO add your handling code here:
-        if(jCBFormaPG.getSelectedItem() != null){
+        if (jCBFormaPG.getSelectedItem() != null) {
             this.carregaContrato();
             cDAO.adicionar(contrato);
             AssentoDAO aDAO = new AssentoDAO();
@@ -1934,16 +1941,21 @@ public class TelaContrato extends javax.swing.JFrame {
                     aDAO.adicionar(a);
                 });
             });
-            if(jCBFormaPG.getSelectedItem().toString().equalsIgnoreCase("Parcelado")){
+            if (jCBFormaPG.getSelectedItem().toString().equalsIgnoreCase("Parcelado")) {
                 geraParcela();
                 contrato.setPaga(false);
                 cDAO.atualizar(contrato);
-            }else if(jCBFormaPG.getSelectedItem().toString().equalsIgnoreCase("Á Vista")){
+                int op;
+                op = JOptionPane.showConfirmDialog(this, "Deseja imprimir o Carne? ", "Carne", JOptionPane.YES_NO_OPTION);
+                if (JOptionPane.YES_OPTION == op){
+                    this.imprimeCarne();
+                }
+            } else if (jCBFormaPG.getSelectedItem().toString().equalsIgnoreCase("Á Vista")) {
                 contrato.setPaga(true);
                 cDAO.atualizar(contrato);
             }
             JOptionPane.showMessageDialog(this, "Venda concluída com sucesso!");
-        }else{
+        } else {
             JOptionPane.showMessageDialog(this, "Selecione uma forma de pagamento!");
         }
     }//GEN-LAST:event_btnFinalizarActionPerformed
@@ -2109,7 +2121,7 @@ public class TelaContrato extends javax.swing.JFrame {
     private javax.swing.JTextField txtViagemVisu;
     // End of variables declaration//GEN-END:variables
 
-    private void limpar(){
+    private void limpar() {
         viagem = new Viagem();
         contrato = new Contrato();
         cliente = new Cliente();
@@ -2121,25 +2133,26 @@ public class TelaContrato extends javax.swing.JFrame {
         txtNParcela.setValue(1);
         txtViagem.setText("");
         dataVenciment.setDate(new Date());
-        
+
         jCBDepedente.setSelected(false);
         jCBFormaPG.setSelectedIndex(-1);
         jCBHoteis.setSelectedIndex(-1);
         jCBVeiculos.setSelectedIndex(-1);
-        
+
         datas.clear();
         assentos.clear();
         assentospk.clear();
         ocupados.clear();
-        
+
         this.vagasTotal();
         this.valorTotal();
-        
+
     }
+
     private void chaveBackdround(boolean b) {
         painelContrato.setVisible(b);
     }
-    
+
     private void carregaPais() {
         paises.clear();
         PaisDAO pDAO = new PaisDAO();
@@ -2157,7 +2170,7 @@ public class TelaContrato extends javax.swing.JFrame {
         jbCidadeOrigem.removeAllItems();
         jbCidadeOrigem.setSelectedIndex(-1);
     }
-    
+
     private void carregaForma() {
         formas.clear();
         FormaPGDAO fpgDAO = new FormaPGDAO();
@@ -2169,11 +2182,11 @@ public class TelaContrato extends javax.swing.JFrame {
         });
         jCBFormaPG.setSelectedIndex(-1);
     }
-    
+
     private void carregaTable() {
         modeloViagem = new ViagemTableModel();
         jtViagem.setModel(modeloViagem);
-        
+
         modeloPassageiro = new PassageiroTableModel();
         jtPassageiro.setModel(modeloPassageiro);
         jtPassageiro.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -2181,12 +2194,12 @@ public class TelaContrato extends javax.swing.JFrame {
         jtPassageiro.getColumnModel().getColumn(0).setPreferredWidth((int) (t * 0.7));
         jtPassageiro.getColumnModel().getColumn(1).setPreferredWidth((int) (t * 0.2));
         jtPassageiro.getColumnModel().getColumn(2).setPreferredWidth((int) (t * 0.1));
-        
+
         modeloDepedente = new DepedenteTableModel();
         jtDepedente.setModel(modeloDepedente);
         jtDepedente.getColumnModel().getColumn(0).setPreferredWidth((int) (t * 0.7));
         jtDepedente.getColumnModel().getColumn(1).setPreferredWidth((int) (t * 0.3));
-        
+
         jtPassageiroVisu.setModel(modeloPassageiro);
         jtPassageiroVisu.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         t = jtPassageiroVisu.getSize().width;
@@ -2194,7 +2207,7 @@ public class TelaContrato extends javax.swing.JFrame {
         jtPassageiroVisu.getColumnModel().getColumn(1).setPreferredWidth((int) (t * 0.2));
         jtPassageiroVisu.getColumnModel().getColumn(2).setPreferredWidth((int) (t * 0.1));
     }
-    
+
     private void buscaViagem(int origem, int destino, Date ida, Date volta) {
         if (origem < 0 || destino < 0) {
             JOptionPane.showMessageDialog(this, "Selecione uma cidade de origem e uma cidade de destino");
@@ -2211,7 +2224,7 @@ public class TelaContrato extends javax.swing.JFrame {
         modeloViagem.limpar();
         modeloViagem.addListaViagem(viagens);
     }
-    
+
     private void carregaVeiculo(int indice) {
         jCBVeiculos.removeAllItems();
         if (indice >= 0) {
@@ -2224,7 +2237,7 @@ public class TelaContrato extends javax.swing.JFrame {
             jCBVeiculos.setEnabled(true);
         }
     }
-    
+
     private void carregaHotel(int indice) {
         HoteisContratadosDAO hcDAO = new HoteisContratadosDAO();
         hoteiscontratados = hcDAO.buscaHoteisContratadosViagem(indice);
@@ -2235,13 +2248,13 @@ public class TelaContrato extends javax.swing.JFrame {
         jCBHoteis.setSelectedIndex(-1);
         jCBHoteis.setEnabled(true);
     }
-    
+
     private int vagasTotal() {
         int total = 0, ocupadas = 0;
         if (!veiculoscontratados.isEmpty() || veiculoscontratados != null) {
             total = veiculoscontratados.stream().map((next) -> next.getVeiculo().getLotacao()).reduce(total, Integer::sum);
         }
-        
+
         if (!ocupados.isEmpty()) {
             ocupadas = ocupados.size();
         }
@@ -2250,7 +2263,7 @@ public class TelaContrato extends javax.swing.JFrame {
         txtVagaTotal.setText(String.valueOf(ITENS.format(total)));
         return total;
     }
-    
+
     private void valorTotal() {
         double total = 0, pessoa, onibus = 0, hotel = 0, desconto = 0;
         int nparcela = Integer.valueOf(txtNParcela.getValue().toString());
@@ -2273,7 +2286,7 @@ public class TelaContrato extends javax.swing.JFrame {
                 }
             }
         }
-        
+
         pessoa = onibus + hotel;
         txtValorPessoa.setText(String.valueOf(DINHEIRO_REAL.format(pessoa)));
         if (!assentos.isEmpty()) {
@@ -2284,11 +2297,11 @@ public class TelaContrato extends javax.swing.JFrame {
         txtValorTotalVenda.setText(DINHEIRO_REAL.format(total));
         txtValorParcela.setText(DINHEIRO_REAL.format(this.valorParcela(total, nparcela)));
     }
-    
+
     private boolean poltronaOcupada(AssentoPK apk) {
         return ocupados.keySet().stream().noneMatch((pk) -> ((pk.getIdassento() == apk.getIdassento()) && (pk.getIdveiculo() == apk.getIdveiculo())));
     }
-     
+
     private void alteraCorbtnPoltrona() {
         int indice = jCBVeiculos.getSelectedIndex();
         if (indice > -1) {
@@ -2303,7 +2316,7 @@ public class TelaContrato extends javax.swing.JFrame {
             }
         }
     }
-        
+
     private void geraDataParcela(int nparcelas, Date d) {
         GregorianCalendar gc = new GregorianCalendar();
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
@@ -2327,22 +2340,24 @@ public class TelaContrato extends javax.swing.JFrame {
         jListDataVencimento.setModel(modelo);
         jListDataVencimentoVisu.setModel(modelo);
     }
-    
+
     private double valorParcela(Double v, int nparcelas) {
         return v / nparcelas;
     }
-    
+
     private double removeCifrao(String texto) {
         Number valor = 0;
-        try {
-            valor = DINHEIRO_REAL.parse(texto);
-        } catch (ParseException ex) {
-            Logger.getLogger(TelaContrato.class.getName()).log(Level.SEVERE, null, ex);
+        if (!texto.isEmpty()) {
+            try {
+                valor = DINHEIRO_REAL.parse(texto);
+            } catch (ParseException ex) {
+                Logger.getLogger(TelaContrato.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        
+
         return valor.doubleValue();
     }
-    
+
     private void carregaVisu() {
         txtClienteVisu.setText(txtCliente.getText());
         txtDescontoVisu.setText(txtDesconto.getText());
@@ -2353,7 +2368,7 @@ public class TelaContrato extends javax.swing.JFrame {
         txtValorTotalVendaVisu.setText(txtValorTotalVenda.getText());
         txtViagemVisu.setText(txtViagem.getText());
     }
-    
+
     private void carregaContrato() {
         contrato.setDataemissao(new Date());
         if (cliente.getIdcliente() != null) {
@@ -2369,9 +2384,9 @@ public class TelaContrato extends javax.swing.JFrame {
         }
         UsuarioDAO uDAO = new UsuarioDAO();
         contrato.setIdusuario(uDAO.buscaUltimo());
-        if(viagem.getIdviagem() != null){
-        contrato.setIdviagem(viagem);
-        }else{
+        if (viagem.getIdviagem() != null) {
+            contrato.setIdviagem(viagem);
+        } else {
             JOptionPane.showMessageDialog(this, "Selecione uma Viagem");
         }
         contrato.setQuantidade(assentos.size());
@@ -2380,7 +2395,7 @@ public class TelaContrato extends javax.swing.JFrame {
     }
 
     private void geraParcela() {
-        Parcela p;   
+        Parcela p;
         ParcelaDAO pDAO = new ParcelaDAO();
         for (Date date : datas) {
             p = new Parcela();
@@ -2391,12 +2406,33 @@ public class TelaContrato extends javax.swing.JFrame {
             pDAO.adiconar(p);
         }
     }
-    
-    private  void carregaAssento(int idvi){
+
+    private void carregaAssento(int idvi) {
         AssentoDAO aDAO = new AssentoDAO();
         //ocupados.clear();
         aDAO.buscaAssento(idvi).forEach((assent) -> {
             ocupados.put(assent, true);
         });
     }
+
+    private void imprimeCarne() {
+        InputStream inputStream = this.getClass().getResourceAsStream("/turism/reports/Parte1_Carne_Landscape.jasper");
+        
+        // mapa de parâmetros do relatório (ainda vamos aprender a usar)
+        Map<String, Object> parametros = new HashMap();
+        parametros.put("id", contrato.getIdcontrato());
+//        parametros.put("Parte2_Carne_Landscape.jasper", sub);
+//        parametros.put("REPORT_CONNECTION", sub);
+        parametros.put("SUBREPORT_DIR", "/turism/reports/");
+
+        try {
+
+            // abre o relatório
+            ConexaoReport.openReport("Carne: ", inputStream, parametros, (Connection) Conexao.getConnection());
+
+        } catch (JRException exc) {
+            exc.printStackTrace();
+        }
+    }
+
 }
