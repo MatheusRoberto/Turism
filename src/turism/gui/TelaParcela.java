@@ -5,14 +5,28 @@
  */
 package turism.gui;
 
+import com.mysql.jdbc.Connection;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
+import org.hsqldb.User;
+import turism.conexao.Conexao;
+import turism.conexao.ConexaoReport;
 import turism.controle.CidadeDAO;
 import turism.controle.ClienteDAO;
 import turism.controle.ContratoDAO;
@@ -35,7 +49,7 @@ import turism.regra.ViagemTableModel;
  * @author matheus
  */
 public class TelaParcela extends javax.swing.JFrame {
-    
+
     private static final Locale BRAZIL = new Locale("pt", "BR");
     private static final DecimalFormatSymbols REAL = new DecimalFormatSymbols(BRAZIL);
     public static final DecimalFormat DINHEIRO_REAL = new DecimalFormat("¤ ###,###,##0.00", REAL);
@@ -82,11 +96,32 @@ public class TelaParcela extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jInternalBuscaCliente = new javax.swing.JInternalFrame();
-        painelCliente = new javax.swing.JPanel();
-        txtBusca = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        listBusca = new javax.swing.JList<>();
+        painelParcela = new javax.swing.JPanel();
+        painelParcelasTable = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTParcela = new javax.swing.JTable();
+        painelViagem_Cliente = new javax.swing.JPanel();
+        txtCliente = new javax.swing.JTextField();
+        btnBuscarCliente = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        btnBuscarViagem = new javax.swing.JButton();
+        txtViagem = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        painelValores = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        txtValorRecebido = new javax.swing.JTextField();
+        txtValorTotal = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        txtValorFaltante = new javax.swing.JTextField();
+        painelParamentros = new javax.swing.JPanel();
+        dataPagamento = new com.toedter.calendar.JDateChooser();
+        txtValorPagamento = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        painelBotoes = new javax.swing.JPanel();
+        btnPagarParcela = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         jInternalBuscaViagem = new javax.swing.JInternalFrame();
         btnBuscarViagem1 = new javax.swing.JButton();
         dataIdaBusca = new com.toedter.calendar.JDateChooser();
@@ -109,111 +144,294 @@ public class TelaParcela extends javax.swing.JFrame {
         jLabel26 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jtViagem = new javax.swing.JTable();
-        painelParcela = new javax.swing.JPanel();
-        txtViagem = new javax.swing.JTextField();
-        btnBuscarViagem = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        txtCliente = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        btnBuscarCliente = new javax.swing.JButton();
-        painelParcelasTable = new javax.swing.JPanel();
-        painelBotoes = new javax.swing.JPanel();
-        btnPagarParcela = new javax.swing.JButton();
-        dataPagamento = new com.toedter.calendar.JDateChooser();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTParcela = new javax.swing.JTable();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        txtValorRecebido = new javax.swing.JTextField();
-        txtValorTotal = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        txtValorFaltante = new javax.swing.JTextField();
+        jInternalBuscaCliente = new javax.swing.JInternalFrame();
+        painelCliente = new javax.swing.JPanel();
+        txtBusca = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        listBusca = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Parcela");
-        setPreferredSize(new java.awt.Dimension(960, 410));
+        setPreferredSize(new java.awt.Dimension(960, 500));
 
-        jInternalBuscaCliente.setVisible(true);
-        jInternalBuscaCliente.addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
-            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
-            }
-            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
-            }
-            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
-                jInternalBuscaClienteInternalFrameClosed(evt);
-            }
-            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
-            }
-            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
-            }
-            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
-            }
-            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
-            }
-        });
+        painelParcela.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        painelParcela.setPreferredSize(new java.awt.Dimension(950, 500));
 
-        painelCliente.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED), "Busca Cliente:"));
+        painelParcelasTable.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED), "Parcelas"));
 
-        txtBusca.addCaretListener(new javax.swing.event.CaretListener() {
-            public void caretUpdate(javax.swing.event.CaretEvent evt) {
-                txtBuscaCaretUpdate(evt);
-            }
-        });
-        txtBusca.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                txtBuscaInputMethodTextChanged(evt);
-            }
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
-        });
+        jTParcela.setModel(modeloParcela);
+        jTParcela.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane2.setViewportView(jTParcela);
 
-        listBusca.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        listBusca.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                listBuscaMouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(listBusca);
-
-        javax.swing.GroupLayout painelClienteLayout = new javax.swing.GroupLayout(painelCliente);
-        painelCliente.setLayout(painelClienteLayout);
-        painelClienteLayout.setHorizontalGroup(
-            painelClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(painelClienteLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(painelClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
-                    .addComponent(txtBusca)))
+        javax.swing.GroupLayout painelParcelasTableLayout = new javax.swing.GroupLayout(painelParcelasTable);
+        painelParcelasTable.setLayout(painelParcelasTableLayout);
+        painelParcelasTableLayout.setHorizontalGroup(
+            painelParcelasTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelParcelasTableLayout.createSequentialGroup()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 784, Short.MAX_VALUE)
+                .addContainerGap())
         );
-        painelClienteLayout.setVerticalGroup(
-            painelClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelClienteLayout.createSequentialGroup()
-                .addContainerGap(23, Short.MAX_VALUE)
-                .addComponent(txtBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+        painelParcelasTableLayout.setVerticalGroup(
+            painelParcelasTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelParcelasTableLayout.createSequentialGroup()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        painelViagem_Cliente.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        txtCliente.setEditable(false);
+
+        btnBuscarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/search_find.png"))); // NOI18N
+        btnBuscarCliente.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnBuscarCliente.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnBuscarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarClienteActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Cliente:");
+
+        btnBuscarViagem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/search_find.png"))); // NOI18N
+        btnBuscarViagem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarViagemActionPerformed(evt);
+            }
+        });
+
+        txtViagem.setEditable(false);
+
+        jLabel2.setText("Viagem:");
+
+        javax.swing.GroupLayout painelViagem_ClienteLayout = new javax.swing.GroupLayout(painelViagem_Cliente);
+        painelViagem_Cliente.setLayout(painelViagem_ClienteLayout);
+        painelViagem_ClienteLayout.setHorizontalGroup(
+            painelViagem_ClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelViagem_ClienteLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(painelViagem_ClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(txtViagem, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(24, 24, 24))
+                .addComponent(btnBuscarViagem, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(painelViagem_ClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(painelViagem_ClienteLayout.createSequentialGroup()
+                        .addComponent(txtCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnBuscarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        painelViagem_ClienteLayout.setVerticalGroup(
+            painelViagem_ClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelViagem_ClienteLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(painelViagem_ClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(painelViagem_ClienteLayout.createSequentialGroup()
+                        .addGroup(painelViagem_ClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1))
+                        .addGap(6, 6, 6)
+                        .addGroup(painelViagem_ClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtViagem)
+                            .addComponent(btnBuscarViagem, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(painelViagem_ClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnBuscarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout jInternalBuscaClienteLayout = new javax.swing.GroupLayout(jInternalBuscaCliente.getContentPane());
-        jInternalBuscaCliente.getContentPane().setLayout(jInternalBuscaClienteLayout);
-        jInternalBuscaClienteLayout.setHorizontalGroup(
-            jInternalBuscaClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 440, Short.MAX_VALUE)
-            .addGroup(jInternalBuscaClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jInternalBuscaClienteLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(painelCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        jLabel3.setText("Valor Recebido:");
+
+        jLabel4.setText("Valor Total:");
+
+        txtValorRecebido.setEditable(false);
+
+        txtValorTotal.setEditable(false);
+
+        jLabel5.setText("Valor Faltante:");
+
+        txtValorFaltante.setEditable(false);
+
+        painelParamentros.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        dataPagamento.setDate(new Date());
+
+        txtValorPagamento.setText(DINHEIRO_REAL.format(0.0));
+        txtValorPagamento.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtValorPagamentoFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtValorPagamentoFocusLost(evt);
+            }
+        });
+
+        jLabel6.setText("Data Pagamento:");
+
+        jLabel7.setText("Valor Recebido:");
+
+        javax.swing.GroupLayout painelParamentrosLayout = new javax.swing.GroupLayout(painelParamentros);
+        painelParamentros.setLayout(painelParamentrosLayout);
+        painelParamentrosLayout.setHorizontalGroup(
+            painelParamentrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelParamentrosLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(painelParamentrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6)
+                    .addComponent(dataPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addGroup(painelParamentrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtValorPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7))
+                .addContainerGap())
+        );
+        painelParamentrosLayout.setVerticalGroup(
+            painelParamentrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelParamentrosLayout.createSequentialGroup()
+                .addGap(9, 9, 9)
+                .addGroup(painelParamentrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(painelParamentrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(dataPagamento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(painelParamentrosLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(txtValorPagamento, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(21, 21, 21))
+        );
+
+        javax.swing.GroupLayout painelValoresLayout = new javax.swing.GroupLayout(painelValores);
+        painelValores.setLayout(painelValoresLayout);
+        painelValoresLayout.setHorizontalGroup(
+            painelValoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelValoresLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(painelValoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(txtValorRecebido, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(47, 47, 47)
+                .addGroup(painelValoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addComponent(txtValorFaltante, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(46, 46, 46)
+                .addGroup(painelValoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(txtValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(384, Short.MAX_VALUE))
+            .addGroup(painelValoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelValoresLayout.createSequentialGroup()
+                    .addContainerGap(448, Short.MAX_VALUE)
+                    .addComponent(painelParamentros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap()))
+        );
+        painelValoresLayout.setVerticalGroup(
+            painelValoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelValoresLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(painelValoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(painelValoresLayout.createSequentialGroup()
+                        .addGroup(painelValoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel4))
+                        .addGroup(painelValoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(painelValoresLayout.createSequentialGroup()
+                                .addGap(5, 5, 5)
+                                .addComponent(txtValorTotal))
+                            .addGroup(painelValoresLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtValorFaltante, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(painelValoresLayout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtValorRecebido, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(38, Short.MAX_VALUE))
+            .addGroup(painelValoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(painelValoresLayout.createSequentialGroup()
+                    .addGap(6, 6, 6)
+                    .addComponent(painelParamentros, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
-        jInternalBuscaClienteLayout.setVerticalGroup(
-            jInternalBuscaClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 396, Short.MAX_VALUE)
-            .addGroup(jInternalBuscaClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jInternalBuscaClienteLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(painelCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+
+        painelBotoes.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        btnPagarParcela.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/finance_64.png"))); // NOI18N
+        btnPagarParcela.setText("Pagar");
+        btnPagarParcela.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnPagarParcela.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnPagarParcela.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPagarParcelaActionPerformed(evt);
+            }
+        });
+
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/printer_64.png"))); // NOI18N
+        jButton1.setText("Imprimir");
+        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout painelBotoesLayout = new javax.swing.GroupLayout(painelBotoes);
+        painelBotoes.setLayout(painelBotoesLayout);
+        painelBotoesLayout.setHorizontalGroup(
+            painelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelBotoesLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnPagarParcela)
+                .addContainerGap())
+            .addGroup(painelBotoesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        painelBotoesLayout.setVerticalGroup(
+            painelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelBotoesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnPagarParcela)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout painelParcelaLayout = new javax.swing.GroupLayout(painelParcela);
+        painelParcela.setLayout(painelParcelaLayout);
+        painelParcelaLayout.setHorizontalGroup(
+            painelParcelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelParcelaLayout.createSequentialGroup()
+                .addGroup(painelParcelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(painelViagem_Cliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(painelParcelaLayout.createSequentialGroup()
+                        .addGroup(painelParcelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(painelParcelaLayout.createSequentialGroup()
+                                .addComponent(painelValores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelParcelaLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(painelParcelasTable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(painelBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12)))
+                .addContainerGap())
+        );
+        painelParcelaLayout.setVerticalGroup(
+            painelParcelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelParcelaLayout.createSequentialGroup()
+                .addComponent(painelViagem_Cliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(painelParcelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(painelParcelaLayout.createSequentialGroup()
+                        .addComponent(painelValores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(painelParcelasTable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(painelBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         jInternalBuscaViagem.setClosable(true);
@@ -466,218 +684,120 @@ public class TelaParcela extends javax.swing.JFrame {
 
         dataIdaBusca.getJCalendar().setMinSelectableDate(new Date());
 
-        painelParcela.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        painelParcela.setPreferredSize(new java.awt.Dimension(300, 500));
-
-        txtViagem.setEditable(false);
-
-        btnBuscarViagem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/search_find.png"))); // NOI18N
-        btnBuscarViagem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBuscarViagemActionPerformed(evt);
+        jInternalBuscaCliente.setVisible(true);
+        jInternalBuscaCliente.addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+                jInternalBuscaClienteInternalFrameClosed(evt);
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
             }
         });
 
-        jLabel2.setText("Viagem:");
+        painelCliente.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED), "Busca Cliente:"));
 
-        txtCliente.setEditable(false);
-
-        jLabel1.setText("Cliente:");
-
-        btnBuscarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/search_find.png"))); // NOI18N
-        btnBuscarCliente.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnBuscarCliente.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnBuscarCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBuscarClienteActionPerformed(evt);
+        txtBusca.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                txtBuscaCaretUpdate(evt);
+            }
+        });
+        txtBusca.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                txtBuscaInputMethodTextChanged(evt);
+            }
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
 
-        painelParcelasTable.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED), "Parcelas"));
-
-        painelBotoes.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-        btnPagarParcela.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/finance_64.png"))); // NOI18N
-        btnPagarParcela.setText("Pagar");
-        btnPagarParcela.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnPagarParcela.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnPagarParcela.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPagarParcelaActionPerformed(evt);
+        listBusca.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        listBusca.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                listBuscaMouseClicked(evt);
             }
         });
+        jScrollPane1.setViewportView(listBusca);
 
-        dataPagamento.setDate(new Date());
-
-        javax.swing.GroupLayout painelBotoesLayout = new javax.swing.GroupLayout(painelBotoes);
-        painelBotoes.setLayout(painelBotoesLayout);
-        painelBotoesLayout.setHorizontalGroup(
-            painelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelBotoesLayout.createSequentialGroup()
-                .addContainerGap(36, Short.MAX_VALUE)
-                .addComponent(btnPagarParcela)
-                .addGap(24, 24, 24))
-            .addGroup(painelBotoesLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(dataPagamento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        painelBotoesLayout.setVerticalGroup(
-            painelBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelBotoesLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(dataPagamento, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnPagarParcela))
-        );
-
-        jTParcela.setModel(modeloParcela);
-        jTParcela.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPane2.setViewportView(jTParcela);
-
-        javax.swing.GroupLayout painelParcelasTableLayout = new javax.swing.GroupLayout(painelParcelasTable);
-        painelParcelasTable.setLayout(painelParcelasTableLayout);
-        painelParcelasTableLayout.setHorizontalGroup(
-            painelParcelasTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelParcelasTableLayout.createSequentialGroup()
+        javax.swing.GroupLayout painelClienteLayout = new javax.swing.GroupLayout(painelCliente);
+        painelCliente.setLayout(painelClienteLayout);
+        painelClienteLayout.setHorizontalGroup(
+            painelClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(painelClienteLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 541, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(painelBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(painelClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
+                    .addComponent(txtBusca)))
         );
-        painelParcelasTableLayout.setVerticalGroup(
-            painelParcelasTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(painelParcelasTableLayout.createSequentialGroup()
-                .addGroup(painelParcelasTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(painelBotoes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addContainerGap())
+        painelClienteLayout.setVerticalGroup(
+            painelClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelClienteLayout.createSequentialGroup()
+                .addContainerGap(23, Short.MAX_VALUE)
+                .addComponent(txtBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24))
         );
 
-        jLabel3.setText("Valor Recebido:");
-
-        jLabel4.setText("Valor Total:");
-
-        txtValorRecebido.setEditable(false);
-
-        txtValorTotal.setEditable(false);
-
-        jLabel5.setText("Valor Faltante:");
-
-        txtValorFaltante.setEditable(false);
-
-        javax.swing.GroupLayout painelParcelaLayout = new javax.swing.GroupLayout(painelParcela);
-        painelParcela.setLayout(painelParcelaLayout);
-        painelParcelaLayout.setHorizontalGroup(
-            painelParcelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(painelParcelaLayout.createSequentialGroup()
-                .addGroup(painelParcelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(painelParcelaLayout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(painelParcelasTable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(painelParcelaLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(painelParcelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(txtValorRecebido, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(89, 89, 89)
-                        .addGroup(painelParcelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(txtValorFaltante, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(80, 80, 80)
-                        .addGroup(painelParcelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(txtValorTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(painelParcelaLayout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addGroup(painelParcelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(txtViagem, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(12, 12, 12)
-                        .addComponent(btnBuscarViagem, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(painelParcelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(painelParcelaLayout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(jLabel1))
-                            .addComponent(txtCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnBuscarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        javax.swing.GroupLayout jInternalBuscaClienteLayout = new javax.swing.GroupLayout(jInternalBuscaCliente.getContentPane());
+        jInternalBuscaCliente.getContentPane().setLayout(jInternalBuscaClienteLayout);
+        jInternalBuscaClienteLayout.setHorizontalGroup(
+            jInternalBuscaClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 440, Short.MAX_VALUE)
+            .addGroup(jInternalBuscaClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jInternalBuscaClienteLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(painelCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
-        painelParcelaLayout.setVerticalGroup(
-            painelParcelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(painelParcelaLayout.createSequentialGroup()
-                .addGroup(painelParcelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(painelParcelaLayout.createSequentialGroup()
-                        .addGap(7, 7, 7)
-                        .addGroup(painelParcelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(painelParcelaLayout.createSequentialGroup()
-                                .addGroup(painelParcelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel1))
-                                .addGap(6, 6, 6)
-                                .addGroup(painelParcelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtViagem, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-                                    .addComponent(txtCliente)))
-                            .addComponent(btnBuscarViagem)))
-                    .addGroup(painelParcelaLayout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addComponent(btnBuscarCliente)))
-                .addGap(12, 12, 12)
-                .addGroup(painelParcelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(painelParcelaLayout.createSequentialGroup()
-                        .addGroup(painelParcelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel4))
-                        .addGroup(painelParcelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(painelParcelaLayout.createSequentialGroup()
-                                .addGap(5, 5, 5)
-                                .addComponent(txtValorTotal))
-                            .addGroup(painelParcelaLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtValorFaltante, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(painelParcelaLayout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtValorRecebido, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(12, 12, 12)
-                .addComponent(painelParcelasTable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        jInternalBuscaClienteLayout.setVerticalGroup(
+            jInternalBuscaClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 396, Short.MAX_VALUE)
+            .addGroup(jInternalBuscaClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jInternalBuscaClienteLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(painelCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(264, 264, 264)
-                .addComponent(jInternalBuscaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(284, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 22, Short.MAX_VALUE)
-                    .addComponent(jInternalBuscaViagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 22, Short.MAX_VALUE)))
+            .addComponent(painelParcela, 936, 936, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(painelParcela, 775, 775, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jInternalBuscaViagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jInternalBuscaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jInternalBuscaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 29, Short.MAX_VALUE))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 26, Short.MAX_VALUE)
-                    .addComponent(jInternalBuscaViagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 26, Short.MAX_VALUE)))
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(painelParcela, 457, 457, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(painelParcela, 457, 457, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jInternalBuscaViagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jInternalBuscaCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
 
@@ -916,17 +1036,57 @@ public class TelaParcela extends javax.swing.JFrame {
     private void btnPagarParcelaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagarParcelaActionPerformed
         // TODO add your handling code here:
         int indice = jTParcela.getSelectedRow();
-        if(indice > -1){
-            Parcela p = parcelas.get(indice);
-            p.setPaga(true);
-            p.setDatapagamento(dataPagamento.getDate());
-            pDAO.atualizar(p);
-            this.carregaParcela();
-            this.valor();
-        }else{
-            JOptionPane.showMessageDialog(this, "Selecione uma parcela á ser paga!");
+        String texto = txtValorPagamento.getText();
+        if (removeCifrao(texto) == 0) {
+            JOptionPane.showMessageDialog(this, "Digite um valor!");
+            txtValorPagamento.requestFocus();
+        } else {
+            if (indice > -1) {
+                Parcela p = parcelas.get(indice);
+                if (!p.getPaga()) {
+                    if (removeCifrao(texto) > p.getValor() || removeCifrao(texto) < p.getValor()) {
+                        this.pagamentoMontante(indice);
+                    } else {
+                        p.setPaga(true);
+                        p.setDatapagamento(dataPagamento.getDate());
+                        pDAO.atualizar(p);
+                    }
+                    this.carregaParcela();
+                    this.valor();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Parcela já está paga!");
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Selecione uma parcela á ser paga!");
+            }
         }
     }//GEN-LAST:event_btnPagarParcelaActionPerformed
+
+    private void txtValorPagamentoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtValorPagamentoFocusLost
+        // TODO add your handling code here:
+        double valor = 0;
+        if (!txtValorPagamento.getText().isEmpty()) {
+            String texto = txtValorPagamento.getText();
+            texto = texto.replaceAll(",", ".");
+            valor = Double.valueOf(texto);
+        }
+        txtValorPagamento.setText(DINHEIRO_REAL.format(valor));
+    }//GEN-LAST:event_txtValorPagamentoFocusLost
+
+    private void txtValorPagamentoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtValorPagamentoFocusGained
+        // TODO add your handling code here:
+        txtValorPagamento.setText(String.valueOf(removeCifrao(txtValorPagamento.getText())));
+        txtValorPagamento.selectAll();
+    }//GEN-LAST:event_txtValorPagamentoFocusGained
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        if (contrato.getIdcontrato() != null) {
+            this.imprimirCarne();
+        } else {
+            JOptionPane.showMessageDialog(this, "Escolha uma viagem e um contrato!");
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -967,6 +1127,7 @@ public class TelaParcela extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser dataIdaBusca;
     private com.toedter.calendar.JDateChooser dataPagamento;
     private com.toedter.calendar.JDateChooser dataVoltaBusca;
+    private javax.swing.JButton jButton1;
     private javax.swing.JInternalFrame jInternalBuscaCliente;
     private javax.swing.JInternalFrame jInternalBuscaViagem;
     private javax.swing.JLabel jLabel1;
@@ -982,6 +1143,8 @@ public class TelaParcela extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane4;
@@ -996,11 +1159,15 @@ public class TelaParcela extends javax.swing.JFrame {
     private javax.swing.JList<String> listBusca;
     private javax.swing.JPanel painelBotoes;
     private javax.swing.JPanel painelCliente;
+    private javax.swing.JPanel painelParamentros;
     private javax.swing.JPanel painelParcela;
     private javax.swing.JPanel painelParcelasTable;
+    private javax.swing.JPanel painelValores;
+    private javax.swing.JPanel painelViagem_Cliente;
     private javax.swing.JTextField txtBusca;
     private javax.swing.JTextField txtCliente;
     private javax.swing.JTextField txtValorFaltante;
+    private javax.swing.JTextField txtValorPagamento;
     private javax.swing.JTextField txtValorRecebido;
     private javax.swing.JTextField txtValorTotal;
     private javax.swing.JTextField txtViagem;
@@ -1060,22 +1227,22 @@ public class TelaParcela extends javax.swing.JFrame {
         modeloParcela.limpar();
         modeloParcela.addListaPArcela(parcelas);
     }
-    
-    private void valor(){
+
+    private void valor() {
         double total = 0, parcial = 0;
-        if(!parcelas.isEmpty()){
+        if (!parcelas.isEmpty()) {
             for (Parcela parc : parcelas) {
                 total += parc.getValor();
-                if(parc.getPaga()){
+                if (parc.getPaga()) {
                     parcial += parc.getValor();
                 }
             }
         }
         txtValorRecebido.setText(DINHEIRO_REAL.format(parcial));
         txtValorTotal.setText(DINHEIRO_REAL.format(total));
-        txtValorFaltante.setText(DINHEIRO_REAL.format(total-parcial));
+        txtValorFaltante.setText(DINHEIRO_REAL.format(total - parcial));
     }
-    
+
     private void tamanhoTabela() {
         int t = jTParcela.getSize().width;
         jTParcela.getColumnModel().getColumn(0).setPreferredWidth((int) (t * 0.2));
@@ -1083,5 +1250,85 @@ public class TelaParcela extends javax.swing.JFrame {
         jTParcela.getColumnModel().getColumn(2).setPreferredWidth((int) (t * 0.3));
         jTParcela.getColumnModel().getColumn(3).setPreferredWidth((int) (t * 0.2));
     }
-    
+
+    private double removeCifrao(String texto) {
+        Number valor = 0;
+        if (!texto.isEmpty()) {
+            try {
+                valor = DINHEIRO_REAL.parse(texto);
+            } catch (ParseException ex) {
+                Logger.getLogger(TelaContrato.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return valor.doubleValue();
+    }
+
+    private void pagamentoMontante(int indice) {
+        double recebido = removeCifrao(txtValorPagamento.getText());
+        double resto;
+        int vezes;
+        Parcela p = parcelas.get(indice);
+        vezes = (int) (recebido / p.getValor());
+        resto = recebido % p.getValor();
+        if (vezes > 0) {
+            for (int i = 0; i < vezes; i++) {
+                p = parcelas.get(indice);
+                p.setPaga(true);
+                p.setDatapagamento(dataPagamento.getDate());
+                indice++;
+            }
+            if (resto != 0) {
+                p = parcelas.get(indice);
+                p.setValor(p.getValor() - resto);
+            }
+        } else {
+            p.setValor(resto);
+            p.setPaga(true);
+            p.setDatapagamento(dataPagamento.getDate());
+            indice++;
+            p = parcelas.get(indice);
+            p.setValor(p.getValor() + (p.getValor() - resto));
+        }
+
+        parcelas.forEach((parc) -> {
+            pDAO.atualizar(parc);
+        });
+    }
+
+    private void imprimirCarne() {
+        InputStream inputStream = this.getClass().getResourceAsStream("/turism/reports/Parte1_Carne_Landscape.jasper");
+        
+        // mapa de parâmetros do relatório (ainda vamos aprender a usar)
+        Map<String, Object> parametros = new HashMap();
+        parametros.put("id", contrato.getIdcontrato());
+        parametros.put("SUBREPORT_DIR", "/turism/reports/");
+
+        try {
+
+            // abre o relatório
+            ConexaoReport.openReport("Parcelas: ", inputStream, parametros, (Connection) Conexao.getConnection());
+
+        } catch (JRException exc) {
+            exc.printStackTrace();
+        }
+
+    }
+
+    /*Connection conn = (Connection) Conexao.getConnection();
+        
+        Map parameters = new HashMap();
+        parameters.put("id", contrato.getIdcontrato());
+        
+        String src = "src/turism/reports/Parte2_Carne_Landscape.jasper";
+        
+        JasperPrint jasperPrint = null;
+        try {
+            jasperPrint = JasperFillManager.fillReport(src, parameters, conn);
+        } catch (JRException ex) {
+            Logger.getLogger(TelaParcela.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        JasperViewer viewer = new JasperViewer(jasperPrint, false);
+        viewer.setVisible(true);*/
 }
