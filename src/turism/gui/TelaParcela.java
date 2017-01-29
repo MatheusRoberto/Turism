@@ -617,6 +617,7 @@ public class TelaParcela extends javax.swing.JFrame {
         jLabel26.setText("Data de Volta:");
 
         jtViagem.setModel(modeloViagem);
+        jtViagem.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jtViagem.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jtViagemMouseClicked(evt);

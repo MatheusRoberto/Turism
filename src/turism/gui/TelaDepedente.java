@@ -81,6 +81,7 @@ public class TelaDepedente extends javax.swing.JFrame {
         btnBuscarCliente = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Depedentes");
 
         jBuscaCliente.setClosable(true);
         jBuscaCliente.setVisible(true);

@@ -441,6 +441,7 @@ public class TelaContrato extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jtPassageiro.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(jtPassageiro);
 
         painelCliente.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -1038,6 +1039,7 @@ public class TelaContrato extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jtViagem.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jtViagem.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jtViagemMouseClicked(evt);

@@ -54,7 +54,8 @@ public class TelaFormaPagamento extends javax.swing.JFrame {
         listBusca = new javax.swing.JList<>();
         txtBusca = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Forma de Pagamento");
 
         painelFuncoes.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 

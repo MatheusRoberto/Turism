@@ -74,7 +74,8 @@ public class TelaCliente extends javax.swing.JFrame {
         listBusca = new javax.swing.JList<>();
         txtBusca = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Clientes");
 
         jLabel1.setText("Nome:");
 
@@ -283,7 +284,7 @@ public class TelaCliente extends javax.swing.JFrame {
         );
 
         jBusca.setClosable(true);
-        jBusca.setVisible(true);
+        jBusca.setVisible(false);
         jBusca.addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
             }
@@ -330,14 +331,14 @@ public class TelaCliente extends javax.swing.JFrame {
             .addGroup(jBuscaLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jBuscaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
                     .addComponent(txtBusca))
                 .addContainerGap())
         );
         jBuscaLayout.setVerticalGroup(
             jBuscaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jBuscaLayout.createSequentialGroup()
-                .addContainerGap(23, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(txtBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
