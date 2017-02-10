@@ -9,7 +9,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -23,6 +27,11 @@ import turism.modelo.ParcelaPK;
  * @author matheus
  */
 public class ParcelaDAO {
+
+    private static final Locale BRAZIL = new Locale("pt", "BR");
+    private static final DecimalFormatSymbols REAL = new DecimalFormatSymbols(BRAZIL);
+    public static final DecimalFormat DINHEIRO_REAL = new DecimalFormat("¤ ###,###,##0.00", REAL);
+    public static final DecimalFormat ITENS = new DecimalFormat("###,###,##0");
 
     public ParcelaDAO() {
         this.connection = Conexao.getConnection();
@@ -57,9 +66,13 @@ public class ParcelaDAO {
                 + "WHERE parcela.idparcela = ? AND parcela.idcontrato = ? ;";
         try {
             stmt = connection.prepareStatement(sql);
+            if (p.getDatapagamento() == null) {
+                stmt.setDate(3, null);
+            } else {
+                stmt.setDate(3, new java.sql.Date(p.getDatapagamento().getTime()));
+            }
             stmt.setDouble(1, p.getValor());
             stmt.setDate(2, new java.sql.Date(p.getDatavencimento().getTime()));
-            stmt.setDate(3, new java.sql.Date(p.getDatapagamento().getTime()));
             stmt.setBoolean(4, p.getPaga());
             stmt.setInt(5, p.getParcelaPK().getIdparcela());
             stmt.setInt(6, p.getParcelaPK().getIdcontrato());
@@ -68,6 +81,19 @@ public class ParcelaDAO {
             Logger.getLogger(ParcelaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    public void apagar(Parcela p) {
+        PreparedStatement stmt;
+        String sql = "DELETE FROM parcela WHERE parcela.idparcela = ? AND parcela.idcontrato = ?";
+        try {
+            stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, p.getParcelaPK().getIdparcela());
+            stmt.setInt(2, p.getParcelaPK().getIdcontrato());
+            stmt.execute();
+        } catch (SQLException ex) {
+            Logger.getLogger(ParcelaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public Parcela buscaParcela(int idparcela) {
@@ -136,7 +162,7 @@ public class ParcelaDAO {
         String sql = "SELECT parcela.* FROM parcela "
                 + "INNER JOIN contrato ON contrato.idcontrato = parcela.idcontrato "
                 + "INNER JOIN viagem ON viagem.idviagem = contrato.idviagem "
-                + "WHERE viagem.idviagem = '"+idviagem+"' AND contrato.idcontrato = '"+idcontrato+"' ;";
+                + "WHERE viagem.idviagem = '" + idviagem + "' AND contrato.idcontrato = '" + idcontrato + "' ;";
         ResultSet result;
         try {
             stmt = connection.prepareStatement(sql);
@@ -160,6 +186,31 @@ public class ParcelaDAO {
         return list;
     }
 
+    public ArrayList<String> parcelaVencimentoDia() {
+        ArrayList<String> list = new ArrayList<>();
+        PreparedStatement stmt;
+        String sql = "SELECT parcela.valor, cliente.nome FROM parcela "
+                + "INNER JOIN contrato ON contrato.idcontrato = parcela.idcontrato "
+                + "INNER JOIN viagem ON viagem.idviagem = contrato.idviagem "
+                + "INNER JOIN cliente ON cliente.idcliente = contrato.idcliente "
+                + "WHERE parcela.datavencimento = '" + new java.sql.Date(new Date().getTime()) + "'"
+                + "AND parcela.paga = 0;";
+        ResultSet result;
+        try {
+            stmt = connection.prepareStatement(sql);
+            result = stmt.executeQuery(sql);
+            while (result.next()) {
+                String texto;
+                texto = DINHEIRO_REAL.format(result.getDouble("valor")) + " do Cliente: " + result.getString("nome");
+                list.add(texto);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ParcelaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return list;
+    }
+
     public Parcela selecionaUltimo() {
         Parcela parcela = null;
         ResultSet result;
@@ -172,7 +223,7 @@ public class ParcelaDAO {
                 parcela = buscaParcela(result.getInt("max(idparcela)"));
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "erro no contrato " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "erro no parcela " + e.getMessage());
         } finally {
             try {
                 stmt.close();

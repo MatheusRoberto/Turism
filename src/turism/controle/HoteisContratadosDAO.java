@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import turism.conexao.Conexao;
 import turism.modelo.Hoteiscontratados;
+import turism.modelo.HoteiscontratadosPK;
 import turism.modelo.Hotel;
 import turism.modelo.Viagem;
 
@@ -126,13 +127,17 @@ public class HoteisContratadosDAO {
             result = stmt.executeQuery(sql);
             while (result.next()) {
                 hc = new Hoteiscontratados();
+                HoteiscontratadosPK hcpk = new HoteiscontratadosPK();
                 hc.setValor(result.getDouble("valor"));
                 ViagemDAO vDAO = new ViagemDAO();
                 Viagem viagem = vDAO.buscaViagem(result.getInt("viagem_idviagem"));
                 hc.setViagem(viagem);
+                hcpk.setViagemIdviagem(viagem.getIdviagem());
                 HotelDAO hDAO = new HotelDAO();
                 Hotel hotel = hDAO.buscaHotel(result.getInt("hotel_idHotel"));
                 hc.setHotel(hotel);
+                hcpk.setHotelidHotel(hotel.getIdhotel());
+                hc.setHoteiscontratadosPK(hcpk);
                 list.add(hc);
             }
         } catch (SQLException e) {

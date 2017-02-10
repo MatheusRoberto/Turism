@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
@@ -1267,29 +1268,45 @@ public class TelaParcela extends javax.swing.JFrame {
 
     private void pagamentoMontante(int indice) {
         double recebido = removeCifrao(txtValorPagamento.getText());
-        double resto;
+        double valor, total = 0;
         int vezes;
+
+        total = parcelas.stream().map((p) -> p.getValor()).reduce(total, (accumulator, _item) -> accumulator + _item);
+
+        valor = total / parcelas.size();
+
         Parcela p = parcelas.get(indice);
-        vezes = (int) (recebido / p.getValor());
-        resto = recebido % p.getValor();
+        vezes = (int) (recebido / valor);
+        
+        Date d;
+        if (dataPagamento.getDate() == null) {
+            d = new Date();
+        } else {
+            d = dataPagamento.getDate();
+        }
+        
         if (vezes > 0) {
-            for (int i = 0; i < vezes; i++) {
+            p = parcelas.get(indice);
+            while (p.getValor() <= recebido) {
                 p = parcelas.get(indice);
                 p.setPaga(true);
-                p.setDatapagamento(dataPagamento.getDate());
+                p.setDatapagamento(d);
                 indice++;
+                recebido -= p.getValor();
             }
-            if (resto != 0) {
+            if (recebido > 0) {
+                p = parcelas.get(indice - 1);
+                p.setValor(p.getValor() + recebido);
                 p = parcelas.get(indice);
-                p.setValor(p.getValor() - resto);
+                p.setValor(p.getValor() - recebido);
             }
         } else {
-            p.setValor(resto);
+            p.setValor(recebido);
             p.setPaga(true);
-            p.setDatapagamento(dataPagamento.getDate());
+            p.setDatapagamento(d);
             indice++;
             p = parcelas.get(indice);
-            p.setValor(p.getValor() + (p.getValor() - resto));
+            p.setValor(p.getValor() + (p.getValor() - recebido));
         }
 
         parcelas.forEach((parc) -> {
@@ -1299,7 +1316,7 @@ public class TelaParcela extends javax.swing.JFrame {
 
     private void imprimirCarne() {
         InputStream inputStream = this.getClass().getResourceAsStream("/turism/reports/Parte1_Carne_Landscape.jasper");
-        
+
         // mapa de parâmetros do relatório (ainda vamos aprender a usar)
         Map<String, Object> parametros = new HashMap();
         parametros.put("id", contrato.getIdcontrato());

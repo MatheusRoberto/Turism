@@ -634,7 +634,7 @@ public class TelaContrato extends javax.swing.JFrame {
 
         jLabel18.setText("Nº de Parcelas:");
 
-        txtNParcela.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
+        txtNParcela.setModel(new javax.swing.SpinnerNumberModel(2, 2, null, 1));
         txtNParcela.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 txtNParcelaStateChanged(evt);
@@ -1787,7 +1787,7 @@ public class TelaContrato extends javax.swing.JFrame {
 
                 if (poltrona <= veiculoscontratados.get(indice).getVeiculo().getLotacao()) {
                     apk.setIdassento(poltrona);
-                    apk.setIdcontrato(cDAO.selecionaUltimo().getIdcontrato() + 1);
+                    //apk.setIdcontrato(cDAO.selecionaUltimo().getIdcontrato() + 1);
                     apk.setIdveiculo(veiculoscontratados.get(indice).getVeiculo().getIdveiculo());
 
                     if (!this.poltronaOcupada(apk)) {
@@ -2199,6 +2199,7 @@ public class TelaContrato extends javax.swing.JFrame {
 
         modeloDepedente = new DepedenteTableModel();
         jtDepedente.setModel(modeloDepedente);
+        t = jtDepedente.getSize().width;
         jtDepedente.getColumnModel().getColumn(0).setPreferredWidth((int) (t * 0.7));
         jtDepedente.getColumnModel().getColumn(1).setPreferredWidth((int) (t * 0.3));
 
@@ -2309,7 +2310,7 @@ public class TelaContrato extends javax.swing.JFrame {
         if (indice > -1) {
             AssentoPK apk = new AssentoPK();
             apk.setIdassento(Integer.valueOf(txtPoltrona.getValue().toString()));
-            apk.setIdcontrato(cDAO.selecionaUltimo().getIdcontrato() + 1);
+           // apk.setIdcontrato(cDAO.selecionaUltimo().getIdcontrato() + 1);
             apk.setIdveiculo(veiculoscontratados.get(indice).getVeiculo().getIdveiculo());
             if (this.poltronaOcupada(apk)) {
                 btnBuscarPoltrona.setBackground(Color.GREEN);
@@ -2334,7 +2335,7 @@ public class TelaContrato extends javax.swing.JFrame {
         modelo.clear();
         for (int e = 0; e < numPar; e++) {
             gc.setTime(diaAtual);
-            gc.roll(GregorianCalendar.MONTH, e);
+            gc.add(GregorianCalendar.MONTH, e);
             Date date = gc.getTime();
             modelo.addElement(df.format(date));
             datas.add(date);

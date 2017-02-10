@@ -30,16 +30,15 @@ public class QuartoDAO {
 
     public void adiciona(Quarto q) {
         String sql = "INSERT INTO quarto (idhotel, camacasal, camasolteiro, observacao) VALUES(?,?,?,?)";
+        PreparedStatement stmt;
         try {
-            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                stmt.setInt(1, q.getIdhotel().getIdhotel());
-                stmt.setInt(2, q.getCamacasal());
-                stmt.setInt(3, q.getCamasolteiro());
-                stmt.setString(4, q.getObservacao());
-                stmt.execute();
-                q.setIdquarto(this.selecionaUltimo().getIdquarto());
-            }
-            System.out.println("Quarto cadastrado com sucesso");
+            stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, q.getIdhotel().getIdhotel());
+            stmt.setInt(2, q.getCamacasal());
+            stmt.setInt(3, q.getCamasolteiro());
+            stmt.setString(4, q.getObservacao());
+            stmt.execute();
+            q.setIdquarto(this.selecionaUltimo().getIdquarto());
         } catch (SQLException u) {
             throw new RuntimeException(u);
         }

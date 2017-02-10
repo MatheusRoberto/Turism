@@ -5,11 +5,12 @@
  */
 package turism;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import turism.controle.PaisDAO;
-import turism.modelo.Pais;
-
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
+import turism.gui.TelaMenuPrincipal;
+import turism.shell.Backup_Turism;
 
 /**
  *
@@ -17,15 +18,17 @@ import turism.modelo.Pais;
  */
 public class Turism {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
-        Pais br = new Pais();
-        PaisDAO pDAO = new PaisDAO();
-        br = pDAO.buscaPais(1);
-        System.err.println(br.getNome() + " E: "+br.getEstadoList());
+    public static void main(String args[]) {
+        JFrame janela = new TelaMenuPrincipal();
+        janela.setVisible(true);
+        janela.setLocationRelativeTo(null);
+
+        Backup_Turism bkp = new Backup_Turism();
+        try {
+            bkp.agendaBackupBD();
+        } catch (IOException ex) {
+            Logger.getLogger(Turism.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
     }
-    
 }

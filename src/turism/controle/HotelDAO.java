@@ -140,13 +140,13 @@ public class HotelDAO {
                 quarto = new Quarto();
                 quarto.setIdquarto(result.getInt("idquarto"));
                 quarto.setCamacasal(result.getInt("camacasal"));
-                quarto.setCamasolteiro(result.getInt("casasolteiro"));
+                quarto.setCamasolteiro(result.getInt("camasolteiro"));
                 quarto.setObservacao(result.getString("observacao"));
                 quarto.setIdhotel(h);
                 list.add(quarto);
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "erro no quarto " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "erro no hotel_quarto " + e.getMessage());
         } finally {
 
             try {

@@ -983,7 +983,7 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
             vc.setValor(Double.valueOf(txtValorOnCon.getValue().toString()));
             VeiculoscontratadosPK vcpk = new VeiculoscontratadosPK();
             vcpk.setVeiculoIdveiculo(vc.getVeiculo().getIdveiculo());
-            vcpk.setViagemIdviagem(vDAO.selecionaUltimo().getIdviagem() + 1);
+           // vcpk.setViagemIdviagem(vDAO.selecionaUltimo().getIdviagem() + 1);
             if (veiculoscontratados.contains(vc) && veiculoscontratadosPK.contains(vcpk)) {
                 JOptionPane.showMessageDialog(this, "Veículo já adicionado");
             } else {
@@ -1017,7 +1017,7 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
             hc.setValor(Double.valueOf(txtValorHtCon.getValue().toString()));
             HoteiscontratadosPK hcpk = new HoteiscontratadosPK();
             hcpk.setHotelidHotel(hc.getHotel().getIdhotel());
-            hcpk.setViagemIdviagem(vDAO.selecionaUltimo().getIdviagem() + 1);
+            //hcpk.setViagemIdviagem(vDAO.selecionaUltimo().getIdviagem() + 1);
             if (hoteiscontratados.contains(hc) && hoteiscontratadosPK.contains(hcpk)) {
                 JOptionPane.showMessageDialog(this, "Hotel já adicionado");
             } else {
@@ -1046,10 +1046,12 @@ public class TelaViagemCadastro extends javax.swing.JFrame {
                 VeiculosContratadosDAO vcDAO = new VeiculosContratadosDAO();
                 HoteisContratadosDAO hcDAO = new HoteisContratadosDAO();
                 veiculoscontratados.forEach((next) -> {
+                    next.setViagem(viagem);
                     vcDAO.adicionar(next);
                 });
 
                 hoteiscontratados.forEach((hc) -> {
+                    hc.setViagem(viagem);
                     hcDAO.adicionar(hc);
                 });
                 JOptionPane.showMessageDialog(this, "Viagem cadastrada com sucesso!");

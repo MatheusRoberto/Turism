@@ -6,9 +6,15 @@
 package turism.gui;
 
 import java.awt.Dimension;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
-import turism.gui.*;
+import turism.controle.ParcelaDAO;
+import turism.shell.Backup_Turism;
 
 /**
  *
@@ -23,6 +29,7 @@ public class TelaMenuPrincipal extends javax.swing.JFrame {
      */
     public TelaMenuPrincipal() {
         initComponents();
+        this.vencimentoDia();
     }
 
     /**
@@ -34,10 +41,6 @@ public class TelaMenuPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnCadastro = new javax.swing.JButton();
-        btnContrato = new javax.swing.JButton();
-        btnViagem = new javax.swing.JButton();
-        btnPGParcela = new javax.swing.JButton();
         internalCadastro = new javax.swing.JInternalFrame();
         btnCliente = new javax.swing.JButton();
         btnDepedente = new javax.swing.JButton();
@@ -47,40 +50,22 @@ public class TelaMenuPrincipal extends javax.swing.JFrame {
         internalViagem = new javax.swing.JInternalFrame();
         btnEditaViagem = new javax.swing.JButton();
         btnConsultaViagem = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jListVencimentoDoDia = new javax.swing.JList<>();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        btnCadastro = new javax.swing.JButton();
+        btnContrato = new javax.swing.JButton();
+        btnViagem = new javax.swing.JButton();
+        btnPGParcela = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        btnCadastro.setText("Cadastro");
-        btnCadastro.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCadastroActionPerformed(evt);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
             }
         });
-
-        btnContrato.setText("Venda de Passagens");
-        btnContrato.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnContrato.setOpaque(false);
-        btnContrato.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnContratoActionPerformed(evt);
-            }
-        });
-
-        btnViagem.setText("Viagem");
-        btnViagem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViagemActionPerformed(evt);
-            }
-        });
-
-        btnPGParcela.setText("Pagamento de Parcela");
-        btnPGParcela.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnPGParcela.setOpaque(false);
-        btnPGParcela.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPGParcelaActionPerformed(evt);
-            }
-        });
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         internalCadastro.setClosable(true);
         internalCadastro.setTitle("Cadastros");
@@ -151,6 +136,8 @@ public class TelaMenuPrincipal extends javax.swing.JFrame {
                 .addGap(22, 22, 22))
         );
 
+        getContentPane().add(internalCadastro, new org.netbeans.lib.awtextra.AbsoluteConstraints(672, 92, 0, 0));
+
         internalViagem.setClosable(true);
         internalViagem.setTitle("Viagem");
         internalViagem.setVisible(false);
@@ -163,6 +150,11 @@ public class TelaMenuPrincipal extends javax.swing.JFrame {
         });
 
         btnConsultaViagem.setText("Consulta Viagem");
+        btnConsultaViagem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsultaViagemActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout internalViagemLayout = new javax.swing.GroupLayout(internalViagem.getContentPane());
         internalViagem.getContentPane().setLayout(internalViagemLayout);
@@ -182,50 +174,93 @@ public class TelaMenuPrincipal extends javax.swing.JFrame {
                 .addComponent(btnConsultaViagem)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnEditaViagem)
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+        getContentPane().add(internalViagem, new org.netbeans.lib.awtextra.AbsoluteConstraints(583, 151, 0, 0));
+
+        jListVencimentoDoDia.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(jListVencimentoDoDia);
+
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 172, 300, -1));
+
+        jLabel1.setText("Parcelas com Vencimento Hoje:");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 151, -1, -1));
+
+        btnCadastro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/menu/cadastro_32.png"))); // NOI18N
+        btnCadastro.setText("Cadastro");
+        btnCadastro.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnCadastro.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnCadastro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCadastroActionPerformed(evt);
+            }
+        });
+
+        btnContrato.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/menu/cart_32.png"))); // NOI18N
+        btnContrato.setText("Venda de Passagens");
+        btnContrato.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnContrato.setOpaque(false);
+        btnContrato.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnContrato.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnContratoActionPerformed(evt);
+            }
+        });
+
+        btnViagem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/menu/travel_32.png"))); // NOI18N
+        btnViagem.setText("Viagem");
+        btnViagem.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnViagem.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnViagem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViagemActionPerformed(evt);
+            }
+        });
+
+        btnPGParcela.setIcon(new javax.swing.ImageIcon(getClass().getResource("/turism/imagens/menu/payment_32.png"))); // NOI18N
+        btnPGParcela.setText("Pagamento de Parcela");
+        btnPGParcela.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnPGParcela.setOpaque(false);
+        btnPGParcela.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnPGParcela.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPGParcelaActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnCadastro)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnContrato)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnViagem)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnPGParcela)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(internalCadastro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(213, 213, 213))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(internalViagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(302, 302, 302))))))
+                .addComponent(btnCadastro)
+                .addGap(18, 18, 18)
+                .addComponent(btnContrato)
+                .addGap(18, 18, 18)
+                .addComponent(btnViagem)
+                .addGap(18, 18, 18)
+                .addComponent(btnPGParcela)
+                .addContainerGap(32, Short.MAX_VALUE))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(45, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCadastro)
                     .addComponent(btnContrato)
                     .addComponent(btnViagem)
                     .addComponent(btnPGParcela))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(internalCadastro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(59, 59, 59)
-                .addComponent(internalViagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(191, Short.MAX_VALUE))
+                .addContainerGap())
         );
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -286,6 +321,15 @@ public class TelaMenuPrincipal extends javax.swing.JFrame {
         this.abreJInternal(internalViagem);
     }//GEN-LAST:event_btnViagemActionPerformed
 
+    private void btnConsultaViagemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultaViagemActionPerformed
+        // TODO add your handling code here:
+        this.abreJFrame(new TelaViagemGerenciamento());
+    }//GEN-LAST:event_btnConsultaViagemActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formWindowClosed
+
     /**
      * @param args the command line arguments
      */
@@ -302,23 +346,18 @@ public class TelaMenuPrincipal extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TelaMenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TelaMenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TelaMenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(TelaMenuPrincipal.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
+        
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new TelaMenuPrincipal().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new TelaMenuPrincipal().setVisible(true);
         });
     }
 
@@ -336,6 +375,10 @@ public class TelaMenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnViagemCadastro;
     private javax.swing.JInternalFrame internalCadastro;
     private javax.swing.JInternalFrame internalViagem;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JList<String> jListVencimentoDoDia;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 
     private void abreJInternal(JInternalFrame inte) {
@@ -352,5 +395,16 @@ public class TelaMenuPrincipal extends javax.swing.JFrame {
         janela.setResizable(false);
         janela.setLocationRelativeTo(null);
         janela.toFront();
+    }
+    
+    private void vencimentoDia(){
+        ParcelaDAO pDAO = new ParcelaDAO();
+        ArrayList<String> vencimento = pDAO.parcelaVencimentoDia();
+        jListVencimentoDoDia.removeAll();
+        DefaultListModel modelov = new DefaultListModel();
+        for (String string : vencimento) {
+            modelov.addElement(string);
+        }
+        jListVencimentoDoDia.setModel(modelov);
     }
 }
