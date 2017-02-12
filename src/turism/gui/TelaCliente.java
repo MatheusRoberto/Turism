@@ -39,6 +39,7 @@ public class TelaCliente extends javax.swing.JFrame {
         initComponents();
         modelo = new DepedenteTableModel();
         jtDepedente.setModel(modelo);
+        jBusca.setVisible(false);
     }
 
     /**
@@ -284,7 +285,7 @@ public class TelaCliente extends javax.swing.JFrame {
         );
 
         jBusca.setClosable(true);
-        jBusca.setVisible(false);
+        jBusca.setVisible(true);
         jBusca.addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
             }
@@ -331,7 +332,7 @@ public class TelaCliente extends javax.swing.JFrame {
             .addGroup(jBuscaLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jBuscaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
                     .addComponent(txtBusca))
                 .addContainerGap())
         );

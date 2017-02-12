@@ -6,15 +6,11 @@
 package turism.gui;
 
 import java.awt.Dimension;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import turism.controle.ParcelaDAO;
-import turism.shell.Backup_Turism;
 
 /**
  *
@@ -30,6 +26,8 @@ public class TelaMenuPrincipal extends javax.swing.JFrame {
     public TelaMenuPrincipal() {
         initComponents();
         this.vencimentoDia();
+        internalCadastro.setVisible(false);
+        internalViagem.setVisible(false);
     }
 
     /**
@@ -69,7 +67,7 @@ public class TelaMenuPrincipal extends javax.swing.JFrame {
 
         internalCadastro.setClosable(true);
         internalCadastro.setTitle("Cadastros");
-        internalCadastro.setVisible(false);
+        internalCadastro.setVisible(true);
 
         btnCliente.setText("Cliente");
         btnCliente.addActionListener(new java.awt.event.ActionListener() {
@@ -136,11 +134,11 @@ public class TelaMenuPrincipal extends javax.swing.JFrame {
                 .addGap(22, 22, 22))
         );
 
-        getContentPane().add(internalCadastro, new org.netbeans.lib.awtextra.AbsoluteConstraints(672, 92, 0, 0));
+        getContentPane().add(internalCadastro, new org.netbeans.lib.awtextra.AbsoluteConstraints(672, 92, -1, -1));
 
         internalViagem.setClosable(true);
         internalViagem.setTitle("Viagem");
-        internalViagem.setVisible(false);
+        internalViagem.setVisible(true);
 
         btnEditaViagem.setText("Editar Viagem");
         btnEditaViagem.addActionListener(new java.awt.event.ActionListener() {
@@ -177,7 +175,7 @@ public class TelaMenuPrincipal extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        getContentPane().add(internalViagem, new org.netbeans.lib.awtextra.AbsoluteConstraints(583, 151, 0, 0));
+        getContentPane().add(internalViagem, new org.netbeans.lib.awtextra.AbsoluteConstraints(583, 151, -1, -1));
 
         jListVencimentoDoDia.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };

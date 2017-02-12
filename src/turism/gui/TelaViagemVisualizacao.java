@@ -244,7 +244,7 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jInternalBuscaViagem.setTitle("Busca Cidade");
-        jInternalBuscaViagem.setVisible(false);
+        jInternalBuscaViagem.setVisible(true);
         jInternalBuscaViagem.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jInternalBuscaViagemFocusGained(evt);
@@ -447,7 +447,7 @@ public class TelaViagemVisualizacao extends javax.swing.JFrame {
         jInternalBuscaViagemLayout.setHorizontalGroup(
             jInternalBuscaViagemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jInternalBuscaViagemLayout.createSequentialGroup()
-                .addGap(0, 63, Short.MAX_VALUE)
+                .addGap(0, 69, Short.MAX_VALUE)
                 .addGroup(jInternalBuscaViagemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jInternalBuscaViagemLayout.createSequentialGroup()
                         .addComponent(PainelOrigem1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)

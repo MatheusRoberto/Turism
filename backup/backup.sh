@@ -2,7 +2,7 @@
 
 echo "Salvando local:"
 # backup Path
-BACKUP_PATH=PASTA_BACKUP
+BACKUP_PATH=/home/matheus/NetBeansProjects/Turism/backup/arquivo/
 
 # database settings
 DB_NAME="turism"
@@ -18,8 +18,8 @@ FILENAME=${DB_NAME}_${TIMESTAMP}.sql
 cd ${BACKUP_PATH}
 
 # remove previous backups
-rm /home/matheus/turism/backup/*.sql
-rm /home/matheus/turism/backup/*.gz
+rm ${BACKUP_PATH}*.sql
+rm ${BACKUP_PATH}*.gz
 
 # dump the database using the mysql administrator - so we can see all dbs
 #mysqldump -u$DB_USER -p$DB_PASS --opt --routines --skip-extended-insert --compact --force "${DB_NAME}" > "${FILENAME}"
@@ -32,7 +32,7 @@ echo "Salvo e compactado!"
 
 echo "Subindo para Google Drive"
 
-cd LOCAL
+cd /home/matheus/NetBeansProjects/Turism/backup/
 
 python backup_initiator.py --backup-file-name "bkp_turism"
 

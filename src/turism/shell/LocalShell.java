@@ -37,7 +37,8 @@ public class LocalShell {
             final InputStreamReader isr = new InputStreamReader(is);
             br = new BufferedReader(isr);
             
-            String line;            
+            String line;
+            System.out.println(br.readLine());            
             while((line = br.readLine()) != null) {
                 System.out.println("Retorno do comando = [" + line + "]");
             }

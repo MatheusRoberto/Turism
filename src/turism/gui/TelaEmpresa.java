@@ -417,12 +417,18 @@ public class TelaEmpresa extends javax.swing.JFrame {
     private void btnRmVeiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRmVeiculoActionPerformed
         // TODO add your handling code here:
         int indice = jtVeiculos.getSelectedRow();
+        if(indice > -1){
         Veiculo v = veiculos.get(indice);
         veiculos.remove(indice);
         VeiculoDAO vDAO = new VeiculoDAO();
         vDAO.apagar(v);
         modelo.limpar();
         modelo.addListaVeiculo(veiculos);
+        JOptionPane.showMessageDialog(this, "Veículo excluído!");
+        }else{
+            JOptionPane.showMessageDialog(this, "Escolha um véiculo!");
+            jtVeiculos.requestFocus();
+        }
     }//GEN-LAST:event_btnRmVeiculoActionPerformed
 
     private void btnAdVeiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdVeiculoActionPerformed
@@ -444,6 +450,7 @@ public class TelaEmpresa extends javax.swing.JFrame {
                 vDAO.adicionar(v);
                 veiculos.add(v);
                 modelo.addItem(v);
+                JOptionPane.showMessageDialog(this, "Veiculo adicionado!");
             }
         }
     }//GEN-LAST:event_btnAdVeiculoActionPerformed
@@ -479,6 +486,7 @@ public class TelaEmpresa extends javax.swing.JFrame {
             btnBuscar.setEnabled(true);
             btnCancelar.setEnabled(false);
             painelVeiculos.setVisible(true);
+            JOptionPane.showMessageDialog(this, "Empresa cadastrada com Sucesso!");
         }
     }//GEN-LAST:event_btnSalvarActionPerformed
 

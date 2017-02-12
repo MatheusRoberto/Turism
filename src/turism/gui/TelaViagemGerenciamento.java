@@ -76,6 +76,8 @@ public class TelaViagemGerenciamento extends javax.swing.JFrame {
     public TelaViagemGerenciamento() {
         initComponents();
         this.carregaTable();
+        jInternalEscolha.setVisible(false);
+        jInternalBuscaViagem.setVisible(false);
     }
 
     /**
@@ -400,7 +402,7 @@ public class TelaViagemGerenciamento extends javax.swing.JFrame {
         painelContratoLayout.setVerticalGroup(
             painelContratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, painelContratoLayout.createSequentialGroup()
-                .addContainerGap(49, Short.MAX_VALUE)
+                .addContainerGap(181, Short.MAX_VALUE)
                 .addGroup(painelContratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE)
                     .addComponent(painelBotoesContrato, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -432,7 +434,7 @@ public class TelaViagemGerenciamento extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(painelViagemLayout.createSequentialGroup()
                 .addComponent(painelValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 169, Short.MAX_VALUE))
+                .addGap(0, 78, Short.MAX_VALUE))
             .addGroup(painelViagemLayout.createSequentialGroup()
                 .addGroup(painelViagemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(painelVagas, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -465,7 +467,7 @@ public class TelaViagemGerenciamento extends javax.swing.JFrame {
         jInternalBuscaViagem.setClosable(true);
         jInternalBuscaViagem.setTitle("Busca Viagem");
         jInternalBuscaViagem.setMinimumSize(new java.awt.Dimension(954, 405));
-        jInternalBuscaViagem.setVisible(false);
+        jInternalBuscaViagem.setVisible(true);
         jInternalBuscaViagem.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jInternalBuscaViagemFocusGained(evt);
@@ -722,7 +724,7 @@ public class TelaViagemGerenciamento extends javax.swing.JFrame {
         dataIdaBusca.getJCalendar().setMinSelectableDate(new Date());
 
         jInternalEscolha.setClosable(true);
-        jInternalEscolha.setVisible(false);
+        jInternalEscolha.setVisible(true);
         jInternalEscolha.addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
             }
@@ -757,16 +759,15 @@ public class TelaViagemGerenciamento extends javax.swing.JFrame {
             .addGroup(jInternalEscolhaLayout.createSequentialGroup()
                 .addGroup(jInternalEscolhaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jInternalEscolhaLayout.createSequentialGroup()
-                        .addGroup(jInternalEscolhaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jInternalEscolhaLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel4))
-                            .addGroup(jInternalEscolhaLayout.createSequentialGroup()
-                                .addGap(47, 47, 47)
-                                .addComponent(btnEscolha)))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addContainerGap()
+                        .addComponent(jLabel4)
+                        .addGap(0, 95, Short.MAX_VALUE))
                     .addComponent(jCBEscolha, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(jInternalEscolhaLayout.createSequentialGroup()
+                .addGap(67, 67, 67)
+                .addComponent(btnEscolha)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jInternalEscolhaLayout.setVerticalGroup(
             jInternalEscolhaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -775,9 +776,9 @@ public class TelaViagemGerenciamento extends javax.swing.JFrame {
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jCBEscolha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnEscolha)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -788,12 +789,12 @@ public class TelaViagemGerenciamento extends javax.swing.JFrame {
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jInternalBuscaViagem, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jInternalBuscaViagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(500, 500, 500)
-                    .addComponent(jInternalEscolha, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jInternalEscolha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(500, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
@@ -802,12 +803,12 @@ public class TelaViagemGerenciamento extends javax.swing.JFrame {
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jInternalBuscaViagem, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jInternalBuscaViagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(363, 363, 363)
-                    .addComponent(jInternalEscolha, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jInternalEscolha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(363, Short.MAX_VALUE)))
         );
 

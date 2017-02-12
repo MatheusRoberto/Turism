@@ -1055,6 +1055,7 @@ public class TelaParcela extends javax.swing.JFrame {
                     }
                     this.carregaParcela();
                     this.valor();
+                    JOptionPane.showMessageDialog(this, "Parcela Paga!");
                 } else {
                     JOptionPane.showMessageDialog(this, "Parcela já está paga!");
                 }
